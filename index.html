@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>What Is Light Really? | Cinematic 3D Loading</title>
+    <title>What Is Light Really? | Cinematic Space Experience</title>
     <meta name="description" content="What is light really? Light is a blessing from God — electromagnetic radiation that helps us see, boosts our mood, and powers photosynthesis.">
     <meta name="robots" content="index, follow">
+    
+    <!-- FAVICON - Premium Light Symbol -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -30,6 +34,33 @@
             cursor: none;
         }
 
+        /* Music control button */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-size: 1.2rem;
+        }
+
+        .music-control:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.1);
+            border-color: #FFD700;
+        }
+
         /* ========== CINEMATIC LOADING SCREEN ========== */
         .loading-screen {
             position: fixed;
@@ -46,7 +77,6 @@
             transition: opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0s 1.2s;
             opacity: 1;
             visibility: visible;
-            backdrop-filter: blur(0px);
         }
 
         .loading-screen.hide {
@@ -63,28 +93,14 @@
             border-radius: 50%;
             animation: pulse3D 1.5s ease-in-out infinite;
             box-shadow: 0 0 60px rgba(255, 215, 0, 0.5), 0 0 120px rgba(255, 20, 147, 0.3);
-            transform-style: preserve-3d;
         }
 
         @keyframes pulse3D {
-            0% {
-                transform: scale(0.8) rotateX(0deg);
-                opacity: 0.6;
-                box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
-            }
-            50% {
-                transform: scale(1.2) rotateX(15deg);
-                opacity: 1;
-                box-shadow: 0 0 100px rgba(255, 215, 0, 0.8), 0 0 150px rgba(255, 20, 147, 0.5);
-            }
-            100% {
-                transform: scale(0.8) rotateX(0deg);
-                opacity: 0.6;
-                box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
-            }
+            0% { transform: scale(0.8); opacity: 0.6; box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 100px rgba(255, 215, 0, 0.8), 0 0 150px rgba(255, 20, 147, 0.5); }
+            100% { transform: scale(0.8); opacity: 0.6; box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
         }
 
-        /* Loading text with cinematic animation */
         .loading-text {
             margin-top: 3rem;
             font-size: 1rem;
@@ -117,19 +133,10 @@
         .loading-dots span:nth-child(5) { animation-delay: 0.8s; }
 
         @keyframes dotBounce {
-            0%, 100% {
-                transform: translateY(0);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translateY(-15px);
-                opacity: 1;
-                background: #FFD700;
-                box-shadow: 0 0 10px #FFD700;
-            }
+            0%, 100% { transform: translateY(0); opacity: 0.3; }
+            50% { transform: translateY(-15px); opacity: 1; background: #FFD700; box-shadow: 0 0 10px #FFD700; }
         }
 
-        /* Cinematic ring around loading core */
         .loading-ring {
             position: absolute;
             width: 180px;
@@ -172,7 +179,7 @@
             color: transparent;
         }
 
-        /* ========== PREMIUM CURSOR SYSTEM ========== */
+        /* ========== CURSOR SYSTEM ========== */
         .cursor-dot {
             position: fixed;
             width: 6px;
@@ -183,7 +190,6 @@
             z-index: 10000;
             transform: translate(-50%, -50%);
             transition: width 0.2s ease, height 0.2s ease;
-            will-change: transform;
         }
         
         .cursor-ring {
@@ -196,7 +202,6 @@
             z-index: 9999;
             transform: translate(-50%, -50%);
             transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
-            will-change: transform;
             backdrop-filter: blur(2px);
         }
         
@@ -213,7 +218,6 @@
             background-color: #FFD700;
         }
 
-        /* Background with 3D depth */
         .unseen-bg {
             position: fixed;
             top: 0;
@@ -257,7 +261,7 @@
             background: rgba(255, 255, 255, 0.03);
             padding: 0.5rem 0.5rem 0.5rem 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 0.3s ease;
             width: 320px;
         }
 
@@ -298,7 +302,7 @@
             opacity: 1;
         }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
             text-align: center;
             margin-bottom: 5rem;
@@ -319,7 +323,7 @@
             letter-spacing: -0.05em;
             color: #ffffff;
             display: inline-block;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 0.3s ease;
             cursor: pointer;
             opacity: 0;
             transform: translateY(30px);
@@ -330,22 +334,21 @@
         }
 
         @keyframes cinematicLetterIn {
-            0% {
-                opacity: 0;
-                transform: translateY(60px) rotateX(-20deg);
-                filter: blur(8px);
-            }
-            40% {
-                transform: translateY(-10px) rotateX(5deg);
-            }
-            70% {
-                transform: translateY(5px) rotateX(-2deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) rotateX(0);
-                filter: blur(0);
-            }
+            0% { opacity: 0; transform: translateY(60px) rotateX(-20deg); filter: blur(8px); }
+            40% { transform: translateY(-10px) rotateX(5deg); }
+            70% { transform: translateY(5px) rotateX(-2deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0); filter: blur(0); }
+        }
+
+        .hero-sub, .blessing-tag, .science-line {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .hero-sub.animate-in, .blessing-tag.animate-in, .science-line.animate-in {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .hero-sub {
@@ -353,14 +356,6 @@
             letter-spacing: 3px;
             color: rgba(255, 255, 255, 0.4);
             margin-bottom: 2rem;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        .hero-sub.animate-in {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .blessing-tag {
@@ -376,14 +371,6 @@
             color: rgba(255, 255, 255, 0.6);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.1s;
-        }
-
-        .blessing-tag.animate-in {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .science-line {
@@ -393,14 +380,6 @@
             font-family: monospace;
             color: rgba(255, 255, 255, 0.4);
             letter-spacing: 1px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.2s;
-        }
-
-        .science-line.animate-in {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         /* Cards */
@@ -415,7 +394,7 @@
             background: transparent;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 2rem;
-            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 0.5s ease;
             opacity: 0;
             transform: translateY(30px);
         }
@@ -464,7 +443,7 @@
             color: rgba(255, 255, 255, 0.4);
         }
 
-        /* Product Showcase */
+        /* Product */
         .product-showcase {
             margin: 5rem 0;
             display: flex;
@@ -476,7 +455,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 0.4s ease;
             opacity: 0;
             transform: translateY(30px);
         }
@@ -557,7 +536,7 @@
             transform: rotate(3deg) scale(1.03);
         }
 
-        /* Curiosity Section */
+        /* Curiosity */
         .curiosity-section {
             margin: 4rem 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -667,10 +646,16 @@
             body { cursor: auto; }
             .loading-core { width: 80px; height: 80px; }
             .loading-ring { width: 130px; height: 130px; }
+            .music-control { bottom: 10px; left: 10px; width: 35px; height: 35px; font-size: 1rem; }
         }
     </style>
 </head>
 <body>
+
+<!-- MUSIC CONTROL BUTTON -->
+<div class="music-control" id="musicControl">
+    <i class="fas fa-music" id="musicIcon"></i>
+</div>
 
 <!-- CINEMATIC LOADING SCREEN -->
 <div class="loading-screen" id="loadingScreen">
@@ -687,9 +672,16 @@
     <div class="loading-percent" id="loadingPercent">0%</div>
 </div>
 
+<!-- Background and Cursors -->
 <div class="unseen-bg"></div>
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
+
+<!-- Hidden Audio Element for Space Music -->
+<audio id="spaceMusic" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/02/02/audio_bb6374e6f8.mp3?filename=ambient-space-music-140463.mp3" type="audio/mpeg">
+    <!-- Fallback: YouTube-style ambient space sound using Web Audio API (silent fallback) -->
+</audio>
 
 <div class="page" id="mainContent" style="opacity: 0;">
     <div class="search-container">
@@ -797,14 +789,96 @@
     </div>
     
     <div class="credits-section">
-        <div>INSPIRED BY UNSEEN STUDIO® — CINEMATIC 3D MOTION & PREMIUM CURSOR PHYSICS</div>
+        <div>INSPIRED BY UNSEEN STUDIO® — CINEMATIC 3D MOTION & SPACE AMBIENCE</div>
         <div style="margin-top: 0.5rem;">CRAFTED WITH LIGHT — SHOP ON JUMIA KENYA</div>
     </div>
 </div>
 
 <script>
     // ============================================
-    // CINEMATIC LOADING SCREEN WITH PERCENTAGE
+    // SPACE MUSIC with Web Audio API Fallback
+    // ============================================
+    
+    const audio = document.getElementById('spaceMusic');
+    const musicControl = document.getElementById('musicControl');
+    const musicIcon = document.getElementById('musicIcon');
+    let isMusicPlaying = false;
+    
+    // Try to play music with user interaction fallback (browsers require user interaction)
+    function playMusic() {
+        audio.volume = 0.3;
+        audio.play().then(() => {
+            isMusicPlaying = true;
+            musicIcon.className = 'fas fa-volume-up';
+        }).catch(() => {
+            // Silent fail - user will need to click button
+            isMusicPlaying = false;
+            musicIcon.className = 'fas fa-music';
+        });
+    }
+    
+    function toggleMusic() {
+        if (isMusicPlaying) {
+            audio.pause();
+            isMusicPlaying = false;
+            musicIcon.className = 'fas fa-music';
+        } else {
+            audio.play().then(() => {
+                isMusicPlaying = true;
+                musicIcon.className = 'fas fa-volume-up';
+            }).catch(() => {
+                console.log('Audio playback requires user interaction first');
+            });
+        }
+    }
+    
+    musicControl.addEventListener('click', toggleMusic);
+    
+    // Auto-play attempt after loading screen (some browsers allow after page load)
+    setTimeout(() => {
+        playMusic();
+    }, 3000);
+    
+    // Fallback: create ambient space sound using Web Audio API if main audio fails
+    let audioContext = null;
+    let oscillator = null;
+    let gainNode = null;
+    
+    function createAmbientSpaceSound() {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            oscillator = audioContext.createOscillator();
+            gainNode = audioContext.createGain();
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 55; // Deep bass frequency (space vibe)
+            gainNode.gain.value = 0.15;
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.start();
+            
+            // Add subtle modulation for space feel
+            setInterval(() => {
+                if (isMusicPlaying && audioContext && audioContext.state === 'running') {
+                    const newFreq = 50 + Math.sin(Date.now() / 8000) * 8;
+                    oscillator.frequency.linearRampToValueAtTime(newFreq, audioContext.currentTime + 0.5);
+                }
+            }, 3000);
+        } catch(e) {
+            console.log('Web Audio API not supported');
+        }
+    }
+    
+    // If main audio fails, try Web Audio as backup
+    audio.addEventListener('error', () => {
+        console.log('Main audio failed, using Web Audio API ambient sound');
+        createAmbientSpaceSound();
+    });
+    
+    // ============================================
+    // CINEMATIC LOADING SCREEN
     // ============================================
     
     const loadingScreen = document.getElementById('loadingScreen');
@@ -818,14 +892,10 @@
             progress = 100;
             clearInterval(interval);
             
-            // Hide loading screen with cinematic fade
             loadingScreen.classList.add('hide');
-            
-            // Reveal main content with fade in
             mainContent.style.transition = 'opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
             mainContent.style.opacity = '1';
             
-            // Trigger all animations
             document.querySelectorAll('.hero-letter').forEach(el => el.classList.add('animate-in'));
             document.querySelector('.hero-sub')?.classList.add('animate-in');
             document.querySelector('.blessing-tag')?.classList.add('animate-in');
@@ -833,22 +903,21 @@
             document.querySelector('.fun-footer')?.classList.add('animate-in');
             document.querySelector('.credits-section')?.classList.add('animate-in');
             
-            // Scroll observer for cards
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) entry.target.classList.add('visible');
                 });
-            }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+            }, { threshold: 0.2 });
             
             document.querySelectorAll('.card, .product-showcase, .curiosity-section').forEach(el => observer.observe(el));
             
-            console.log('%c✨ CINEMATIC LOADING COMPLETE — WELCOME TO LIGHT ✨', 'color: #FFD700; font-size: 14px; letter-spacing: 2px;');
+            console.log('%c✨ CINEMATIC SPACE EXPERIENCE LOADED — WELCOME TO LIGHT ✨', 'color: #FFD700; font-size: 14px; letter-spacing: 2px;');
         }
         percentElement.textContent = progress + '%';
     }, 80);
     
     // ============================================
-    // PREMIUM CURSOR INERTIA & MOMENTUM PHYSICS
+    // CURSOR PHYSICS
     // ============================================
     
     const cursorDot = document.querySelector('.cursor-dot');
@@ -947,7 +1016,7 @@
     price?.addEventListener('click', redirect);
     
     // ============================================
-    // SEARCH FUNCTIONALITY
+    // SEARCH
     // ============================================
     
     const searchInput = document.getElementById('searchInput');
@@ -979,10 +1048,7 @@
     searchBtn?.addEventListener('click', doSearch);
     searchInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') doSearch(); });
     
-    // ============================================
-    // CURIOSITY FACTS
-    // ============================================
-    
+    // Curiosity facts
     document.querySelectorAll('.curiosity-item').forEach(item => {
         item.addEventListener('click', () => {
             const fact = item.getAttribute('data-fact');
