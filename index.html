@@ -3,21 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    
-    <!-- SEO -->
-    <title>What Is Light Really? | Unseen Studio® | Cursor Physics</title>
+    <title>What Is Light Really? | Cinematic 3D Loading</title>
     <meta name="description" content="What is light really? Light is a blessing from God — electromagnetic radiation that helps us see, boosts our mood, and powers photosynthesis.">
-    <meta name="keywords" content="what is light, light blessing, electromagnetic radiation, photosynthesis, flashlight, unseen studio, cursor physics, inertia">
-    <meta name="author" content="Light Philosophy">
     <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="What Is Light Really?">
-    <meta property="og:description" content="Light is a blessing — refreshingly unexpected ideas about light with premium cursor physics.">
-    <meta property="og:type" content="website">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='70' text-anchor='middle' font-size='70' fill='%23FFFFFF' font-family='monospace'%3EL%3C/text%3E%3C/svg%3E">
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -34,18 +22,157 @@
             background: #000000;
             font-family: 'Space Grotesk', sans-serif;
             color: #ffffff;
-            line-height: 1.4;
             overflow-x: hidden;
         }
 
-        /* Hide default cursor on all interactive elements */
+        /* Hide default cursor */
         a, button, .product-showcase, .price-tag, .curiosity-item, .search-wrapper button, .hero-letter {
             cursor: none;
         }
 
+        /* ========== CINEMATIC LOADING SCREEN ========== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 20000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0s 1.2s;
+            opacity: 1;
+            visibility: visible;
+            backdrop-filter: blur(0px);
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* 3D Light Core */
+        .loading-core {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, #FFD700, #FF8C00, #FF1493);
+            border-radius: 50%;
+            animation: pulse3D 1.5s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5), 0 0 120px rgba(255, 20, 147, 0.3);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes pulse3D {
+            0% {
+                transform: scale(0.8) rotateX(0deg);
+                opacity: 0.6;
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            }
+            50% {
+                transform: scale(1.2) rotateX(15deg);
+                opacity: 1;
+                box-shadow: 0 0 100px rgba(255, 215, 0, 0.8), 0 0 150px rgba(255, 20, 147, 0.5);
+            }
+            100% {
+                transform: scale(0.8) rotateX(0deg);
+                opacity: 0.6;
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            }
+        }
+
+        /* Loading text with cinematic animation */
+        .loading-text {
+            margin-top: 3rem;
+            font-size: 1rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Space Grotesk', monospace;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: dotBounce 1.2s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: 0s; }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+        .loading-dots span:nth-child(4) { animation-delay: 0.6s; }
+        .loading-dots span:nth-child(5) { animation-delay: 0.8s; }
+
+        @keyframes dotBounce {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-15px);
+                opacity: 1;
+                background: #FFD700;
+                box-shadow: 0 0 10px #FFD700;
+            }
+        }
+
+        /* Cinematic ring around loading core */
+        .loading-ring {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            animation: ringSpin 3s linear infinite;
+        }
+
+        .loading-ring::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: ringSpinReverse 4s linear infinite;
+        }
+
+        @keyframes ringSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes ringSpinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        .loading-percent {
+            margin-top: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: monospace;
+            background: linear-gradient(135deg, #FFD700, #FF1493);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
         /* ========== PREMIUM CURSOR SYSTEM ========== */
-        
-        /* Main cursor dot (small, sharp) */
         .cursor-dot {
             position: fixed;
             width: 6px;
@@ -55,11 +182,10 @@
             pointer-events: none;
             z-index: 10000;
             transform: translate(-50%, -50%);
-            transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+            transition: width 0.2s ease, height 0.2s ease;
             will-change: transform;
         }
         
-        /* Outer cursor ring (with inertia/momentum) */
         .cursor-ring {
             position: fixed;
             width: 40px;
@@ -69,36 +195,16 @@
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
             will-change: transform;
             backdrop-filter: blur(2px);
         }
         
-        /* Cursor trail particles container */
-        .cursor-trail {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-        }
-        
-        .trail-particle {
-            position: fixed;
-            width: 3px;
-            height: 3px;
-            background-color: rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            will-change: transform, opacity;
-        }
-        
-        /* Active/hover state */
         .cursor-ring.active {
             width: 70px;
             height: 70px;
             border-color: rgba(255, 215, 0, 0.8);
             background: rgba(255, 215, 0, 0.05);
-            backdrop-filter: blur(4px);
         }
         
         .cursor-dot.active {
@@ -106,21 +212,8 @@
             height: 10px;
             background-color: #FFD700;
         }
-        
-        /* Click state */
-        .cursor-ring.click {
-            width: 55px;
-            height: 55px;
-            border-color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translate(-50%, -50%) scale(0.95);
-        }
-        
-        .cursor-dot.click {
-            transform: translate(-50%, -50%) scale(0.8);
-        }
 
-        /* ========== BACKGROUND ========== */
+        /* Background with 3D depth */
         .unseen-bg {
             position: fixed;
             top: 0;
@@ -141,10 +234,8 @@
             background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none;
-            opacity: 0.5;
         }
 
-        /* Main content */
         .page {
             position: relative;
             z-index: 10;
@@ -153,7 +244,7 @@
             padding: 2rem 2rem 4rem;
         }
 
-        /* ========== SEARCH BAR ========== */
+        /* Search bar */
         .search-container {
             display: flex;
             justify-content: flex-end;
@@ -166,18 +257,12 @@
             background: rgba(255, 255, 255, 0.03);
             padding: 0.5rem 0.5rem 0.5rem 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             width: 320px;
         }
 
         .search-wrapper:hover, .search-wrapper:focus-within {
             border-bottom-color: #ffffff;
-        }
-
-        .search-wrapper i {
-            color: #ffffff;
-            font-size: 1rem;
-            opacity: 0.5;
         }
 
         .search-wrapper input {
@@ -204,7 +289,6 @@
             cursor: pointer;
             font-weight: 500;
             font-size: 0.7rem;
-            transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 2px;
             opacity: 0.6;
@@ -214,7 +298,7 @@
             opacity: 1;
         }
 
-        /* ========== HERO SECTION ========== */
+        /* Hero Section */
         .hero {
             text-align: center;
             margin-bottom: 5rem;
@@ -237,44 +321,32 @@
             display: inline-block;
             transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             cursor: pointer;
-        }
-
-        .hero-letter:hover {
-            transform: translateY(-8px) scale(1.05);
-            color: #FFD700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
-
-        @keyframes letterBounce {
-            0% { opacity: 0; transform: translateY(50px); }
-            60% { transform: translateY(-10px); }
-            80% { transform: translateY(5px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-letter {
-            animation: letterBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             opacity: 0;
+            transform: translateY(30px);
         }
 
-        .hero-letters:nth-child(1) .hero-letter:nth-child(1) { animation-delay: 0.02s; }
-        .hero-letters:nth-child(1) .hero-letter:nth-child(2) { animation-delay: 0.06s; }
-        .hero-letters:nth-child(1) .hero-letter:nth-child(3) { animation-delay: 0.10s; }
-        .hero-letters:nth-child(1) .hero-letter:nth-child(4) { animation-delay: 0.14s; }
-        .hero-letters:nth-child(2) .hero-letter:nth-child(1) { animation-delay: 0.20s; }
-        .hero-letters:nth-child(2) .hero-letter:nth-child(2) { animation-delay: 0.24s; }
-        .hero-letters:nth-child(3) .hero-letter:nth-child(1) { animation-delay: 0.30s; }
-        .hero-letters:nth-child(3) .hero-letter:nth-child(2) { animation-delay: 0.34s; }
-        .hero-letters:nth-child(3) .hero-letter:nth-child(3) { animation-delay: 0.38s; }
-        .hero-letters:nth-child(3) .hero-letter:nth-child(4) { animation-delay: 0.42s; }
-        .hero-letters:nth-child(3) .hero-letter:nth-child(5) { animation-delay: 0.46s; }
-        .hero-letters:nth-child(4) .hero-letter:nth-child(1) { animation-delay: 0.52s; }
-        .hero-letters:nth-child(4) .hero-letter:nth-child(2) { animation-delay: 0.56s; }
-        .hero-letters:nth-child(4) .hero-letter:nth-child(3) { animation-delay: 0.60s; }
-        .hero-letters:nth-child(4) .hero-letter:nth-child(4) { animation-delay: 0.64s; }
-        .hero-letters:nth-child(4) .hero-letter:nth-child(5) { animation-delay: 0.68s; }
-        .hero-letters:nth-child(4) .hero-letter:nth-child(6) { animation-delay: 0.72s; }
-        .hero-letters:nth-child(4) .hero-letter:nth-child(7) { animation-delay: 0.76s; }
+        .hero-letter.animate-in {
+            animation: cinematicLetterIn 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        @keyframes cinematicLetterIn {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) rotateX(-20deg);
+                filter: blur(8px);
+            }
+            40% {
+                transform: translateY(-10px) rotateX(5deg);
+            }
+            70% {
+                transform: translateY(5px) rotateX(-2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+                filter: blur(0);
+            }
+        }
 
         .hero-sub {
             font-size: 0.8rem;
@@ -282,13 +354,13 @@
             color: rgba(255, 255, 255, 0.4);
             margin-bottom: 2rem;
             opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.9s;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .hero-sub.animate-in {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .blessing-tag {
@@ -304,21 +376,34 @@
             color: rgba(255, 255, 255, 0.6);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.1s;
+        }
+
+        .blessing-tag.animate-in {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .science-line {
             font-size: 0.7rem;
-            background: transparent;
             display: inline-block;
             padding: 0.5rem 1rem;
             font-family: monospace;
-            font-weight: 400;
             color: rgba(255, 255, 255, 0.4);
             letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.2s;
         }
 
-        /* ========== CARDS ========== */
+        .science-line.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Cards */
         .facts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -340,13 +425,16 @@
             transform: translateY(0);
         }
 
+        .card:hover {
+            transform: translateY(-5px);
+            border-top-color: rgba(255, 215, 0, 0.5);
+        }
+
         .card h2 {
-            font-family: 'Space Grotesk', sans-serif;
             font-size: 1.5rem;
             font-weight: 500;
             margin-bottom: 1.5rem;
             letter-spacing: 3px;
-            color: #ffffff;
         }
 
         .card ul {
@@ -359,21 +447,12 @@
             display: flex;
             align-items: flex-start;
             gap: 0.8rem;
-            line-height: 1.4;
             color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 0.3px;
-            transition: transform 0.2s ease;
-        }
-
-        .card li:hover {
-            transform: translateX(5px);
-            color: rgba(255, 255, 255, 0.9);
         }
 
         .card li::before {
             content: "—";
             color: #ffffff;
-            font-size: 0.9rem;
             opacity: 0.5;
         }
 
@@ -385,7 +464,7 @@
             color: rgba(255, 255, 255, 0.4);
         }
 
-        /* ========== PRODUCT SHOWCASE ========== */
+        /* Product Showcase */
         .product-showcase {
             margin: 5rem 0;
             display: flex;
@@ -397,7 +476,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             opacity: 0;
             transform: translateY(30px);
         }
@@ -407,6 +486,12 @@
             transform: translateY(0);
         }
 
+        .product-showcase:hover {
+            transform: translateY(-5px);
+            border-top-color: rgba(255, 215, 0, 0.3);
+            border-bottom-color: rgba(255, 215, 0, 0.3);
+        }
+
         .flashlight-info {
             flex: 1;
             min-width: 240px;
@@ -414,11 +499,9 @@
         }
 
         .flashlight-info h3 {
-            font-family: 'Space Grotesk', sans-serif;
             font-size: 2rem;
             font-weight: 500;
             letter-spacing: -0.02em;
-            color: #ffffff;
             margin-bottom: 0.5rem;
         }
 
@@ -436,20 +519,13 @@
             color: #ffffff;
             margin: 0.5rem 0;
             cursor: pointer;
-            transition: all 0.2s ease;
-            letter-spacing: -0.02em;
             display: inline-block;
-        }
-
-        .price-tag:hover {
-            transform: scale(1.02);
         }
 
         .price-tag small {
             font-size: 0.9rem;
             text-decoration: line-through;
             color: rgba(255, 255, 255, 0.3);
-            font-weight: 400;
         }
 
         .btn-buy {
@@ -459,10 +535,9 @@
             font-weight: 500;
             font-size: 0.8rem;
             padding: 0.8rem 2rem;
-            border-radius: 0px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: inherit;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -470,28 +545,19 @@
         .btn-buy:hover {
             background: #ffffff;
             color: #000000;
-            border-color: #ffffff;
         }
 
         .flashlight-image svg {
             max-width: 180px;
             width: 100%;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
-            transition: transform 0.4s ease;
+            transition: transform 0.3s ease;
         }
 
         .product-showcase:hover .flashlight-image svg {
             transform: rotate(3deg) scale(1.03);
         }
 
-        .caption-action {
-            font-size: 0.6rem;
-            margin-top: 0.5rem;
-            color: rgba(255, 255, 255, 0.3);
-            letter-spacing: 1px;
-        }
-
-        /* ========== CURIOSITY ========== */
+        /* Curiosity Section */
         .curiosity-section {
             margin: 4rem 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -521,11 +587,9 @@
         }
 
         .curiosity-item {
-            background: transparent;
-            padding: 0;
             font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             color: rgba(255, 255, 255, 0.5);
             letter-spacing: 1px;
             border-bottom: 1px solid transparent;
@@ -537,7 +601,7 @@
             transform: translateY(-2px);
         }
 
-        /* ========== FOOTER ========== */
+        /* Footer */
         .fun-footer {
             margin-top: 5rem;
             text-align: center;
@@ -547,19 +611,20 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 0.3s;
+        }
+
+        .fun-footer.animate-in {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .fun-footer span {
-            background: transparent;
-            padding: 0.2rem 0.5rem;
             font-size: 0.7rem;
             color: rgba(255, 255, 255, 0.3);
             letter-spacing: 1px;
-            transition: all 0.2s ease;
-        }
-
-        .fun-footer span:hover {
-            color: rgba(255, 255, 255, 0.7);
         }
 
         .credits-section {
@@ -568,7 +633,12 @@
             padding: 1rem;
             font-size: 0.6rem;
             color: rgba(255, 255, 255, 0.2);
-            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.6s ease 0.4s;
+        }
+
+        .credits-section.animate-in {
+            opacity: 1;
         }
 
         .search-results {
@@ -585,24 +655,6 @@
             font-size: 0.75rem;
             color: rgba(255, 255, 255, 0.5);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            letter-spacing: 1px;
-        }
-
-        .loading-dots {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.2);
-            z-index: 100;
-            font-family: monospace;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.6; }
         }
 
         @media (max-width: 750px) {
@@ -611,25 +663,35 @@
             .product-showcase { flex-direction: column; text-align: center; }
             .flashlight-info { text-align: center; }
             .search-wrapper { width: 100%; }
-            .hero-letters { gap: 0.2rem; }
             .cursor-dot, .cursor-ring { display: none; }
             body { cursor: auto; }
-            a, button, .product-showcase, .price-tag, .curiosity-item { cursor: pointer; }
+            .loading-core { width: 80px; height: 80px; }
+            .loading-ring { width: 130px; height: 130px; }
         }
     </style>
 </head>
 <body>
 
-<div class="unseen-bg"></div>
+<!-- CINEMATIC LOADING SCREEN -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-ring"></div>
+    <div class="loading-core"></div>
+    <div class="loading-text">ILLUMINATING</div>
+    <div class="loading-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="loading-percent" id="loadingPercent">0%</div>
+</div>
 
-<!-- PREMIUM CURSOR SYSTEM with INERTIA & MOMENTUM -->
+<div class="unseen-bg"></div>
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
-<div class="cursor-trail"></div>
 
-<div class="loading-dots">( L O A D I N G . . . L I G H T )</div>
-
-<div class="page">
+<div class="page" id="mainContent" style="opacity: 0;">
     <div class="search-container">
         <div class="search-wrapper">
             <i class="fas fa-search"></i>
@@ -679,7 +741,7 @@
                 <li>It helps us experience the world we live in — every shade, every detail.</li>
                 <li>It literally helps with our mood — it can make you happy.</li>
             </ul>
-            <div class="photosynthesis-note">“Let there be light” — and suddenly, everything feels brighter.</div>
+            <div class="photosynthesis-note">"Let there be light" — and suddenly, everything feels brighter.</div>
         </div>
         <div class="card" id="card2">
             <h2>LIGHT & LIFE</h2>
@@ -694,10 +756,10 @@
     <div class="curiosity-section" id="curiositySection">
         <h4>— CURIOUS ABOUT LIGHT? —</h4>
         <div class="curiosity-grid">
-            <div class="curiosity-item" data-fact="Light travels at 299,792,458 meters per second!">SPEED OF LIGHT</div>
-            <div class="curiosity-item" data-fact="The sun produces enough energy in one second to power Earth for 500,000 years!">SOLAR POWER</div>
-            <div class="curiosity-item" data-fact="Fireflies produce light through bioluminescence — no electricity needed!">BIOLUMINESCENCE</div>
-            <div class="curiosity-item" data-fact="Without light, there would be no color — everything would be black!">COLOR & LIGHT</div>
+            <div class="curiosity-item" data-fact="Light travels at 299,792,458 meters per second!">⚡ SPEED OF LIGHT</div>
+            <div class="curiosity-item" data-fact="The sun produces enough energy in one second to power Earth for 500,000 years!">☀️ SOLAR POWER</div>
+            <div class="curiosity-item" data-fact="Fireflies produce light through bioluminescence — no electricity needed!">🐞 BIOLUMINESCENCE</div>
+            <div class="curiosity-item" data-fact="Without light, there would be no color — everything would be black!">🎨 COLOR & LIGHT</div>
         </div>
     </div>
 
@@ -708,7 +770,7 @@
             <div style="font-size: 0.7rem; letter-spacing: 2px; color: rgba(255,255,255,0.4);">REFRESHINGLY UNEXPECTED</div>
             <div class="price-tag" id="priceTag">KSh 699 <small>was KSh 1,739</small></div>
             <button class="btn-buy" id="buyNowBtn">SHOP NOW →</button>
-            <div class="caption-action">CLICK ANYWHERE TO CUT THROUGH THE NOISE</div>
+            <div class="caption-action" style="font-size: 0.6rem; margin-top: 0.5rem;">CLICK ANYWHERE TO SHOP</div>
         </div>
         <div class="flashlight-image">
             <svg viewBox="0 0 200 260" fill="none">
@@ -735,45 +797,77 @@
     </div>
     
     <div class="credits-section">
-        <div>INSPIRED BY UNSEEN STUDIO® — PREMIUM CURSOR PHYSICS WITH INERTIA & MOMENTUM</div>
-        <div style="margin-top: 0.5rem;">CRAFTED WITH LIGHT — SHOP QUALITY FLASHLIGHTS ON JUMIA KENYA</div>
+        <div>INSPIRED BY UNSEEN STUDIO® — CINEMATIC 3D MOTION & PREMIUM CURSOR PHYSICS</div>
+        <div style="margin-top: 0.5rem;">CRAFTED WITH LIGHT — SHOP ON JUMIA KENYA</div>
     </div>
 </div>
 
 <script>
     // ============================================
+    // CINEMATIC LOADING SCREEN WITH PERCENTAGE
+    // ============================================
+    
+    const loadingScreen = document.getElementById('loadingScreen');
+    const mainContent = document.getElementById('mainContent');
+    const percentElement = document.getElementById('loadingPercent');
+    
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 15) + 5;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            
+            // Hide loading screen with cinematic fade
+            loadingScreen.classList.add('hide');
+            
+            // Reveal main content with fade in
+            mainContent.style.transition = 'opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+            mainContent.style.opacity = '1';
+            
+            // Trigger all animations
+            document.querySelectorAll('.hero-letter').forEach(el => el.classList.add('animate-in'));
+            document.querySelector('.hero-sub')?.classList.add('animate-in');
+            document.querySelector('.blessing-tag')?.classList.add('animate-in');
+            document.querySelector('.science-line')?.classList.add('animate-in');
+            document.querySelector('.fun-footer')?.classList.add('animate-in');
+            document.querySelector('.credits-section')?.classList.add('animate-in');
+            
+            // Scroll observer for cards
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+            
+            document.querySelectorAll('.card, .product-showcase, .curiosity-section').forEach(el => observer.observe(el));
+            
+            console.log('%c✨ CINEMATIC LOADING COMPLETE — WELCOME TO LIGHT ✨', 'color: #FFD700; font-size: 14px; letter-spacing: 2px;');
+        }
+        percentElement.textContent = progress + '%';
+    }, 80);
+    
+    // ============================================
     // PREMIUM CURSOR INERTIA & MOMENTUM PHYSICS
     // ============================================
     
-    // Get cursor elements
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorRing = document.querySelector('.cursor-ring');
-    const trailContainer = document.querySelector('.cursor-trail');
     
-    // Position variables with momentum
     let mouseX = 0, mouseY = 0;
     let dotX = 0, dotY = 0;
     let ringX = 0, ringY = 0;
-    
-    // Velocity for inertia (momentum)
     let ringVX = 0, ringVY = 0;
     
-    // Physics parameters
-    const DOT_FOLLOW_SPEED = 0.25;      // Dot follows almost instantly
-    const RING_FOLLOW_SPEED = 0.08;     // Ring has inertia (lower = more lag)
-    const INERTIA_DAMPING = 0.92;       // How fast momentum decays (0.92 = smooth)
-    const MAX_VELOCITY = 15;            // Max momentum speed
+    const DOT_SPEED = 0.25;
+    const RING_SPEED = 0.08;
+    const DAMPING = 0.92;
+    const MAX_VEL = 15;
     
-    // Trail particles array
-    let trailPositions = [];
-    const MAX_TRAIL_LENGTH = 12;
-    
-    // Update cursor position from mouse
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
         
-        // Update hover state for interactive elements
         const target = e.target;
         const isClickable = target.closest('.product-showcase, .btn-buy, .price-tag, .curiosity-item, .search-wrapper button, .hero-letter');
         if (isClickable) {
@@ -785,7 +879,6 @@
         }
     });
     
-    // Click animation
     document.addEventListener('mousedown', () => {
         cursorRing.classList.add('click');
         cursorDot.classList.add('click');
@@ -795,75 +888,32 @@
         }, 150);
     });
     
-    // Animation loop with INERTIA PHYSICS
-    function animateCursorWithMomentum() {
-        // 1. UPDATE DOT (sharp, minimal inertia)
-        dotX += (mouseX - dotX) * DOT_FOLLOW_SPEED;
-        dotY += (mouseY - dotY) * DOT_FOLLOW_SPEED;
+    function animateCursor() {
+        dotX += (mouseX - dotX) * DOT_SPEED;
+        dotY += (mouseY - dotY) * DOT_SPEED;
         cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
         
-        // 2. UPDATE RING WITH MOMENTUM (velocity-based inertia)
-        // Calculate target position with spring physics
-        const targetX = mouseX;
-        const targetY = mouseY;
+        let forceX = (mouseX - ringX) * RING_SPEED;
+        let forceY = (mouseY - ringY) * RING_SPEED;
+        forceX = Math.min(Math.max(forceX, -MAX_VEL), MAX_VEL);
+        forceY = Math.min(Math.max(forceY, -MAX_VEL), MAX_VEL);
         
-        // Calculate force (spring back to target)
-        let forceX = (targetX - ringX) * RING_FOLLOW_SPEED;
-        let forceY = (targetY - ringY) * RING_FOLLOW_SPEED;
-        
-        // Limit force to prevent crazy speeds
-        forceX = Math.min(Math.max(forceX, -MAX_VELOCITY), MAX_VELOCITY);
-        forceY = Math.min(Math.max(forceY, -MAX_VELOCITY), MAX_VELOCITY);
-        
-        // Apply force to velocity
         ringVX += forceX;
         ringVY += forceY;
+        ringVX *= DAMPING;
+        ringVY *= DAMPING;
+        ringVX = Math.min(Math.max(ringVX, -MAX_VEL), MAX_VEL);
+        ringVY = Math.min(Math.max(ringVY, -MAX_VEL), MAX_VEL);
         
-        // Apply damping (momentum decay)
-        ringVX *= INERTIA_DAMPING;
-        ringVY *= INERTIA_DAMPING;
-        
-        // Limit max velocity
-        ringVX = Math.min(Math.max(ringVX, -MAX_VELOCITY), MAX_VELOCITY);
-        ringVY = Math.min(Math.max(ringVY, -MAX_VELOCITY), MAX_VELOCITY);
-        
-        // Update position with velocity
         ringX += ringVX;
         ringY += ringVY;
-        
         cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
         
-        // 3. TRAIL PARTICLES (store positions and create particles)
-        trailPositions.unshift({ x: ringX, y: ringY });
-        if (trailPositions.length > MAX_TRAIL_LENGTH) {
-            trailPositions.pop();
-        }
-        
-        // Update trail particles
-        const existingParticles = trailContainer.querySelectorAll('.trail-particle');
-        existingParticles.forEach(p => p.remove());
-        
-        trailPositions.forEach((pos, index) => {
-            if (index === 0) return; // Skip current position
-            const opacity = 0.3 * (1 - index / MAX_TRAIL_LENGTH);
-            const size = 3 * (1 - index / MAX_TRAIL_LENGTH);
-            const particle = document.createElement('div');
-            particle.className = 'trail-particle';
-            particle.style.left = pos.x + 'px';
-            particle.style.top = pos.y + 'px';
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.opacity = opacity;
-            trailContainer.appendChild(particle);
-        });
-        
-        requestAnimationFrame(animateCursorWithMomentum);
+        requestAnimationFrame(animateCursor);
     }
     
-    // Start cursor physics animation
-    animateCursorWithMomentum();
+    animateCursor();
     
-    // Hide cursor when leaving window
     document.addEventListener('mouseleave', () => {
         cursorDot.style.opacity = '0';
         cursorRing.style.opacity = '0';
@@ -874,87 +924,75 @@
         cursorRing.style.opacity = '1';
     });
     
-    // ========== SCROLL TRIGGER (Intersection Observer) ==========
-    const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -50px 0px' };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-    }, observerOptions);
+    // ============================================
+    // JUMLA REDIRECT
+    // ============================================
     
-    document.querySelectorAll('.card, .product-showcase, .curiosity-section').forEach(el => observer.observe(el));
-    
-    // ========== JUMLA REDIRECT ==========
-    const JUMLA_FLASHLIGHT_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
-    const productCardElem = document.getElementById('productCard');
+    const JUMLA_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
+    const productCard = document.getElementById('productCard');
     const buyBtn = document.getElementById('buyNowBtn');
-    const priceTagElem = document.getElementById('priceTag');
+    const price = document.getElementById('priceTag');
     
-    function showToastAndRedirect() {
+    function redirect() {
         const toast = document.createElement('div');
         toast.textContent = '→ REDIRECTING TO JUMIA KENYA ←';
-        toast.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:12px 28px;font-family:'Space Grotesk',monospace;z-index:1000;border:1px solid rgba(255,255,255,0.2);font-size:0.7rem;letter-spacing:2px;`;
+        toast.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:12px 28px;z-index:1000;border:1px solid rgba(255,255,255,0.2);font-size:0.7rem;letter-spacing:2px;font-family:monospace;`;
         document.body.appendChild(toast);
-        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 1200);
-        setTimeout(() => { window.open(JUMLA_FLASHLIGHT_URL, '_blank'); }, 250);
+        setTimeout(() => toast.remove(), 1200);
+        setTimeout(() => window.open(JUMLA_URL, '_blank'), 200);
     }
     
-    function handleRedirect(e) { e.preventDefault(); e.stopPropagation(); showToastAndRedirect(); }
+    productCard?.addEventListener('click', redirect);
+    buyBtn?.addEventListener('click', redirect);
+    price?.addEventListener('click', redirect);
     
-    if (productCardElem) { productCardElem.addEventListener('click', handleRedirect); productCardElem.style.cursor = 'pointer'; }
-    if (buyBtn) buyBtn.addEventListener('click', handleRedirect);
-    if (priceTagElem) { priceTagElem.addEventListener('click', handleRedirect); priceTagElem.style.cursor = 'pointer'; }
+    // ============================================
+    // SEARCH FUNCTIONALITY
+    // ============================================
     
-    // ========== SEARCH ==========
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
-    const searchResultsDiv = document.getElementById('searchResults');
+    const searchResults = document.getElementById('searchResults');
     
-    const searchableContent = [
-        { term: "light", description: "Light is electromagnetic radiation visible to the human eye." },
-        { term: "blessing", description: "Light is considered a blessing from God — it brings warmth and life." },
-        { term: "flashlight", description: "Shop the Mythco Rechargeable Torch — KSh 699 on Jumia Kenya." },
-        { term: "photosynthesis", description: "Plants use light for photosynthesis, producing the oxygen we breathe." },
-        { term: "mood", description: "Light exposure affects serotonin levels and can improve your mood." },
-        { term: "electromagnetic", description: "Light is a form of electromagnetic radiation, like radio waves and X-rays." },
-        { term: "oxygen", description: "Photosynthesis produces oxygen — thank light for every breath!" }
+    const content = [
+        { term: "light", desc: "Light is electromagnetic radiation visible to the human eye." },
+        { term: "blessing", desc: "Light is a blessing from God — it brings warmth and life." },
+        { term: "flashlight", desc: "Mythco Rechargeable Torch — KSh 699 on Jumia Kenya." },
+        { term: "photosynthesis", desc: "Plants use light for photosynthesis, producing oxygen." },
+        { term: "mood", desc: "Light exposure affects serotonin and improves mood." },
+        { term: "electromagnetic", desc: "Light is a form of electromagnetic radiation." }
     ];
     
-    function performSearch() {
-        const query = searchInput.value.toLowerCase().trim();
-        if (!query) { searchResultsDiv.classList.remove('active'); return; }
-        const results = searchableContent.filter(item => item.term.includes(query) || item.description.toLowerCase().includes(query));
-        if (results.length > 0) {
-            searchResultsDiv.innerHTML = results.map(r => `<div class="result-item">→ <strong>${r.term.toUpperCase()}</strong> — ${r.description}</div>`).join('');
-            searchResultsDiv.classList.add('active');
+    function doSearch() {
+        const q = searchInput.value.toLowerCase().trim();
+        if (!q) { searchResults.classList.remove('active'); return; }
+        const results = content.filter(c => c.term.includes(q) || c.desc.toLowerCase().includes(q));
+        if (results.length) {
+            searchResults.innerHTML = results.map(r => `<div class="result-item">→ <strong>${r.term.toUpperCase()}</strong> — ${r.desc}</div>`).join('');
+            searchResults.classList.add('active');
         } else {
-            searchResultsDiv.innerHTML = `<div class="result-item">→ NO RESULTS FOR "${query.toUpperCase()}"</div>`;
-            searchResultsDiv.classList.add('active');
+            searchResults.innerHTML = `<div class="result-item">→ No results for "${q}"</div>`;
+            searchResults.classList.add('active');
         }
     }
     
-    searchBtn.addEventListener('click', performSearch);
-    searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
-    document.addEventListener('click', (e) => {
-        if (!searchInput.contains(e.target) && !searchBtn.contains(e.target) && !searchResultsDiv.contains(e.target)) {
-            searchResultsDiv.classList.remove('active');
-        }
-    });
+    searchBtn?.addEventListener('click', doSearch);
+    searchInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') doSearch(); });
     
-    // Curiosity facts
+    // ============================================
+    // CURIOSITY FACTS
+    // ============================================
+    
     document.querySelectorAll('.curiosity-item').forEach(item => {
         item.addEventListener('click', () => {
             const fact = item.getAttribute('data-fact');
             const toast = document.createElement('div');
             toast.textContent = `→ ${fact} ←`;
-            toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 20px;border:1px solid rgba(255,255,255,0.2);z-index:1000;font-size:0.7rem;letter-spacing:1px;`;
+            toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:10px 20px;border:1px solid rgba(255,255,255,0.2);z-index:1000;font-size:0.7rem;letter-spacing:1px;font-family:monospace;`;
             document.body.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2500);
+            setTimeout(() => toast.remove(), 2500);
         });
     });
-    
-    console.log("%c✨ PREMIUM CURSOR PHYSICS ACTIVATED — INERTIA & MOMENTUM ✨", "color: #ffffff; font-size: 12px; letter-spacing: 2px;");
-    console.log("%c→ Dot: sharp follow • Ring: velocity-based momentum with damping • Trail: smooth particle trail", "color: rgba(255,255,255,0.5); font-size: 10px;");
 </script>
 </body>
 </html>
