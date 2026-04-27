@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>What Is Light Really? | INTO THE BLACK HOLE</title>
-    <meta name="description" content="Get sucked INTO the Gargantua black hole - then explode into polaroids">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>What Is Light Really? | MAX QUALITY | 4K Cinematic Black Hole</title>
+    <meta name="description" content="Ultra-premium 4K black hole experience with full post-processing, bloom, DOF, and cinematic lighting">
     
     <script type="importmap">
         {
@@ -34,6 +34,7 @@
             color: #ffffff;
             overflow: hidden;
             height: 100vh;
+            width: 100vw;
         }
 
         ::-webkit-scrollbar { display: none; }
@@ -56,31 +57,34 @@
         /* Navigation */
         .nav-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 1001;
             display: flex;
             justify-content: center;
             gap: 2rem;
-            padding: 1rem 2rem;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 0.8rem 2rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
         .nav-btn {
             background: transparent;
             border: none;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.8);
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             letter-spacing: 2px;
-            padding: 0.5rem 1.5rem;
+            padding: 0.5rem 1.8rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             border-radius: 40px;
             position: relative;
+            font-weight: 500;
         }
 
         .nav-btn::before {
@@ -96,60 +100,69 @@
         }
 
         .nav-btn:hover::before, .nav-btn.active::before {
-            width: 70%;
+            width: 60%;
         }
 
         .nav-btn:hover, .nav-btn.active {
             color: #FFD700;
             transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
         }
 
         /* UI Elements */
         .cursor-dot, .cursor-ring { position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); }
-        .cursor-dot { width: 6px; height: 6px; background: #FFD700; border-radius: 50%; box-shadow: 0 0 10px #FFD700; }
-        .cursor-ring { width: 40px; height: 40px; border: 1.5px solid rgba(255, 215, 0, 0.5); border-radius: 50%; backdrop-filter: blur(2px); z-index: 9999; transition: all 0.2s ease; }
+        .cursor-dot { width: 8px; height: 8px; background: #FFD700; border-radius: 50%; box-shadow: 0 0 15px #FFD700; }
+        .cursor-ring { width: 45px; height: 45px; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 50%; backdrop-filter: blur(3px); z-index: 9999; transition: all 0.2s ease; }
 
         .music-control {
-            position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%;
-            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,215,0,0.4); color: #FFD700;
+            position: fixed; bottom: 25px; left: 25px; width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,215,0,0.5); color: #FFD700;
             display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1001;
-            backdrop-filter: blur(10px); font-size: 1.2rem;
+            backdrop-filter: blur(15px); font-size: 1.3rem;
+            transition: all 0.3s ease;
         }
+        .music-control:hover { transform: scale(1.1); border-color: #FFD700; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
 
         .scroll-progress {
-            position: fixed; right: 20px; top: 50%; transform: translateY(-50%); width: 3px; height: 200px;
-            background: rgba(255,255,255,0.08); z-index: 1000; border-radius: 3px;
+            position: fixed; right: 25px; top: 50%; transform: translateY(-50%); width: 4px; height: 200px;
+            background: rgba(255,255,255,0.1); z-index: 1000; border-radius: 4px;
         }
         .scroll-progress-fill {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
-            background: linear-gradient(to top, #FFD700, #FF1493); border-radius: 3px;
+            background: linear-gradient(to top, #FFD700, #FF1493); border-radius: 4px;
+            box-shadow: 0 0 10px #FFD700;
         }
 
         .scroll-hint {
-            position: fixed; bottom: 20px; right: 20px; font-size: 0.6rem; letter-spacing: 2px;
-            color: rgba(255,255,255,0.3); z-index: 1000; font-family: monospace;
-            background: rgba(0,0,0,0.5); padding: 0.3rem 0.8rem; border-radius: 20px; pointer-events: none;
-            backdrop-filter: blur(5px);
+            position: fixed; bottom: 25px; right: 25px; font-size: 0.7rem; letter-spacing: 3px;
+            color: rgba(255,255,255,0.4); z-index: 1000; font-family: monospace;
+            background: rgba(0,0,0,0.5); padding: 0.4rem 1rem; border-radius: 30px; pointer-events: none;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Loading Screen */
+        /* Loading Screen - Premium */
         .loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000;
             z-index: 20000; display: flex; flex-direction: column; justify-content: center;
-            align-items: center; transition: opacity 1.2s ease; opacity: 1; visibility: visible;
+            align-items: center; transition: opacity 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); opacity: 1; visibility: visible;
         }
         .loading-screen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
         .loading-core {
-            width: 120px; height: 120px; background: radial-gradient(circle, #FFD700, #FF1493, #4B0082);
-            border-radius: 50%; box-shadow: 0 0 60px rgba(255,215,0,0.5);
+            width: 140px; height: 140px; background: radial-gradient(circle, #FFD700, #FF1493, #4B0082);
+            border-radius: 50%; box-shadow: 0 0 80px rgba(255,215,0,0.6);
             animation: pulse3D 1.5s ease-in-out infinite;
         }
-        @keyframes pulse3D { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }
-        .loading-text { margin-top: 3rem; font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
-        .loading-dots { display: flex; gap: 0.5rem; margin-top: 1rem; }
-        .loading-dots span { width: 8px; height: 8px; background: #FFD700; border-radius: 50%; animation: dotBounce 1.2s infinite; }
-        @keyframes dotBounce { 0%,100% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(-15px); opacity: 1; } }
-        .loading-percent { margin-top: 2rem; font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #FFD700, #FF1493); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        @keyframes pulse3D { 0% { transform: scale(0.8); opacity: 0.6; box-shadow: 0 0 40px rgba(255,215,0,0.4); } 50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 100px rgba(255,215,0,0.8); } 100% { transform: scale(0.8); opacity: 0.6; box-shadow: 0 0 40px rgba(255,215,0,0.4); } }
+        .loading-text { margin-top: 3rem; font-size: 1.2rem; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,255,255,0.8); font-weight: 300; }
+        .loading-dots { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+        .loading-dots span { width: 10px; height: 10px; background: #FFD700; border-radius: 50%; animation: dotBounce 1.2s infinite; box-shadow: 0 0 10px #FFD700; }
+        @keyframes dotBounce { 0%,100% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(-18px); opacity: 1; } }
+        .loading-ring { position: absolute; width: 200px; height: 200px; border: 2px solid rgba(255,215,0,0.3); border-radius: 50%; animation: ringSpin 3s linear infinite; }
+        .loading-ring::before { content: ''; position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border: 1px solid rgba(255,215,0,0.2); border-radius: 50%; animation: ringSpinReverse 4s linear infinite; }
+        @keyframes ringSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes ringSpinReverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+        .loading-percent { margin-top: 2rem; font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #FFD700, #FF1493); background-clip: text; -webkit-background-clip: text; color: transparent; font-family: monospace; }
 
         /* Scroll Container */
         .scroll-container {
@@ -160,37 +173,35 @@
         .scroll-container::-webkit-scrollbar { display: none; }
 
         .page {
-            position: relative; max-width: 1400px; margin: 0 auto; padding: 6rem 2rem 4rem;
+            position: relative; max-width: 1400px; margin: 0 auto; padding: 8rem 2rem 5rem;
             min-height: 100vh;
-            backdrop-filter: blur(5px);
-            transition: all 0.1s linear;
+            backdrop-filter: blur(8px);
         }
 
-        /* Dramatic crushing animation - INTO the black hole */
+        /* Dramatic crushing animation */
         .page.crushing {
-            animation: intoTheBlackHole 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: intoTheBlackHole 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             pointer-events: none;
         }
 
         @keyframes intoTheBlackHole {
             0% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 1; filter: blur(0px); }
-            15% { transform: scale(0.8) rotate(3deg) translateX(-20px); opacity: 0.9; filter: blur(2px); }
-            35% { transform: scale(0.5) rotate(8deg) translateX(-50px) translateY(-30px); opacity: 0.7; filter: blur(8px); }
-            55% { transform: scale(0.2) rotate(15deg) translateX(-100px) translateY(-60px); opacity: 0.4; filter: blur(20px); }
-            75% { transform: scale(0.05) rotate(25deg) translateX(-150px) translateY(-100px); opacity: 0.1; filter: blur(40px); }
-            100% { transform: scale(0) rotate(30deg) translateX(-200px) translateY(-150px); opacity: 0; filter: blur(60px); display: none; }
+            20% { transform: scale(0.7) rotate(5deg) translateX(-30px) translateY(-20px); opacity: 0.9; filter: blur(3px); }
+            45% { transform: scale(0.3) rotate(12deg) translateX(-80px) translateY(-50px); opacity: 0.6; filter: blur(12px); }
+            70% { transform: scale(0.08) rotate(20deg) translateX(-140px) translateY(-90px); opacity: 0.2; filter: blur(30px); }
+            100% { transform: scale(0) rotate(28deg) translateX(-200px) translateY(-130px); opacity: 0; filter: blur(60px); display: none; }
         }
 
         .page.reversing {
-            animation: emergeFromBlackHole 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            animation: emergeFromBlackHole 1.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
         }
 
         @keyframes emergeFromBlackHole {
-            0% { transform: scale(0) rotate(30deg) translateX(-200px) translateY(-150px); opacity: 0; filter: blur(60px); display: block; }
+            0% { transform: scale(0) rotate(28deg) translateX(-200px) translateY(-130px); opacity: 0; filter: blur(60px); display: block; }
             100% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 1; filter: blur(0px); }
         }
 
-        /* Black hole sucking overlay */
+        /* Suck overlay */
         .suck-overlay {
             position: fixed;
             top: 50%;
@@ -202,107 +213,80 @@
             transform: translate(-50%, -50%) scale(0);
             z-index: 20000;
             pointer-events: none;
-            transition: all 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 1.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
+        .suck-overlay.active { transform: translate(-50%, -50%) scale(35); background: radial-gradient(circle, #000000, #0a0015, #1a0030); }
 
-        .suck-overlay.active {
-            transform: translate(-50%, -50%) scale(30);
-            background: radial-gradient(circle, #000000, #0a0015, #1a0030);
-        }
-
-        /* Polaroid styles */
+        /* Polaroid styles - Premium */
         .polaroid {
             position: fixed;
-            width: 220px;
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
-            border-radius: 12px;
-            padding: 12px 12px 20px 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            width: 240px;
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            border-radius: 16px;
+            padding: 14px 14px 24px 14px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,215,0,0.2);
             z-index: 10005;
             opacity: 0;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             pointer-events: auto;
+            backdrop-filter: blur(2px);
         }
+        .polaroid:hover { transform: scale(1.08) !important; box-shadow: 0 40px 70px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(255,215,0,0.5); }
+        .polaroid-image { width: 100%; height: 180px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .polaroid-caption { font-size: 0.75rem; color: #222; text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.5px; }
+        .polaroid-caption span { font-size: 0.65rem; color: #777; font-weight: 400; }
 
-        .polaroid:hover {
-            transform: scale(1.05) !important;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .polaroid-image {
-            width: 100%;
-            height: 170px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .polaroid-caption {
-            font-size: 0.7rem;
-            color: #333;
-            text-align: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-        }
-
-        .polaroid-caption span {
-            font-size: 0.6rem;
-            color: #666;
-            font-weight: 400;
-        }
-
-        /* Content styles */
+        /* Content styles - Premium */
         .hero { text-align: center; padding: 2rem 0; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
-        .hero-letters { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .hero-letter { font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 800; letter-spacing: -0.05em; color: #ffffff; display: inline-block; opacity: 0; transform: translateY(30px); text-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .hero-sub { font-size: 0.8rem; letter-spacing: 4px; color: rgba(255,255,255,0.7); margin-bottom: 2rem; opacity: 0; transform: translateY(20px); }
-        .blessing-tag { display: inline-flex; align-items: center; gap: 0.8rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); padding: 0.6rem 2rem; border-radius: 60px; font-size: 0.9rem; margin: 1rem 0; letter-spacing: 2px; border: 1px solid rgba(255,215,0,0.3); opacity: 0; transform: translateY(20px); }
-        .science-line { font-size: 0.7rem; display: inline-block; padding: 0.5rem 1rem; font-family: monospace; color: rgba(255,255,255,0.5); letter-spacing: 1px; opacity: 0; transform: translateY(20px); }
+        .hero-letters { display: flex; justify-content: center; gap: 0.6rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+        .hero-letter { font-size: clamp(2.8rem, 9vw, 6.5rem); font-weight: 800; letter-spacing: -0.03em; color: #ffffff; display: inline-block; opacity: 0; transform: translateY(40px); text-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .hero-sub { font-size: 0.85rem; letter-spacing: 6px; color: rgba(255,255,255,0.7); margin-bottom: 2rem; opacity: 0; transform: translateY(25px); font-weight: 300; }
+        .blessing-tag { display: inline-flex; align-items: center; gap: 1rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); padding: 0.7rem 2.2rem; border-radius: 60px; font-size: 0.95rem; margin: 1rem 0; letter-spacing: 2px; border: 1px solid rgba(255,215,0,0.4); opacity: 0; transform: translateY(25px); }
+        .science-line { font-size: 0.75rem; display: inline-block; padding: 0.5rem 1.2rem; font-family: monospace; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; opacity: 0; transform: translateY(25px); }
 
         .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 3rem 0; }
-        .card { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 2rem; opacity: 0; transform: translateY(40px); transition: all 0.3s ease; }
-        .card:hover { transform: translateY(-5px); border-color: rgba(255,215,0,0.4); }
-        .card h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 3px; color: #FFD700; }
+        .card { background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.12); border-radius: 1.8rem; padding: 2rem; opacity: 0; transform: translateY(40px); transition: all 0.4s ease; }
+        .card:hover { transform: translateY(-8px) scale(1.01); border-color: rgba(255,215,0,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card h2 { font-size: 1.6rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 3px; color: #FFD700; }
         .card ul { list-style: none; }
-        .card li { margin-bottom: 1rem; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.8rem; color: rgba(255,255,255,0.8); }
-        .card li::before { content: "✦"; color: #FFD700; }
+        .card li { margin-bottom: 1rem; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 0.8rem; color: rgba(255,255,255,0.85); line-height: 1.4; }
+        .card li::before { content: "✦"; color: #FFD700; font-size: 1rem; }
 
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 2rem 0; }
-        .spectrum-bar { height: 60px; border-radius: 30px; background: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3); margin: 2rem 0; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+        .spectrum-bar { height: 70px; border-radius: 35px; background: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3); margin: 2rem 0; box-shadow: 0 0 30px rgba(255,255,255,0.15); }
         
-        .fun-facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
-        .fun-fact { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.1); border-radius: 1rem; padding: 1.5rem; cursor: pointer; opacity: 0; transform: translateY(30px); transition: all 0.3s ease; }
-        .fun-fact:hover { transform: translateY(-5px); border-color: rgba(255,215,0,0.4); }
-        .fun-fact .emoji { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+        .fun-facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .fun-fact { background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,215,0,0.12); border-radius: 1.2rem; padding: 1.5rem; cursor: pointer; opacity: 0; transform: translateY(30px); transition: all 0.3s ease; }
+        .fun-fact:hover { transform: translateY(-6px); border-color: rgba(255,215,0,0.5); }
+        .fun-fact .emoji { font-size: 2.2rem; margin-bottom: 0.6rem; display: block; }
         .fun-fact h4 { color: #FFD700; font-size: 1rem; margin-bottom: 0.5rem; }
-        .fun-fact p { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+        .fun-fact p { color: rgba(255,255,255,0.7); font-size: 0.85rem; line-height: 1.4; }
 
-        .curiosity-grid { display: flex; justify-content: flex-start; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0; }
-        .curiosity-item { font-size: 0.8rem; cursor: pointer; color: rgba(255,255,255,0.7); letter-spacing: 1px; border-bottom: 1px solid transparent; padding: 0.3rem 0; transition: all 0.2s ease; }
-        .curiosity-item:hover { color: #FFD700; border-bottom-color: #FFD700; }
+        .curiosity-grid { display: flex; justify-content: flex-start; gap: 1.8rem; flex-wrap: wrap; margin: 1.5rem 0; }
+        .curiosity-item { font-size: 0.85rem; cursor: pointer; color: rgba(255,255,255,0.7); letter-spacing: 1.5px; border-bottom: 1px solid transparent; padding: 0.3rem 0; transition: all 0.2s ease; }
+        .curiosity-item:hover { color: #FFD700; border-bottom-color: #FFD700; transform: translateY(-2px); }
 
-        .quiz-container { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.2); border-radius: 1rem; padding: 2rem; margin: 2rem 0; opacity: 0; transform: translateY(30px); }
-        .quiz-question { font-size: 1.1rem; margin-bottom: 1rem; color: #FFD700; }
+        .quiz-container { background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,215,0,0.2); border-radius: 1.5rem; padding: 2rem; margin: 2rem 0; opacity: 0; transform: translateY(30px); }
+        .quiz-question { font-size: 1.15rem; margin-bottom: 1.2rem; color: #FFD700; font-weight: 500; }
         .quiz-options { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .quiz-option { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.6rem 1.5rem; border-radius: 40px; cursor: pointer; font-family: inherit; color: white; transition: all 0.2s ease; }
-        .quiz-option:hover { background: #FFD700; color: #000000; }
+        .quiz-option { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 0.7rem 1.6rem; border-radius: 40px; cursor: pointer; font-family: inherit; color: white; transition: all 0.2s ease; font-size: 0.9rem; }
+        .quiz-option:hover { background: #FFD700; color: #000000; transform: scale(1.02); }
 
-        .product-showcase { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem; padding: 3rem 2rem; border-radius: 2rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.2); cursor: pointer; opacity: 0; transform: translateY(40px); transition: all 0.3s ease; }
-        .product-showcase:hover { transform: translateY(-5px); border-color: rgba(255,215,0,0.5); }
+        .product-showcase { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem; padding: 3rem 2.5rem; border-radius: 2rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,215,0,0.25); cursor: pointer; opacity: 0; transform: translateY(40px); transition: all 0.4s ease; }
+        .product-showcase:hover { transform: translateY(-8px); border-color: rgba(255,215,0,0.6); box-shadow: 0 25px 45px rgba(0,0,0,0.5); }
         .flashlight-info { flex: 1; min-width: 240px; text-align: left; }
-        .flashlight-info h3 { font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
-        .price-tag { font-size: 2.5rem; font-weight: 700; color: #FFD700; margin: 0.5rem 0; cursor: pointer; display: inline-block; }
-        .price-tag small { font-size: 0.9rem; text-decoration: line-through; color: rgba(255,255,255,0.4); }
-        .btn-buy { background: linear-gradient(135deg, #FFD700, #FF8C00); border: none; color: #000000; font-weight: 700; font-size: 0.8rem; padding: 0.8rem 2rem; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; border-radius: 40px; transition: transform 0.2s ease; }
-        .btn-buy:hover { transform: scale(1.02); }
-        .flashlight-image svg { max-width: 180px; width: 100%; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
+        .flashlight-info h3 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; letter-spacing: -0.02em; }
+        .price-tag { font-size: 2.8rem; font-weight: 800; color: #FFD700; margin: 0.5rem 0; cursor: pointer; display: inline-block; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .price-tag small { font-size: 1rem; text-decoration: line-through; color: rgba(255,255,255,0.5); font-weight: 400; }
+        .btn-buy { background: linear-gradient(135deg, #FFD700, #FF8C00); border: none; color: #000000; font-weight: 800; font-size: 0.9rem; padding: 0.9rem 2.2rem; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 2.5px; border-radius: 50px; transition: transform 0.2s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .btn-buy:hover { transform: scale(1.03) translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+        .flashlight-image svg { max-width: 180px; width: 100%; filter: drop-shadow(0 0 25px rgba(255,215,0,0.3)); transition: transform 0.3s ease; }
+        .product-showcase:hover .flashlight-image svg { transform: rotate(4deg) scale(1.03); }
 
-        .fun-footer { margin-top: 5rem; text-align: center; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; opacity: 0; transform: translateY(20px); }
-        .fun-footer span { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; transition: all 0.2s ease; }
-        .fun-footer span:hover { color: #FFD700; letter-spacing: 2px; }
+        .fun-footer { margin-top: 5rem; text-align: center; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem; opacity: 0; transform: translateY(25px); }
+        .fun-footer span { font-size: 0.75rem; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; transition: all 0.2s ease; }
+        .fun-footer span:hover { color: #FFD700; letter-spacing: 2.5px; }
 
         @media (max-width: 900px) {
             .facts-grid, .grid-3 { grid-template-columns: 1fr; }
@@ -310,8 +294,10 @@
             .flashlight-info { text-align: center; }
             .cursor-dot, .cursor-ring { display: none; }
             body { cursor: auto; }
-            .polaroid { width: 160px; }
-            .polaroid-image { height: 120px; }
+            .polaroid { width: 170px; }
+            .polaroid-image { height: 130px; }
+            .nav-bar { gap: 0.8rem; padding: 0.6rem 1.2rem; top: 10px; }
+            .nav-btn { padding: 0.3rem 1rem; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -319,8 +305,6 @@
 
 <!-- WebGL Canvas Container -->
 <div id="canvas-container"></div>
-
-<!-- Suck Overlay for dramatic effect -->
 <div class="suck-overlay" id="suckOverlay"></div>
 
 <!-- Navigation -->
@@ -364,14 +348,14 @@
         <div class="facts-grid"><div class="card"><h2>🌱 PHOTOSYNTHESIS</h2><ul><li>Plants convert light energy into chemical energy</li><li>6CO₂ + 6H₂O + Light → C₆H₁₂O₆ + 6O₂</li><li>Without light, there is no oxygen — no us</li></ul></div>
         <div class="card"><h2>🌍 LIGHT & CLIMATE</h2><ul><li>The sun provides Earth with 174 petawatts of energy</li><li>Light maintains Earth's habitable temperature</li></ul></div></div>
 
-        <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">⚡ THE PHYSICS OF LIGHT</div>
+        <div style="font-size:1.3rem; letter-spacing:5px; color:#FFD700; margin:2rem 0 1rem 0; font-weight:500;">⚡ THE PHYSICS OF LIGHT</div>
         <div class="grid-3"><div class="card"><h2>📏 WAVE OR PARTICLE?</h2><ul><li>Light behaves as BOTH a wave AND a particle</li><li>Particles are called "photons"</li></ul></div>
         <div class="card"><h2>📐 SPEED OF LIGHT</h2><ul><li>299,792,458 meters per second</li><li>Nothing in the universe is faster</li></ul></div>
         <div class="card"><h2>🌈 LIGHT SPECTRUM</h2><ul><li>Visible light is a tiny part of EM spectrum</li><li>ROYGBIV — Red, Orange, Yellow, Green, Blue, Indigo, Violet</li></ul></div></div>
 
         <div class="spectrum-bar"></div>
 
-        <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">✨ FASCINATING LIGHT FACTS</div>
+        <div style="font-size:1.3rem; letter-spacing:5px; color:#FFD700; margin:2rem 0 1rem 0; font-weight:500;">✨ FASCINATING LIGHT FACTS</div>
         <div class="fun-facts-grid"><div class="fun-fact"><span class="emoji">🐙</span><h4>Bioluminescence</h4><p>Over 80% of deep-sea creatures produce their own light.</p></div>
         <div class="fun-fact"><span class="emoji">🎨</span><h4>Color is Light</h4><p>Objects don't have color — they reflect wavelengths of light.</p></div>
         <div class="fun-fact"><span class="emoji">⚡</span><h4>Lightning Speed</h4><p>A lightning bolt heats the air to 50,000°F!</p></div>
@@ -379,17 +363,17 @@
         <div class="fun-fact"><span class="emoji">💎</span><h4>Diamond Sparkle</h4><p>Diamonds sparkle because they slow light down.</p></div>
         <div class="fun-fact"><span class="emoji">🦋</span><h4>Butterfly Wings</h4><p>Butterfly wings create color through light interference.</p></div></div>
 
-        <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">❓ CURIOUS ABOUT LIGHT?</div>
+        <div style="font-size:1.3rem; letter-spacing:5px; color:#FFD700; margin:2rem 0 1rem 0; font-weight:500;">❓ CURIOUS ABOUT LIGHT?</div>
         <div class="curiosity-grid"><div class="curiosity-item" data-fact="Light travels at 299,792,458 meters per second!">⚡ SPEED OF LIGHT</div>
         <div class="curiosity-item" data-fact="The sun produces 3.8 × 10²⁶ watts every second!">☀️ SOLAR POWER</div>
         <div class="curiosity-item" data-fact="Fireflies produce light through bioluminescence!">🐞 BIOLUMINESCENCE</div>
         <div class="curiosity-item" data-fact="Without light, there would be no color!">🎨 COLOR & LIGHT</div>
         <div class="curiosity-item" data-fact="Light from Proxima Centauri takes 4.24 YEARS to reach us!">⭐ STARLIGHT</div></div>
 
-        <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">🧠 LIGHT KNOWLEDGE QUIZ</div>
+        <div style="font-size:1.3rem; letter-spacing:5px; color:#FFD700; margin:2rem 0 1rem 0; font-weight:500;">🧠 LIGHT KNOWLEDGE QUIZ</div>
         <div class="quiz-container"><div class="quiz-question">❓ What is the speed of light in a vacuum?</div><div class="quiz-options"><button class="quiz-option" data-correct="false">186,000 mph</button><button class="quiz-option" data-correct="true">299,792 km/s</button><button class="quiz-option" data-correct="false">150,000 km/s</button></div><div class="quiz-feedback" style="margin-top:1rem;"></div></div>
 
-        <div class="product-showcase" id="productCard"><div class="flashlight-info"><div style="font-size:0.6rem; letter-spacing:3px; color:rgba(255,255,255,0.5);">LIMITED EDITION</div><h3>MYTHCO RECHARGEABLE TORCH</h3><div class="price-tag" id="priceTag">KSh 699 <small>was KSh 1,739</small></div><button class="btn-buy" id="buyNowBtn">SHOP NOW →</button></div><div class="flashlight-image"><svg viewBox="0 0 200 260" fill="none"><rect x="55" y="90" width="90" height="130" rx="12" fill="#111111" stroke="#FFD700" stroke-width="1.5"/><circle cx="100" cy="110" r="8" fill="#FFD700"/><path d="M85 220 L115 220 L108 245 L92 245 L85 220Z" fill="#FF8C00" stroke="#FFD700" stroke-width="1"/></svg></div></div>
+        <div class="product-showcase" id="productCard"><div class="flashlight-info"><div style="font-size:0.7rem; letter-spacing:4px; color:rgba(255,255,255,0.6); margin-bottom:0.5rem;">LIMITED EDITION</div><h3>MYTHCO RECHARGEABLE TORCH</h3><div class="price-tag" id="priceTag">KSh 699 <small>was KSh 1,739</small></div><button class="btn-buy" id="buyNowBtn">SHOP NOW →</button></div><div class="flashlight-image"><svg viewBox="0 0 200 260" fill="none"><rect x="55" y="90" width="90" height="130" rx="12" fill="#111111" stroke="#FFD700" stroke-width="1.5"/><circle cx="100" cy="110" r="8" fill="#FFD700"/><path d="M85 220 L115 220 L108 245 L92 245 L85 220Z" fill="#FF8C00" stroke="#FFD700" stroke-width="1"/></svg></div></div>
 
         <div class="fun-footer"><span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span><span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span></div>
     </div>
@@ -403,182 +387,296 @@
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+    import { FilmPass } from 'three/addons/postprocessing/FilmPass.js';
+    import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+    import { RGBShiftShader } from 'three/addons/shaders/RGBShiftShader.js';
     
     // ============================================
-    // GARGANTUA-STYLE BLACK HOLE
+    // MAX QUALITY WEBGL SETUP
     // ============================================
     
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
-    scene.fog = new THREE.FogExp2(0x000000, 0.0006);
+    scene.fog = new THREE.FogExp2(0x000000, 0.0004);  // Very subtle fog
     
-    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 1.2, 13);
+    // Camera with filmic position
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.0, 14);
     camera.lookAt(0, 0, 0);
     
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    // Renderer with MAX QUALITY settings
+    const renderer = new THREE.WebGLRenderer({ 
+        antialias: true, 
+        alpha: false,
+        powerPreference: "high-performance"
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.toneMapping = THREE.ReinhardToneMapping;
-    renderer.toneMappingExposure = 1.4;
+    renderer.setPixelRatio(window.devicePixelRatio);  // NATIVE resolution (4K on 4K screens)
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;  // FILMIC like REDSHIFT
+    renderer.toneMappingExposure = 1.5;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
     
+    // ============================================
+    // FULL POST-PROCESSING STACK
+    // ============================================
     const renderScene = new RenderPass(scene, camera);
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.1, 0.2, 0.85);
+    
+    // Main Bloom Pass (Cinematic glow)
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.3, 0.85);
     bloomPass.threshold = 0.05;
-    bloomPass.strength = 0.8;
-    bloomPass.radius = 0.9;
+    bloomPass.strength = 0.9;
+    bloomPass.radius = 0.8;
+    
+    // Film Grain Pass (Analog texture)
+    const filmPass = new FilmPass(0.25, 0.5, 2048, false);
+    filmPass.renderToScreen = false;
+    
+    // RGB Shift Pass (Chromatic aberration - subtle)
+    const rgbShiftPass = new ShaderPass(RGBShiftShader);
+    rgbShiftPass.uniforms['amount'].value = 0.002;
+    rgbShiftPass.renderToScreen = false;
+    
+    // Effect Composer with all passes
     const effectComposer = new EffectComposer(renderer);
     effectComposer.addPass(renderScene);
     effectComposer.addPass(bloomPass);
+    effectComposer.addPass(rgbShiftPass);
+    effectComposer.addPass(filmPass);
     
+    // Set last pass to render to screen
+    filmPass.renderToScreen = true;
+    
+    // ============================================
+    // ORBIT CONTROLS (CINEMATIC)
+    // ============================================
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
+    controls.dampingFactor = 0.06;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.25;
+    controls.autoRotateSpeed = 0.2;  // SLOW AND CINEMATIC
     controls.enableZoom = false;
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     
-    // Event Horizon
-    const eventHorizonGeo = new THREE.SphereGeometry(1.15, 128, 128);
+    // ============================================
+    // GARGANTUA BLACK HOLE - HIGH RESOLUTION
+    // ============================================
+    
+    // Event Horizon (Ultra high resolution geometry)
+    const eventHorizonGeo = new THREE.SphereGeometry(1.15, 256, 256);
     const eventHorizonMat = new THREE.MeshStandardMaterial({
         color: 0x000000,
-        emissive: 0x110033,
-        emissiveIntensity: 0.25,
-        roughness: 0.1,
-        metalness: 0.95
+        emissive: 0x150033,
+        emissiveIntensity: 0.35,
+        roughness: 0.08,
+        metalness: 0.98,
+        emissiveMap: null
     });
     const eventHorizon = new THREE.Mesh(eventHorizonGeo, eventHorizonMat);
     scene.add(eventHorizon);
     
-    // Photon Sphere
-    const photonSphereGeo = new THREE.SphereGeometry(1.32, 96, 96);
+    // Photon Sphere (Inner glow)
+    const photonSphereGeo = new THREE.SphereGeometry(1.34, 192, 192);
     const photonSphereMat = new THREE.MeshBasicMaterial({
         color: 0xFF66AA,
         transparent: true,
-        opacity: 0.14,
+        opacity: 0.16,
         side: THREE.BackSide
     });
     const photonSphere = new THREE.Mesh(photonSphereGeo, photonSphereMat);
     scene.add(photonSphere);
     
-    // Accretion Disk
-    const diskGeometry = new THREE.TorusGeometry(2.5, 0.24, 256, 512);
+    // Accretion Disk - Main (High poly count)
+    const diskGeometry = new THREE.TorusGeometry(2.6, 0.26, 512, 1024);
     const diskMaterial = new THREE.MeshStandardMaterial({
         color: 0xFF4466,
         emissive: 0xFF2266,
-        emissiveIntensity: 0.75,
-        metalness: 0.85,
-        roughness: 0.25,
+        emissiveIntensity: 0.85,
+        metalness: 0.9,
+        roughness: 0.22,
         transparent: true,
-        opacity: 0.9
+        opacity: 0.92
     });
     const accretionDisk = new THREE.Mesh(diskGeometry, diskMaterial);
-    accretionDisk.rotation.x = Math.PI / 2.12;
-    accretionDisk.rotation.z = 0.3;
+    accretionDisk.rotation.x = Math.PI / 2.1;
+    accretionDisk.rotation.z = 0.32;
     scene.add(accretionDisk);
     
-    // Outer Disk
-    const outerDiskGeo = new THREE.TorusGeometry(3.3, 0.2, 256, 512);
+    // Outer Accretion Disk
+    const outerDiskGeo = new THREE.TorusGeometry(3.5, 0.22, 512, 1024);
     const outerDiskMat = new THREE.MeshStandardMaterial({
         color: 0xFF6633,
         emissive: 0xFF4411,
-        emissiveIntensity: 0.55,
-        metalness: 0.75,
-        roughness: 0.35,
+        emissiveIntensity: 0.6,
+        metalness: 0.8,
+        roughness: 0.32,
         transparent: true,
-        opacity: 0.7
+        opacity: 0.75
     });
     const outerDisk = new THREE.Mesh(outerDiskGeo, outerDiskMat);
-    outerDisk.rotation.x = Math.PI / 2.05;
-    outerDisk.rotation.z = -0.2;
+    outerDisk.rotation.x = Math.PI / 2.03;
+    outerDisk.rotation.z = -0.22;
     scene.add(outerDisk);
     
-    // Inner hot ring
-    const innerRingGeo = new THREE.TorusGeometry(1.7, 0.07, 128, 384);
+    // Inner Hot Ring
+    const innerRingGeo = new THREE.TorusGeometry(1.75, 0.08, 256, 768);
     const innerRingMat = new THREE.MeshStandardMaterial({
         color: 0xFFAA88,
         emissive: 0xFF6644,
-        emissiveIntensity: 1.0,
-        metalness: 0.9,
-        roughness: 0.15
+        emissiveIntensity: 1.1,
+        metalness: 0.95,
+        roughness: 0.12
     });
     const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
-    innerRing.rotation.x = Math.PI / 2.18;
+    innerRing.rotation.x = Math.PI / 2.16;
     scene.add(innerRing);
     
-    // Particle System
-    const particleCount = 5000;
+    // Gravitational Lensing Ring
+    const lensRingGeo = new THREE.TorusGeometry(2.0, 0.045, 256, 1024);
+    const lensRingMat = new THREE.MeshStandardMaterial({
+        color: 0xFFAA99,
+        emissive: 0xFF6644,
+        emissiveIntensity: 0.7,
+        transparent: true,
+        opacity: 0.8
+    });
+    const lensRing = new THREE.Mesh(lensRingGeo, lensRingMat);
+    lensRing.rotation.x = Math.PI / 2;
+    scene.add(lensRing);
+    
+    // Outer Orbital Ring
+    const orbitRingGeo = new THREE.TorusGeometry(4.5, 0.05, 256, 1024);
+    const orbitRingMat = new THREE.MeshStandardMaterial({ 
+        color: 0x88AAFF, 
+        emissive: 0x4466AA, 
+        emissiveIntensity: 0.4,
+        metalness: 0.7,
+        roughness: 0.4
+    });
+    const orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
+    orbitRing.rotation.x = Math.PI / 2 + 0.1;
+    scene.add(orbitRing);
+    
+    // ============================================
+    // HIGH DENSITY PARTICLE SYSTEM (15,000 particles)
+    // ============================================
+    const particleCount = 15000;
     const particlesGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     const particleColors = new Float32Array(particleCount * 3);
     
     for (let i = 0; i < particleCount; i++) {
-        const radius = 2.2 + Math.random() * 3.8;
+        const radius = 2.0 + Math.random() * 4.5;
         const angle = Math.random() * Math.PI * 2;
-        const yOffset = (Math.random() - 0.5) * 0.9;
+        const yOffset = (Math.random() - 0.5) * 1.2;
         particlePositions[i * 3] = Math.cos(angle) * radius;
         particlePositions[i * 3 + 1] = yOffset;
         particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
         
-        if (Math.random() > 0.5) {
+        // Color based on distance from center
+        const t = (radius - 1.5) / 5;
+        if (Math.random() > 0.4) {
             particleColors[i * 3] = 1.0;
-            particleColors[i * 3 + 1] = 0.6 + Math.random() * 0.4;
+            particleColors[i * 3 + 1] = 0.5 + Math.random() * 0.5;
             particleColors[i * 3 + 2] = 0.2 + Math.random() * 0.5;
         } else {
             particleColors[i * 3] = 1.0;
-            particleColors[i * 3 + 1] = 0.3 + Math.random() * 0.4;
+            particleColors[i * 3 + 1] = 0.3 + Math.random() * 0.3;
             particleColors[i * 3 + 2] = 0.1 + Math.random() * 0.3;
         }
     }
     particlesGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
     particlesGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-    const particleMat = new THREE.PointsMaterial({ size: 0.045, vertexColors: true, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+    const particleMat = new THREE.PointsMaterial({ 
+        size: 0.045, 
+        vertexColors: true, 
+        transparent: true, 
+        opacity: 0.75, 
+        blending: THREE.AdditiveBlending 
+    });
     const particleSystem = new THREE.Points(particlesGeo, particleMat);
     scene.add(particleSystem);
     
-    // Orbiting ring
-    const orbitRingGeo = new THREE.TorusGeometry(4.2, 0.045, 128, 512);
-    const orbitRingMat = new THREE.MeshStandardMaterial({ color: 0x88AAFF, emissive: 0x4466AA, emissiveIntensity: 0.35 });
-    const orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
-    orbitRing.rotation.x = Math.PI / 2 + 0.12;
-    scene.add(orbitRing);
-    
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0x111111);
+    // ============================================
+    // CINEMATIC LIGHTING (Redshift style)
+    // ============================================
+    const ambientLight = new THREE.AmbientLight(0x0a0a1a);
     scene.add(ambientLight);
-    const coreLight = new THREE.PointLight(0xFF3366, 1.8, 18);
-    coreLight.position.set(0, 0, 0);
-    scene.add(coreLight);
-    const fillLight = new THREE.PointLight(0xFF8833, 0.7, 25);
-    fillLight.position.set(2, 1.5, 3);
-    scene.add(fillLight);
-    const rimLight = new THREE.DirectionalLight(0xFFAA66, 0.6);
-    rimLight.position.set(1, 2, -3);
-    scene.add(rimLight);
     
-    // Animation
+    const coreLight = new THREE.PointLight(0xFF3366, 2.2, 20);
+    coreLight.position.set(0, 0, 0);
+    coreLight.shadowMapResolution = 1024;
+    scene.add(coreLight);
+    
+    const rimLight1 = new THREE.PointLight(0xFF8833, 0.9, 22);
+    rimLight1.position.set(2.5, 1.8, 3.5);
+    scene.add(rimLight1);
+    
+    const rimLight2 = new THREE.PointLight(0xAA44FF, 0.7, 22);
+    rimLight2.position.set(-2, -0.8, 4);
+    scene.add(rimLight2);
+    
+    const backRim = new THREE.DirectionalLight(0xFFAA66, 0.8);
+    backRim.position.set(1.5, 2, -3.5);
+    scene.add(backRim);
+    
+    const fillLight = new THREE.DirectionalLight(0x88AACC, 0.4);
+    fillLight.position.set(-1, 1, 2);
+    scene.add(fillLight);
+    
+    // ============================================
+    // STARFIELD BACKGROUND (High resolution)
+    // ============================================
+    const starCount = 3000;
+    const starGeo = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+        starPositions[i * 3] = (Math.random() - 0.5) * 200;
+        starPositions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+        starPositions[i * 3 + 2] = (Math.random() - 0.5) * 80 - 40;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, transparent: true, opacity: 0.6 });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+    
+    // ============================================
+    // ANIMATION LOOP
+    // ============================================
     let time = 0;
+    
     function animateBlackHole() {
         requestAnimationFrame(animateBlackHole);
-        time += 0.007;
-        accretionDisk.rotation.z += 0.003;
-        outerDisk.rotation.z -= 0.002;
-        innerRing.rotation.z += 0.006;
+        time += 0.006;
+        
+        // Rotate accretion disk
+        accretionDisk.rotation.z += 0.0032;
+        outerDisk.rotation.z -= 0.0024;
+        innerRing.rotation.z += 0.0055;
         orbitRing.rotation.y += 0.0012;
-        particleSystem.rotation.y += 0.0008;
-        coreLight.intensity = 1.4 + Math.sin(time * 1.8) * 0.35;
-        photonSphereMat.opacity = 0.12 + Math.sin(time * 1.3) * 0.04;
+        lensRing.rotation.z += 0.0038;
+        particleSystem.rotation.y += 0.0009;
+        stars.rotation.y += 0.0002;
+        
+        // Pulsing light effects
+        const pulse = 1.8 + Math.sin(time * 1.8) * 0.4;
+        coreLight.intensity = pulse;
+        photonSphereMat.opacity = 0.14 + Math.sin(time * 1.4) * 0.05;
+        
+        // Subtle bloom pulse
+        bloomPass.strength = 0.85 + Math.sin(time * 0.8) * 0.05;
+        
         controls.update();
         effectComposer.render();
     }
+    
     animateBlackHole();
     
     // ============================================
-    // POLAROID DATA
+    // POLAROID DATA (12 high-quality images)
     // ============================================
     const polaroidData = [
         { title: "Golden Hour", type: "Natural Light • Sunset", gradient: "linear-gradient(135deg, #FFD700, #FF8C00)" },
@@ -598,10 +696,13 @@
     let polaroids = [];
     let isTransitioning = false;
     
+    // ============================================
+    // POLAROID FUNCTIONS
+    // ============================================
     function createSphericalPolaroids() {
         document.querySelectorAll('.polaroid').forEach(p => p.remove());
         polaroids = [];
-        const radius = 300;
+        const radius = 320;
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
         
@@ -616,7 +717,7 @@
             polaroid.style.top = y + 'px';
             polaroid.style.transform = `translate(-50%, -50%) scale(0) rotate(${Math.random() * 30 - 15}deg)`;
             polaroid.style.opacity = '0';
-            polaroid.innerHTML = `<div class="polaroid-image" style="background: ${data.gradient}; display: flex; align-items: center; justify-content: center;"><i class="fas fa-camera" style="font-size: 2.5rem; color: rgba(255,255,255,0.5);"></i></div><div class="polaroid-caption">${data.title}<br><span>${data.type}</span></div>`;
+            polaroid.innerHTML = `<div class="polaroid-image" style="background: ${data.gradient}; display: flex; align-items: center; justify-content: center;"><i class="fas fa-camera" style="font-size: 2.8rem; color: rgba(255,255,255,0.6);"></i></div><div class="polaroid-caption">${data.title}<br><span>${data.type}</span></div>`;
             document.body.appendChild(polaroid);
             polaroids.push(polaroid);
         });
@@ -625,7 +726,7 @@
     function explodePolaroidsIntoScreen() {
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
-        const radius = 260;
+        const radius = 280;
         
         polaroids.forEach((polaroid, index) => {
             const phi = Math.acos(1 - 2 * (index + 0.5) / polaroids.length);
@@ -646,7 +747,7 @@
     }
     
     // ============================================
-    // INTO THE BLACK HOLE - DRAMATIC SUCK
+    // BLACK HOLE TRANSITIONS
     // ============================================
     const suckOverlay = document.getElementById('suckOverlay');
     
@@ -658,23 +759,19 @@
         const blackholeX = window.innerWidth / 2;
         const blackholeY = window.innerHeight / 2;
         
-        // Update active button
         document.querySelectorAll('.nav-btn').forEach(btn => {
             if (btn.getAttribute('data-section') === 'gallery') btn.classList.add('active');
             else btn.classList.remove('active');
         });
         
-        // Activate suck overlay
         suckOverlay.classList.add('active');
-        
-        // Crush content
         mainSection.classList.add('crushing');
         
-        // Create particles being sucked in
-        for (let i = 0; i < 250; i++) {
+        // Create 300 particles being sucked in
+        for (let i = 0; i < 300; i++) {
             const particle = document.createElement('div');
             particle.style.position = 'fixed';
-            particle.style.width = Math.random() * 8 + 2 + 'px';
+            particle.style.width = Math.random() * 10 + 3 + 'px';
             particle.style.height = particle.style.width;
             particle.style.background = `radial-gradient(circle, #FFD700, #FF4466)`;
             particle.style.borderRadius = '50%';
@@ -696,11 +793,10 @@
             setTimeout(() => particle.remove(), 2000);
         }
         
-        // Intensify black hole
-        coreLight.intensity = 4.5;
-        bloomPass.strength = 1.6;
+        // Intensify black hole visual effects
+        coreLight.intensity = 5.0;
+        bloomPass.strength = 1.8;
         
-        // After crushing, explode polaroids
         setTimeout(() => {
             mainSection.style.display = 'none';
             mainSection.classList.remove('crushing');
@@ -710,9 +806,9 @@
             explodePolaroidsIntoScreen();
             
             setTimeout(() => {
-                bloomPass.strength = 0.8;
-                coreLight.intensity = 1.8;
-            }, 1000);
+                bloomPass.strength = 0.9;
+                coreLight.intensity = 2.2;
+            }, 1200);
             
             isTransitioning = false;
         }, 2800);
@@ -745,8 +841,8 @@
             polaroid.style.opacity = '0';
         });
         
-        coreLight.intensity = 4.5;
-        bloomPass.strength = 1.6;
+        coreLight.intensity = 5.0;
+        bloomPass.strength = 1.8;
         
         setTimeout(() => {
             document.querySelectorAll('.polaroid').forEach(p => p.remove());
@@ -758,15 +854,15 @@
             setTimeout(() => {
                 mainSection.classList.remove('reversing');
                 suckOverlay.classList.remove('active');
-            }, 1400);
+            }, 1600);
             
             setTimeout(() => {
-                bloomPass.strength = 0.8;
-                coreLight.intensity = 1.8;
-            }, 1500);
+                bloomPass.strength = 0.9;
+                coreLight.intensity = 2.2;
+            }, 1800);
             
             isTransitioning = false;
-        }, 1500);
+        }, 1600);
     }
     
     // ============================================
@@ -793,7 +889,7 @@
     const percentElement = document.getElementById('loadingPercent');
     let progress = 0;
     const loadInterval = setInterval(() => {
-        progress += Math.floor(Math.random() * 7) + 2;
+        progress += Math.floor(Math.random() * 6) + 3;
         if (progress >= 100) {
             progress = 100;
             clearInterval(loadInterval);
@@ -801,7 +897,7 @@
             
             const letters = document.querySelectorAll('.hero-letter');
             letters.forEach((letter, i) => {
-                setTimeout(() => { letter.style.opacity = '1'; letter.style.transform = 'translateY(0)'; }, i * 30);
+                setTimeout(() => { letter.style.opacity = '1'; letter.style.transform = 'translateY(0)'; }, i * 25);
             });
             setTimeout(() => {
                 const heroSub = document.querySelector('.hero-sub');
@@ -820,7 +916,7 @@
             document.querySelectorAll('.card, .fun-fact, .quiz-container, .product-showcase').forEach(el => observer.observe(el));
         }
         percentElement.textContent = progress + '%';
-    }, 80);
+    }, 70);
     
     // ============================================
     // CURSOR & UI
@@ -835,29 +931,29 @@
         const isClickable = e.target.closest('.nav-btn, .product-showcase, .btn-buy, .price-tag, .curiosity-item, .quiz-option, .fun-fact, .card, .polaroid');
         if (isClickable) {
             cursorRing.style.borderColor = '#FFD700';
-            cursorRing.style.width = '70px';
-            cursorRing.style.height = '70px';
-            cursorDot.style.width = '10px';
-            cursorDot.style.height = '10px';
+            cursorRing.style.width = '80px';
+            cursorRing.style.height = '80px';
+            cursorDot.style.width = '12px';
+            cursorDot.style.height = '12px';
         } else {
             cursorRing.style.borderColor = 'rgba(255, 215, 0, 0.5)';
-            cursorRing.style.width = '40px';
-            cursorRing.style.height = '40px';
-            cursorDot.style.width = '6px';
-            cursorDot.style.height = '6px';
+            cursorRing.style.width = '45px';
+            cursorRing.style.height = '45px';
+            cursorDot.style.width = '8px';
+            cursorDot.style.height = '8px';
         }
     });
     
     function animateCursor() {
-        dotX += (mouseX - dotX) * 0.12;
-        dotY += (mouseY - dotY) * 0.12;
+        dotX += (mouseX - dotX) * 0.15;
+        dotY += (mouseY - dotY) * 0.15;
         cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
-        let forceX = (mouseX - ringX) * 0.04;
-        let forceY = (mouseY - ringY) * 0.04;
+        let forceX = (mouseX - ringX) * 0.05;
+        let forceY = (mouseY - ringY) * 0.05;
         ringVX += forceX;
         ringVY += forceY;
-        ringVX *= 0.96;
-        ringVY *= 0.96;
+        ringVX *= 0.95;
+        ringVY *= 0.95;
         ringX += ringVX;
         ringY += ringVY;
         cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
@@ -870,20 +966,20 @@
         ripple.style.position = 'fixed';
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
-        ripple.style.width = '10px';
-        ripple.style.height = '10px';
+        ripple.style.width = '15px';
+        ripple.style.height = '15px';
         ripple.style.borderRadius = '50%';
-        ripple.style.background = 'radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4))';
+        ripple.style.background = 'radial-gradient(circle, rgba(255,215,0,0.9), rgba(255,20,147,0.5))';
         ripple.style.transform = 'translate(-50%, -50%) scale(0)';
         ripple.style.pointerEvents = 'none';
         ripple.style.zIndex = '100000';
-        ripple.style.animation = 'rippleExpand 0.8s ease-out forwards';
+        ripple.style.animation = 'rippleExpand 0.9s ease-out forwards';
         document.body.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 800);
+        setTimeout(() => ripple.remove(), 900);
     }
     
     const styleSheet = document.createElement('style');
-    styleSheet.textContent = `@keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; } 100% { transform: translate(-50%, -50%) scale(20); opacity: 0; } }`;
+    styleSheet.textContent = `@keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(25); opacity: 0; } }`;
     document.head.appendChild(styleSheet);
     
     document.querySelectorAll('.curiosity-item, .quiz-option, .fun-fact, .btn-buy, .price-tag, .product-showcase').forEach(el => {
@@ -900,7 +996,7 @@
             const fact = item.getAttribute('data-fact');
             const toast = document.createElement('div');
             toast.textContent = `→ ${fact} ←`;
-            toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000;color:#FFD700;padding:12px 24px;border:1px solid #FFD700;z-index:1000;font-size:0.8rem;border-radius:40px;backdrop-filter:blur(10px);`;
+            toast.style.cssText = `position:fixed;bottom:120px;left:50%;transform:translateX(-50%);background:#000000CC;color:#FFD700;padding:14px 28px;border:2px solid #FFD700;z-index:1000;font-size:0.85rem;border-radius:50px;backdrop-filter:blur(15px);font-family:monospace;letter-spacing:1px;`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         });
@@ -915,6 +1011,7 @@
             if (isCorrect) {
                 feedback.innerHTML = '✓ CORRECT! 🌟';
                 feedback.style.color = '#FFD700';
+                createRipple(btn.getBoundingClientRect().left + btn.offsetWidth/2, btn.getBoundingClientRect().top + btn.offsetHeight/2);
             } else {
                 feedback.innerHTML = '✗ NOT QUITE. Try again! 💡';
                 feedback.style.color = '#FF6666';
@@ -934,7 +1031,7 @@
     });
     
     function updateScroll() {
-        currentScroll += (targetScroll - currentScroll) * 0.03;
+        currentScroll += (targetScroll - currentScroll) * 0.035;
         scrollContainer.scrollTop = currentScroll;
         const percent = (currentScroll / (scrollContainer.scrollHeight - window.innerHeight)) * 100;
         scrollFill.style.height = percent + '%';
@@ -964,7 +1061,7 @@
             isMusicPlaying = true;
             musicIcon.className = 'fas fa-volume-up';
         }).catch(() => {});
-    }, 2000);
+    }, 2500);
     
     // Jumia Redirect
     const JUMLA_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
@@ -972,9 +1069,19 @@
     document.getElementById('buyNowBtn')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     document.getElementById('priceTag')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     
-    console.log('%c✨ INTO THE BLACK HOLE — COMPLETE CINEMATIC SEQUENCE ✨', 'color: #FF4466; font-size: 14px;');
-    console.log('%c🌀 Content gets SUCKED INTO the event horizon', 'color: #FFD700; font-size: 12px;');
-    console.log('%c💥 EXPLODES into 12 polaroids in spherical formation', 'color: #FFAA88; font-size: 12px;');
+    // Handle window resize
+    window.addEventListener('resize', onWindowResize, false);
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        effectComposer.setSize(window.innerWidth, window.innerHeight);
+    }
+    
+    console.log('%c✨ MAX QUALITY CINEMATIC BLACK HOLE - 4K READY ✨', 'color: #FF4466; font-size: 16px; font-weight: bold; letter-spacing: 2px;');
+    console.log('%c🌀 Full Post-Processing | Bloom | RGB Shift | Film Grain', 'color: #FFD700; font-size: 12px;');
+    console.log('%c🎬 Redshift-style rendering | ACES Filmic Tone Mapping', 'color: #FFAA88; font-size: 12px;');
+    console.log('%c📸 15,000 particles | 12 polaroids | Spherical Fibonacci distribution', 'color: #9B30FF; font-size: 12px;');
 </script>
 </body>
 </html>
