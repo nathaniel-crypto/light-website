@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>What Is Light Really? | Unseen Studio® Transitions</title>
-    <meta name="description" content="What is light really? Complete guide to light — electromagnetic radiation, visible spectrum, photosynthesis, and the blessing of light.">
-    <meta name="robots" content="index, follow">
+    <title>What Is Light Really? | Gargantua Black Hole</title>
+    <meta name="description" content="Interstellar-inspired Gargantua black hole with slow cinematic transitions and spherical polaroid formation">
     
-    <!-- FAVICON -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+    
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,455 +38,249 @@
 
         ::-webkit-scrollbar { display: none; }
 
-        /* ========== UNSEEN STUDIO: ANIMATED COSMIC BACKGROUND ========== */
-        .cosmic-bg {
+        #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
-            overflow: hidden;
-            background: radial-gradient(ellipse at 30% 40%, #0a0a2a, #000000);
         }
 
-        /* Nebula clouds — slow organic drift */
-        .nebula {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.35;
-            animation: nebulaDrift 30s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
 
-        @keyframes nebulaDrift {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(60px, -40px) scale(1.08); }
-            66% { transform: translate(-50px, 50px) scale(0.95); }
-        }
-
-        .nebula-1 { width: 600px; height: 600px; background: #FF1493; top: 20%; left: -10%; animation-duration: 25s; }
-        .nebula-2 { width: 500px; height: 500px; background: #9B30FF; bottom: 10%; right: -5%; animation-duration: 35s; }
-        .nebula-3 { width: 450px; height: 450px; background: #FFD700; top: 50%; left: 60%; opacity: 0.2; animation-duration: 28s; }
-
-        /* Twinkling stars */
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0;
-            animation: starTwinkle 3s infinite ease-in-out;
-        }
-
-        @keyframes starTwinkle {
-            0%, 100% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 0.9; transform: scale(1); }
-        }
-
-        /* Floating particles */
-        .particle {
-            position: absolute;
-            background: rgba(255, 215, 0, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(2px);
-            animation: particleFloat 18s infinite linear;
-        }
-
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-100px) translateX(80px) rotate(360deg); opacity: 0; }
-        }
-
-        /* ========== UNSEEN STUDIO: 3D PORTAL BOX ========== */
-        .portal-overlay {
+        /* Navigation */
+        .nav-bar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 20000;
+            right: 0;
+            z-index: 1001;
             display: flex;
             justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            backdrop-filter: blur(20px);
+            gap: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
         }
 
-        .portal-overlay.active { opacity: 1; visibility: visible; }
-
-        .portal-box {
-            width: 100px;
-            height: 100px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: portalRotate 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            padding: 0.5rem 1.5rem;
             cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 40px;
+            position: relative;
         }
 
-        @keyframes portalRotate {
-            from { transform: rotateX(0deg) rotateY(0deg); }
-            to { transform: rotateX(360deg) rotateY(360deg); }
-        }
-
-        .portal-face {
+        .nav-btn::before {
+            content: '';
             position: absolute;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 215, 0, 0.15);
-            border: 2px solid #FFD700;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0%;
+            height: 2px;
+            background: #FFD700;
+            transition: width 0.3s ease;
+        }
+
+        .nav-btn:hover::before, .nav-btn.active::before {
+            width: 70%;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            color: #FFD700;
+            transform: translateY(-2px);
+        }
+
+        /* UI Elements */
+        .cursor-dot, .cursor-ring { position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); }
+        .cursor-dot { width: 6px; height: 6px; background: #FFD700; border-radius: 50%; box-shadow: 0 0 10px #FFD700; }
+        .cursor-ring { width: 40px; height: 40px; border: 1.5px solid rgba(255, 215, 0, 0.5); border-radius: 50%; backdrop-filter: blur(2px); z-index: 9999; transition: all 0.2s ease; }
+
+        .music-control {
+            position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%;
+            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,215,0,0.4); color: #FFD700;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1001;
+            backdrop-filter: blur(10px); font-size: 1.2rem;
+        }
+
+        .scroll-progress {
+            position: fixed; right: 20px; top: 50%; transform: translateY(-50%); width: 3px; height: 200px;
+            background: rgba(255,255,255,0.08); z-index: 1000; border-radius: 3px;
+        }
+        .scroll-progress-fill {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
+            background: linear-gradient(to top, #FFD700, #FF1493); border-radius: 3px;
+        }
+
+        .scroll-hint {
+            position: fixed; bottom: 20px; right: 20px; font-size: 0.6rem; letter-spacing: 2px;
+            color: rgba(255,255,255,0.3); z-index: 1000; font-family: monospace;
+            background: rgba(0,0,0,0.5); padding: 0.3rem 0.8rem; border-radius: 20px; pointer-events: none;
             backdrop-filter: blur(5px);
         }
 
-        .portal-face.front { transform: translateZ(50px); background: radial-gradient(circle, rgba(255,215,0,0.25), rgba(255,20,147,0.15)); }
-        .portal-face.back { transform: translateZ(-50px) rotateY(180deg); }
-        .portal-face.left { transform: translateX(-50px) rotateY(-90deg); }
-        .portal-face.right { transform: translateX(50px) rotateY(90deg); }
-        .portal-face.top { transform: translateY(-50px) rotateX(90deg); }
-        .portal-face.bottom { transform: translateY(50px) rotateX(-90deg); }
-
-        .portal-box.expand {
-            animation: portalExpand 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-        }
-
-        @keyframes portalExpand {
-            0% { transform: scale(1) rotateX(0deg) rotateY(0deg); opacity: 1; }
-            100% { transform: scale(100) rotateX(180deg) rotateY(180deg); opacity: 0; }
-        }
-
-        /* ========== UNSEEN STUDIO: CURSOR SYSTEM with INERTIA ========== */
-        .cursor-dot {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: #FFD700;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px #FFD700;
-            transition: width 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), height 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        .cursor-ring {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 1.5px solid rgba(255, 215, 0, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            backdrop-filter: blur(2px);
-            transition: width 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), height 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), border-color 0.2s ease;
-        }
-
-        .cursor-ring.active { width: 80px; height: 80px; border-color: #FFD700; background: rgba(255, 215, 0, 0.06); }
-        .cursor-dot.active { width: 12px; height: 12px; background: #FFD700; box-shadow: 0 0 20px #FFD700; }
-
-        /* ========== UNSEEN STUDIO: RIPPLE EFFECT ========== */
-        .ripple-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9998;
-            overflow: hidden;
-        }
-
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.8), rgba(255, 20, 147, 0.4), transparent);
-            transform: translate(-50%, -50%) scale(0);
-            animation: rippleExpand 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-        }
-
-        @keyframes rippleExpand {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(20); opacity: 0; }
-        }
-
-        /* ========== UNSEEN STUDIO: CINEMATIC LOADING ========== */
+        /* Loading Screen */
         .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 20000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0s 1.2s;
-            opacity: 1;
-            visibility: visible;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000;
+            z-index: 20000; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; transition: opacity 1.2s ease; opacity: 1; visibility: visible;
         }
-
-        .loading-screen.hide { opacity: 0; visibility: hidden; }
-
+        .loading-screen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
         .loading-core {
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, #FFD700, #FF8C00, #FF1493);
-            border-radius: 50%;
-            animation: pulse3D 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
+            width: 120px; height: 120px; background: radial-gradient(circle, #FFD700, #FF1493, #4B0082);
+            border-radius: 50%; box-shadow: 0 0 60px rgba(255,215,0,0.5);
+            animation: pulse3D 1.5s ease-in-out infinite;
         }
-
-        @keyframes pulse3D {
-            0% { transform: scale(0.8); opacity: 0.6; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.8); opacity: 0.6; }
-        }
-
-        .loading-text { margin-top: 3rem; font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; color: rgba(255,255,255,0.7); font-weight: 300; }
+        @keyframes pulse3D { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }
+        .loading-text { margin-top: 3rem; font-size: 1rem; letter-spacing: 6px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
         .loading-dots { display: flex; gap: 0.5rem; margin-top: 1rem; }
-        .loading-dots span { width: 8px; height: 8px; background: #FFD700; border-radius: 50%; animation: dotBounce 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        .loading-dots span { width: 8px; height: 8px; background: #FFD700; border-radius: 50%; animation: dotBounce 1.2s infinite; }
         @keyframes dotBounce { 0%,100% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(-15px); opacity: 1; } }
-        .loading-ring { position: absolute; width: 180px; height: 180px; border: 2px solid rgba(255,215,0,0.3); border-radius: 50%; animation: ringSpin 3s linear infinite; }
-        @keyframes ringSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .loading-percent { margin-top: 2rem; font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #FFD700, #FF1493); background-clip: text; -webkit-background-clip: text; color: transparent; }
 
-        /* ========== SCROLL CONTAINER ========== */
+        /* Scroll Container */
         .scroll-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
+            z-index: 10;
+            pointer-events: auto;
         }
         .scroll-container::-webkit-scrollbar { display: none; }
 
         .page {
-            position: relative;
-            z-index: 10;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 2rem 6rem;
+            position: relative; max-width: 1400px; margin: 0 auto; padding: 6rem 2rem 4rem;
+            min-height: 100vh;
+            backdrop-filter: blur(5px);
+            transition: all 0.1s linear;
         }
 
-        /* ========== UNSEEN STUDIO: MUSIC CONTROL ========== */
-        .music-control {
+        /* Slow cinematic crushing animation */
+        .page.crushing {
+            animation: slowPaperCrush 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            pointer-events: none;
+        }
+
+        @keyframes slowPaperCrush {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); }
+            20% { transform: scale(0.7) rotate(2deg) skewX(8deg); opacity: 0.9; filter: blur(3px); }
+            50% { transform: scale(0.3) rotate(6deg) skewX(15deg) skewY(8deg); opacity: 0.6; filter: blur(12px); }
+            80% { transform: scale(0.08) rotate(12deg) skewX(22deg) skewY(15deg); opacity: 0.2; filter: blur(30px); }
+            100% { transform: scale(0) rotate(15deg) skewX(25deg) skewY(18deg); opacity: 0; filter: blur(50px); display: none; }
+        }
+
+        .page.reversing {
+            animation: slowReverseUncrush 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        @keyframes slowReverseUncrush {
+            0% { transform: scale(0) rotate(15deg) skewX(25deg); opacity: 0; filter: blur(50px); display: block; }
+            100% { transform: scale(1) rotate(0deg) skewX(0deg); opacity: 1; filter: blur(0px); }
+        }
+
+        /* Polaroid styles */
+        .polaroid {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            color: #FFD700;
+            width: 220px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 12px;
+            padding: 12px 12px 20px 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            z-index: 10005;
+            opacity: 0;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            pointer-events: auto;
+        }
+
+        .polaroid:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .polaroid-image {
+            width: 100%;
+            height: 170px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            z-index: 1001;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            backdrop-filter: blur(10px);
-            font-size: 1.2rem;
+            margin-bottom: 10px;
         }
 
-        .music-control:hover { transform: scale(1.1); border-color: #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-
-        /* Scroll progress */
-        .scroll-progress {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.08);
-            z-index: 1000;
-            border-radius: 3px;
-        }
-
-        .scroll-progress-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0%;
-            background: linear-gradient(to top, #FFD700, #FF1493);
-            border-radius: 3px;
-            transition: height 0.05s linear;
-        }
-
-        .scroll-hint {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 0.6rem;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.3);
-            z-index: 1000;
-            font-family: monospace;
-            background: rgba(0,0,0,0.5);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            pointer-events: none;
-            backdrop-filter: blur(5px);
-        }
-
-        /* ========== UNSEEN STUDIO: CINEMATIC HERO ========== */
-        .hero {
+        .polaroid-caption {
+            font-size: 0.7rem;
+            color: #333;
             text-align: center;
-            padding: 2rem 0;
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
         }
 
+        .polaroid-caption span {
+            font-size: 0.6rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Content styles */
+        .hero { text-align: center; padding: 2rem 0; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
         .hero-letters { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        
-        .hero-letter {
-            font-size: clamp(3rem, 10vw, 7rem);
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            color: #ffffff;
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(30px);
-            text-shadow: 0 0 20px rgba(255,215,0,0.2);
-        }
+        .hero-letter { font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 800; letter-spacing: -0.05em; color: #ffffff; display: inline-block; opacity: 0; transform: translateY(30px); text-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .hero-sub { font-size: 0.8rem; letter-spacing: 4px; color: rgba(255,255,255,0.7); margin-bottom: 2rem; opacity: 0; transform: translateY(20px); }
+        .blessing-tag { display: inline-flex; align-items: center; gap: 0.8rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); padding: 0.6rem 2rem; border-radius: 60px; font-size: 0.9rem; margin: 1rem 0; letter-spacing: 2px; border: 1px solid rgba(255,215,0,0.3); opacity: 0; transform: translateY(20px); }
+        .science-line { font-size: 0.7rem; display: inline-block; padding: 0.5rem 1rem; font-family: monospace; color: rgba(255,255,255,0.5); letter-spacing: 1px; opacity: 0; transform: translateY(20px); }
 
-        .hero-letter.animate-in {
-            animation: cinematicLetterIn 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-        }
-
-        @keyframes cinematicLetterIn {
-            0% { opacity: 0; transform: translateY(60px) rotateX(-25deg); filter: blur(10px); }
-            40% { transform: translateY(-10px) rotateX(5deg); filter: blur(2px); }
-            70% { transform: translateY(5px) rotateX(-2deg); filter: blur(0); }
-            100% { opacity: 1; transform: translateY(0) rotateX(0); filter: blur(0); }
-        }
-
-        .hero-sub, .blessing-tag, .science-line {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        .hero-sub.animate-in, .blessing-tag.animate-in, .science-line.animate-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero-sub { font-size: 0.8rem; letter-spacing: 4px; color: rgba(255,255,255,0.5); margin-bottom: 2rem; font-weight: 300; }
-        
-        .blessing-tag {
-            display: inline-flex; align-items: center; gap: 0.8rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
-            padding: 0.6rem 2rem; border-radius: 60px; font-size: 0.9rem; font-weight: 400; margin: 1rem 0;
-            letter-spacing: 2px; color: rgba(255,255,255,0.8); border: 1px solid rgba(255,215,0,0.3);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        
-        .blessing-tag:hover { border-color: #FFD700; transform: translateY(-2px); letter-spacing: 3px; }
-        
-        .science-line { font-size: 0.7rem; display: inline-block; padding: 0.5rem 1rem; font-family: monospace; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
-
-        /* ========== UNSEEN STUDIO: CARDS WITH SCROLL REVEAL ========== */
         .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 3rem 0; }
-        
-        .card {
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.06); border-radius: 1.5rem;
-            padding: 2rem; transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); opacity: 0; transform: translateY(40px);
-        }
-        
-        .card.visible { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-8px); border-color: rgba(255,215,0,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 2rem; opacity: 0; transform: translateY(40px); transition: all 0.3s ease; }
+        .card:hover { transform: translateY(-5px); border-color: rgba(255,215,0,0.4); }
         .card h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 3px; color: #FFD700; }
         .card ul { list-style: none; }
-        .card li { margin-bottom: 1rem; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.8rem; color: rgba(255,255,255,0.7); transition: transform 0.2s ease; }
-        .card li:hover { transform: translateX(5px); color: #FFD700; }
+        .card li { margin-bottom: 1rem; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 0.8rem; color: rgba(255,255,255,0.8); }
         .card li::before { content: "✦"; color: #FFD700; }
 
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 2rem 0; }
+        .spectrum-bar { height: 60px; border-radius: 30px; background: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3); margin: 2rem 0; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
         
-        /* Spectrum bar */
-        .spectrum-bar {
-            height: 60px;
-            border-radius: 30px;
-            background: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3);
-            margin: 2rem 0;
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
-        }
-
-        /* Fun facts */
         .fun-facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
-        .fun-fact {
-            background: rgba(255,215,0,0.04); border: 1px solid rgba(255,215,0,0.1); border-radius: 1rem;
-            padding: 1.5rem; transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); cursor: pointer;
-            opacity: 0; transform: translateY(30px);
-        }
-        .fun-fact.visible { opacity: 1; transform: translateY(0); }
-        .fun-fact:hover { transform: translateY(-6px); border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.08); }
+        .fun-fact { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.1); border-radius: 1rem; padding: 1.5rem; cursor: pointer; opacity: 0; transform: translateY(30px); transition: all 0.3s ease; }
+        .fun-fact:hover { transform: translateY(-5px); border-color: rgba(255,215,0,0.4); }
         .fun-fact .emoji { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
         .fun-fact h4 { color: #FFD700; font-size: 1rem; margin-bottom: 0.5rem; }
+        .fun-fact p { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
 
-        /* Quiz */
-        .quiz-container {
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.2); border-radius: 1rem;
-            padding: 2rem; margin: 2rem 0; transition: all 0.4s ease; opacity: 0; transform: translateY(30px);
-        }
-        .quiz-container.visible { opacity: 1; transform: translateY(0); }
+        .curiosity-grid { display: flex; justify-content: flex-start; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0; }
+        .curiosity-item { font-size: 0.8rem; cursor: pointer; color: rgba(255,255,255,0.7); letter-spacing: 1px; border-bottom: 1px solid transparent; padding: 0.3rem 0; transition: all 0.2s ease; }
+        .curiosity-item:hover { color: #FFD700; border-bottom-color: #FFD700; }
+
+        .quiz-container { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.2); border-radius: 1rem; padding: 2rem; margin: 2rem 0; opacity: 0; transform: translateY(30px); }
         .quiz-question { font-size: 1.1rem; margin-bottom: 1rem; color: #FFD700; }
         .quiz-options { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .quiz-option {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 0.6rem 1.5rem;
-            border-radius: 40px; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); font-family: inherit; color: white;
-        }
-        .quiz-option:hover { background: #FFD700; color: #000000; border-color: #FFD700; transform: scale(1.02) translateY(-2px); }
+        .quiz-option { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.6rem 1.5rem; border-radius: 40px; cursor: pointer; font-family: inherit; color: white; transition: all 0.2s ease; }
+        .quiz-option:hover { background: #FFD700; color: #000000; }
 
-        /* Curiosity grid */
-        .curiosity-grid { display: flex; justify-content: flex-start; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0; }
-        .curiosity-item {
-            font-size: 0.8rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); color: rgba(255,255,255,0.6);
-            letter-spacing: 1px; border-bottom: 1px solid transparent; padding: 0.3rem 0;
-        }
-        .curiosity-item:hover { color: #FFD700; border-bottom-color: #FFD700; transform: translateY(-2px); letter-spacing: 2px; }
-
-        /* Product */
-        .product-showcase {
-            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem;
-            padding: 3rem 2rem; border-radius: 2rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,215,0,0.2); cursor: pointer; transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            opacity: 0; transform: translateY(40px);
-        }
-        .product-showcase.visible { opacity: 1; transform: translateY(0); }
-        .product-showcase:hover { transform: translateY(-8px); border-color: rgba(255,215,0,0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .product-showcase { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 3rem; padding: 3rem 2rem; border-radius: 2rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.2); cursor: pointer; opacity: 0; transform: translateY(40px); transition: all 0.3s ease; }
+        .product-showcase:hover { transform: translateY(-5px); border-color: rgba(255,215,0,0.5); }
         .flashlight-info { flex: 1; min-width: 240px; text-align: left; }
-        .flashlight-info h3 { font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .price-tag { font-size: 2.5rem; font-weight: 700; color: #FFD700; margin: 0.5rem 0; cursor: pointer; display: inline-block; transition: all 0.2s ease; }
-        .price-tag:hover { transform: scale(1.02); text-shadow: 0 0 10px #FFD700; }
+        .flashlight-info h3 { font-size: 2rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .price-tag { font-size: 2.5rem; font-weight: 700; color: #FFD700; margin: 0.5rem 0; cursor: pointer; display: inline-block; }
         .price-tag small { font-size: 0.9rem; text-decoration: line-through; color: rgba(255,255,255,0.4); }
-        .btn-buy {
-            background: linear-gradient(135deg, #FFD700, #FF8C00); border: none; color: #000000; font-weight: 700;
-            font-size: 0.8rem; padding: 0.8rem 2rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            font-family: inherit; text-transform: uppercase; letter-spacing: 2px; border-radius: 40px;
-        }
-        .btn-buy:hover { transform: scale(1.02) translateY(-2px); box-shadow: 0 0 25px rgba(255,215,0,0.5); }
-        .flashlight-image svg { max-width: 180px; width: 100%; transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); filter: drop-shadow(0 0 20px rgba(255,215,0,0.2)); }
-        .product-showcase:hover .flashlight-image svg { transform: rotate(3deg) scale(1.03); filter: drop-shadow(0 0 30px rgba(255,215,0,0.4)); }
+        .btn-buy { background: linear-gradient(135deg, #FFD700, #FF8C00); border: none; color: #000000; font-weight: 700; font-size: 0.8rem; padding: 0.8rem 2rem; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; border-radius: 40px; transition: transform 0.2s ease; }
+        .btn-buy:hover { transform: scale(1.02); }
+        .flashlight-image svg { max-width: 180px; width: 100%; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
 
-        /* Footer */
-        .fun-footer { margin-top: 5rem; text-align: center; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.05); display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.2s; }
-        .fun-footer.animate-in { opacity: 1; transform: translateY(0); }
-        .fun-footer span { font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 1px; transition: all 0.2s ease; }
+        .fun-footer { margin-top: 5rem; text-align: center; padding: 2rem 0; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; opacity: 0; transform: translateY(20px); }
+        .fun-footer span { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; transition: all 0.2s ease; }
         .fun-footer span:hover { color: #FFD700; letter-spacing: 2px; }
 
         @media (max-width: 900px) {
@@ -488,39 +289,30 @@
             .flashlight-info { text-align: center; }
             .cursor-dot, .cursor-ring { display: none; }
             body { cursor: auto; }
+            .polaroid { width: 160px; }
+            .polaroid-image { height: 120px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ANIMATED COSMIC BACKGROUND -->
-<div class="cosmic-bg" id="cosmicBg">
-    <div class="nebula nebula-1"></div>
-    <div class="nebula nebula-2"></div>
-    <div class="nebula nebula-3"></div>
-</div>
+<!-- WebGL Canvas Container -->
+<div id="canvas-container"></div>
 
-<!-- 3D PORTAL BOX OVERLAY -->
-<div class="portal-overlay" id="portalOverlay">
-    <div class="portal-box" id="portalBox">
-        <div class="portal-face front"></div>
-        <div class="portal-face back"></div>
-        <div class="portal-face left"></div>
-        <div class="portal-face right"></div>
-        <div class="portal-face top"></div>
-        <div class="portal-face bottom"></div>
-    </div>
+<!-- Navigation -->
+<div class="nav-bar" id="navBar">
+    <button class="nav-btn active" data-section="main">✦ HOME ✦</button>
+    <button class="nav-btn" data-section="gallery">🌀 GARGANTUA 🌀</button>
 </div>
 
 <!-- UI Elements -->
-<div class="ripple-container" id="rippleContainer"></div>
-<div class="cursor-dot"></div>
-<div class="cursor-ring"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 <div class="music-control" id="musicControl"><i class="fas fa-music" id="musicIcon"></i></div>
 <div class="scroll-progress"><div class="scroll-progress-fill" id="scrollFill"></div></div>
 <div class="scroll-hint">✦ MOVE MOUSE UP/DOWN TO SCROLL ✦</div>
 
-<!-- LOADING SCREEN -->
+<!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
     <div class="loading-ring"></div>
     <div class="loading-core"></div>
@@ -529,10 +321,9 @@
     <div class="loading-percent" id="loadingPercent">0%</div>
 </div>
 
-<!-- SCROLLABLE CONTENT -->
+<!-- Scroll Container -->
 <div class="scroll-container" id="scrollContainer">
-    <div class="page" id="mainContent" style="opacity: 0;">
-        
+    <div class="page" id="mainSection">
         <div class="hero">
             <div class="hero-letters"><span class="hero-letter">W</span><span class="hero-letter">H</span><span class="hero-letter">A</span><span class="hero-letter">T</span></div>
             <div class="hero-letters"><span class="hero-letter">I</span><span class="hero-letter">S</span></div>
@@ -543,271 +334,623 @@
             <div class="science-line">⚡ ELECTROMAGNETIC RADIATION — VISIBLE TO THE HUMAN EYE ⚡</div>
         </div>
 
-        <!-- LIGHT & US -->
-        <div class="facts-grid">
-            <div class="card"><h2>👁️ LIGHT & VISION</h2><ul><li>Light makes us see — it reveals the world around us</li><li>The human eye can detect over 10 million colors</li><li>Light travels from the sun to Earth in 8 minutes and 20 seconds</li><li>Your eyes can detect a single photon of light!</li></ul></div>
-            <div class="card"><h2>😊 LIGHT & MOOD</h2><ul><li>Light exposure affects serotonin — the happiness chemical</li><li>Morning sunlight helps regulate your circadian rhythm</li><li>Bright light makes us more alert and focused</li></ul><div style="margin-top:1rem; color:rgba(255,215,0,0.6);">💛 “Let there be light” — and suddenly, everything feels brighter.</div></div>
-        </div>
+        <div class="facts-grid"><div class="card"><h2>👁️ LIGHT & VISION</h2><ul><li>Light makes us see — it reveals the world around us</li><li>The human eye can detect over 10 million colors</li><li>Light travels from the sun to Earth in 8 minutes and 20 seconds</li></ul></div>
+        <div class="card"><h2>😊 LIGHT & MOOD</h2><ul><li>Light exposure affects serotonin — the happiness chemical</li><li>Morning sunlight helps regulate your circadian rhythm</li><li>Bright light makes us more alert and focused</li></ul></div></div>
 
-        <!-- LIGHT & LIFE -->
-        <div class="facts-grid">
-            <div class="card"><h2>🌱 PHOTOSYNTHESIS</h2><ul><li>Plants convert light energy into chemical energy</li><li>6CO₂ + 6H₂O + Light → C₆H₁₂O₆ + 6O₂</li><li>Without light, there is no oxygen — no us</li></ul></div>
-            <div class="card"><h2>🌍 LIGHT & CLIMATE</h2><ul><li>The sun provides Earth with 174 petawatts of energy</li><li>Light maintains Earth's habitable temperature</li><li>Solar energy drives wind and ocean currents</li></ul></div>
-        </div>
+        <div class="facts-grid"><div class="card"><h2>🌱 PHOTOSYNTHESIS</h2><ul><li>Plants convert light energy into chemical energy</li><li>6CO₂ + 6H₂O + Light → C₆H₁₂O₆ + 6O₂</li><li>Without light, there is no oxygen — no us</li></ul></div>
+        <div class="card"><h2>🌍 LIGHT & CLIMATE</h2><ul><li>The sun provides Earth with 174 petawatts of energy</li><li>Light maintains Earth's habitable temperature</li></ul></div></div>
 
-        <!-- PHYSICS OF LIGHT -->
         <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">⚡ THE PHYSICS OF LIGHT</div>
-        <div class="grid-3">
-            <div class="card"><h2>📏 WAVE OR PARTICLE?</h2><ul><li>Light behaves as BOTH a wave AND a particle</li><li>Particles are called "photons"</li><li>Einstein won Nobel Prize for this discovery</li></ul></div>
-            <div class="card"><h2>📐 SPEED OF LIGHT</h2><ul><li>299,792,458 meters per second</li><li>About 670 million miles per hour</li><li>Nothing in the universe is faster</li></ul></div>
-            <div class="card"><h2>🌈 LIGHT SPECTRUM</h2><ul><li>Visible light is a tiny part of EM spectrum</li><li>ROYGBIV — Red, Orange, Yellow, Green, Blue, Indigo, Violet</li><li>Different animals see different spectrums</li></ul></div>
-        </div>
+        <div class="grid-3"><div class="card"><h2>📏 WAVE OR PARTICLE?</h2><ul><li>Light behaves as BOTH a wave AND a particle</li><li>Particles are called "photons"</li></ul></div>
+        <div class="card"><h2>📐 SPEED OF LIGHT</h2><ul><li>299,792,458 meters per second</li><li>Nothing in the universe is faster</li></ul></div>
+        <div class="card"><h2>🌈 LIGHT SPECTRUM</h2><ul><li>Visible light is a tiny part of EM spectrum</li><li>ROYGBIV — Red, Orange, Yellow, Green, Blue, Indigo, Violet</li></ul></div></div>
 
         <div class="spectrum-bar"></div>
-        <div style="display:flex; justify-content:space-between; font-size:0.6rem; color:rgba(255,255,255,0.4); margin-bottom:2rem;"><span>Red</span><span>Orange</span><span>Yellow</span><span>Green</span><span>Blue</span><span>Violet</span></div>
 
-        <!-- FUN FACTS -->
         <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">✨ FASCINATING LIGHT FACTS</div>
-        <div class="fun-facts-grid">
-            <div class="fun-fact"><span class="emoji">🐙</span><h4>Bioluminescence</h4><p>Over 80% of deep-sea creatures produce their own light through chemical reactions.</p></div>
-            <div class="fun-fact"><span class="emoji">🎨</span><h4>Color is Light</h4><p>Objects don't have color — they reflect certain wavelengths of light.</p></div>
-            <div class="fun-fact"><span class="emoji">⚡</span><h4>Lightning Speed</h4><p>A lightning bolt heats the air to 50,000°F — 5x hotter than the sun!</p></div>
-            <div class="fun-fact"><span class="emoji">🌙</span><h4>Moonlight</h4><p>Moonlight is reflected sunlight — it takes 1.3 seconds to reach Earth.</p></div>
-            <div class="fun-fact"><span class="emoji">💎</span><h4>Diamond Sparkle</h4><p>Diamonds sparkle because they slow light down more than air.</p></div>
-            <div class="fun-fact"><span class="emoji">🦋</span><h4>Butterfly Wings</h4><p>Butterfly wings create color through light interference, not pigments!</p></div>
-        </div>
+        <div class="fun-facts-grid"><div class="fun-fact"><span class="emoji">🐙</span><h4>Bioluminescence</h4><p>Over 80% of deep-sea creatures produce their own light.</p></div>
+        <div class="fun-fact"><span class="emoji">🎨</span><h4>Color is Light</h4><p>Objects don't have color — they reflect wavelengths of light.</p></div>
+        <div class="fun-fact"><span class="emoji">⚡</span><h4>Lightning Speed</h4><p>A lightning bolt heats the air to 50,000°F!</p></div>
+        <div class="fun-fact"><span class="emoji">🌙</span><h4>Moonlight</h4><p>Moonlight is reflected sunlight — takes 1.3 seconds to reach Earth.</p></div>
+        <div class="fun-fact"><span class="emoji">💎</span><h4>Diamond Sparkle</h4><p>Diamonds sparkle because they slow light down.</p></div>
+        <div class="fun-fact"><span class="emoji">🦋</span><h4>Butterfly Wings</h4><p>Butterfly wings create color through light interference.</p></div></div>
 
-        <!-- CURIOUS QUESTIONS -->
         <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">❓ CURIOUS ABOUT LIGHT?</div>
-        <div class="curiosity-grid">
-            <div class="curiosity-item" data-fact="Light travels at 299,792,458 meters per second — about 7.5 times around Earth in one second!">⚡ SPEED OF LIGHT</div>
-            <div class="curiosity-item" data-fact="The sun produces 3.8 × 10²⁶ watts of energy every second!">☀️ SOLAR POWER</div>
-            <div class="curiosity-item" data-fact="Fireflies produce light through bioluminescence — a chemical reaction!">🐞 BIOLUMINESCENCE</div>
-            <div class="curiosity-item" data-fact="Without light, there would be no color — everything would appear black!">🎨 COLOR & LIGHT</div>
-            <div class="curiosity-item" data-fact="Light from the nearest star (Proxima Centauri) takes 4.24 YEARS to reach us!">⭐ STARLIGHT</div>
-            <div class="curiosity-item" data-fact="A photon can travel for billions of years through space without being absorbed!">📸 PHOTON JOURNEY</div>
-        </div>
+        <div class="curiosity-grid"><div class="curiosity-item" data-fact="Light travels at 299,792,458 meters per second!">⚡ SPEED OF LIGHT</div>
+        <div class="curiosity-item" data-fact="The sun produces 3.8 × 10²⁶ watts every second!">☀️ SOLAR POWER</div>
+        <div class="curiosity-item" data-fact="Fireflies produce light through bioluminescence!">🐞 BIOLUMINESCENCE</div>
+        <div class="curiosity-item" data-fact="Without light, there would be no color!">🎨 COLOR & LIGHT</div>
+        <div class="curiosity-item" data-fact="Light from Proxima Centauri takes 4.24 YEARS to reach us!">⭐ STARLIGHT</div></div>
 
-        <!-- QUIZ -->
         <div style="font-size:1.2rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">🧠 LIGHT KNOWLEDGE QUIZ</div>
-        <div class="quiz-container">
-            <div class="quiz-question">❓ What is the speed of light in a vacuum?</div>
-            <div class="quiz-options"><button class="quiz-option" data-correct="false">186,000 mph</button><button class="quiz-option" data-correct="true">299,792 km/s</button><button class="quiz-option" data-correct="false">150,000 km/s</button><button class="quiz-option" data-correct="false">1,000,000 km/s</button></div>
-            <div class="quiz-feedback" style="margin-top:1rem; font-size:0.8rem;"></div>
-        </div>
-        <div class="quiz-container">
-            <div class="quiz-question">❓ Which color of visible light has the longest wavelength?</div>
-            <div class="quiz-options"><button class="quiz-option" data-correct="false">Violet</button><button class="quiz-option" data-correct="true">Red</button><button class="quiz-option" data-correct="false">Blue</button><button class="quiz-option" data-correct="false">Green</button></div>
-            <div class="quiz-feedback" style="margin-top:1rem; font-size:0.8rem;"></div>
-        </div>
+        <div class="quiz-container"><div class="quiz-question">❓ What is the speed of light in a vacuum?</div><div class="quiz-options"><button class="quiz-option" data-correct="false">186,000 mph</button><button class="quiz-option" data-correct="true">299,792 km/s</button><button class="quiz-option" data-correct="false">150,000 km/s</button></div><div class="quiz-feedback" style="margin-top:1rem;"></div></div>
 
-        <!-- PRODUCT -->
-        <div class="product-showcase" id="productCard">
-            <div class="flashlight-info">
-                <div style="font-size:0.6rem; letter-spacing:3px; color:rgba(255,255,255,0.5); margin-bottom:0.5rem;">LIMITED EDITION</div>
-                <h3>MYTHCO RECHARGEABLE TORCH</h3>
-                <div style="font-size: 0.7rem; letter-spacing: 2px; color: rgba(255,255,255,0.4); margin-bottom:0.5rem;">1000 LUMENS • 3 MODES • ZOOMABLE</div>
-                <div class="price-tag" id="priceTag">KSh 699 <small>was KSh 1,739</small></div>
-                <button class="btn-buy" id="buyNowBtn">SHOP NOW →</button>
-            </div>
-            <div class="flashlight-image">
-                <svg viewBox="0 0 200 260" fill="none">
-                    <rect x="55" y="90" width="90" height="130" rx="12" fill="#111111" stroke="#FFD700" stroke-width="1.5"/>
-                    <rect x="60" y="95" width="80" height="30" rx="8" fill="#1a1a1a" stroke="#FFD700" stroke-width="1"/>
-                    <circle cx="100" cy="110" r="8" fill="#FFD700"/>
-                    <rect x="70" y="140" width="60" height="12" rx="4" fill="#2a2a2a"/>
-                    <rect x="75" y="170" width="50" height="12" rx="4" fill="#2a2a2a"/>
-                    <path d="M85 220 L115 220 L108 245 L92 245 L85 220Z" fill="#FF8C00" stroke="#FFD700" stroke-width="1"/>
-                    <ellipse cx="100" cy="88" rx="25" ry="8" fill="#FFD700" fill-opacity="0.3"/>
-                    <path d="M125 98 L165 70 L175 85 L135 103Z" fill="#FFD700" opacity="0.3"/>
-                </svg>
-            </div>
-        </div>
+        <div class="product-showcase" id="productCard"><div class="flashlight-info"><div style="font-size:0.6rem; letter-spacing:3px; color:rgba(255,255,255,0.5);">LIMITED EDITION</div><h3>MYTHCO RECHARGEABLE TORCH</h3><div class="price-tag" id="priceTag">KSh 699 <small>was KSh 1,739</small></div><button class="btn-buy" id="buyNowBtn">SHOP NOW →</button></div><div class="flashlight-image"><svg viewBox="0 0 200 260" fill="none"><rect x="55" y="90" width="90" height="130" rx="12" fill="#111111" stroke="#FFD700" stroke-width="1.5"/><circle cx="100" cy="110" r="8" fill="#FFD700"/><path d="M85 220 L115 220 L108 245 L92 245 L85 220Z" fill="#FF8C00" stroke="#FFD700" stroke-width="1"/></svg></div></div>
 
-        <!-- FOOTER -->
-        <div class="fun-footer">
-            <span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span>
-            <span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span><span>⚡ ELECTROMAGNETIC RADIATION</span>
-        </div>
+        <div class="fun-footer"><span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span><span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span></div>
     </div>
 </div>
 
-<audio id="spaceMusic" loop preload="auto">
-    <source src="https://cdn.pixabay.com/download/audio/2022/02/02/audio_bb6374e6f8.mp3?filename=ambient-space-music-140463.mp3" type="audio/mpeg">
-</audio>
+<audio id="spaceMusic" loop preload="auto"><source src="https://cdn.pixabay.com/download/audio/2022/02/02/audio_bb6374e6f8.mp3?filename=ambient-space-music-140463.mp3" type="audio/mpeg"></audio>
 
-<script>
-    // ========== CREATE STARS AND PARTICLES ==========
-    const cosmicBg = document.getElementById('cosmicBg');
-    for (let i = 0; i < 250; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.width = Math.random() * 2 + 1 + 'px';
-        star.style.height = star.style.width;
-        star.style.animationDelay = Math.random() * 5 + 's';
-        star.style.animationDuration = Math.random() * 3 + 2 + 's';
-        cosmicBg.appendChild(star);
-    }
-    for (let i = 0; i < 60; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.width = Math.random() * 4 + 2 + 'px';
-        particle.style.height = particle.style.width;
-        particle.style.animationDelay = Math.random() * 15 + 's';
-        particle.style.animationDuration = Math.random() * 20 + 15 + 's';
-        cosmicBg.appendChild(particle);
-    }
-
-    // ========== 3D PORTAL BOX ==========
-    const portalOverlay = document.getElementById('portalOverlay');
-    const portalBox = document.getElementById('portalBox');
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     
-    setTimeout(() => {
-        portalOverlay.classList.add('active');
-        setTimeout(() => {
-            portalBox.classList.add('expand');
-            setTimeout(() => {
-                portalOverlay.classList.remove('active');
-                portalBox.classList.remove('expand');
-            }, 1500);
-        }, 500);
-    }, 500);
-
-    // ========== LOADING SCREEN ==========
-    const loadingScreen = document.getElementById('loadingScreen');
-    const mainContent = document.getElementById('mainContent');
-    const percentElement = document.getElementById('loadingPercent');
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += Math.floor(Math.random() * 10) + 3;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(interval);
-            loadingScreen.classList.add('hide');
-            mainContent.style.transition = 'opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
-            mainContent.style.opacity = '1';
-            
-            document.querySelectorAll('.hero-letter').forEach(el => el.classList.add('animate-in'));
-            document.querySelector('.hero-sub')?.classList.add('animate-in');
-            document.querySelector('.blessing-tag')?.classList.add('animate-in');
-            document.querySelector('.science-line')?.classList.add('animate-in');
-            document.querySelector('.fun-footer')?.classList.add('animate-in');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-            }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
-            document.querySelectorAll('.card, .product-showcase, .quiz-container, .fun-fact').forEach(el => observer.observe(el));
+    // ============================================
+    // GARGANTUA-STYLE BLACK HOLE (Interstellar inspired)
+    // ============================================
+    
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+    scene.fog = new THREE.FogExp2(0x000000, 0.0005);
+    
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.5, 14);
+    camera.lookAt(0, 0, 0);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ReinhardToneMapping;
+    renderer.toneMappingExposure = 1.3;
+    container.appendChild(renderer.domElement);
+    
+    // Bloom effect for that cinematic glow
+    const renderScene = new RenderPass(scene, camera);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.0, 0.2, 0.85);
+    bloomPass.threshold = 0.05;
+    bloomPass.strength = 0.7;
+    bloomPass.radius = 0.8;
+    const effectComposer = new EffectComposer(renderer);
+    effectComposer.addPass(renderScene);
+    effectComposer.addPass(bloomPass);
+    
+    // Orbit controls for cinematic rotation
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.3;  // SLOW rotation like Interstellar
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.target.set(0, 0, 0);
+    
+    // ============================================
+    // EVENT HORIZON (The black sphere)
+    // ============================================
+    const eventHorizonGeo = new THREE.SphereGeometry(1.1, 128, 128);
+    const eventHorizonMat = new THREE.MeshStandardMaterial({
+        color: 0x000000,
+        emissive: 0x0a0030,
+        emissiveIntensity: 0.2,
+        roughness: 0.1,
+        metalness: 0.95
+    });
+    const eventHorizon = new THREE.Mesh(eventHorizonGeo, eventHorizonMat);
+    scene.add(eventHorizon);
+    
+    // Glow sphere around event horizon (photon sphere)
+    const photonSphereGeo = new THREE.SphereGeometry(1.28, 96, 96);
+    const photonSphereMat = new THREE.MeshBasicMaterial({
+        color: 0xFF6699,
+        transparent: true,
+        opacity: 0.12,
+        side: THREE.BackSide
+    });
+    const photonSphere = new THREE.Mesh(photonSphereGeo, photonSphereMat);
+    scene.add(photonSphere);
+    
+    // ============================================
+    // ACCRETION DISK (The glowing ring - Gargantua style)
+    // ============================================
+    const diskGeometry = new THREE.TorusGeometry(2.4, 0.22, 256, 512);
+    const diskMaterial = new THREE.MeshStandardMaterial({
+        color: 0xFF4466,
+        emissive: 0xFF2266,
+        emissiveIntensity: 0.7,
+        metalness: 0.85,
+        roughness: 0.25,
+        transparent: true,
+        opacity: 0.9
+    });
+    const accretionDisk = new THREE.Mesh(diskGeometry, diskMaterial);
+    accretionDisk.rotation.x = Math.PI / 2.15;
+    accretionDisk.rotation.z = 0.25;
+    scene.add(accretionDisk);
+    
+    // Outer disk (larger, more orange)
+    const outerDiskGeo = new THREE.TorusGeometry(3.2, 0.18, 256, 512);
+    const outerDiskMat = new THREE.MeshStandardMaterial({
+        color: 0xFF6633,
+        emissive: 0xFF4411,
+        emissiveIntensity: 0.5,
+        metalness: 0.75,
+        roughness: 0.35,
+        transparent: true,
+        opacity: 0.7
+    });
+    const outerDisk = new THREE.Mesh(outerDiskGeo, outerDiskMat);
+    outerDisk.rotation.x = Math.PI / 2.08;
+    outerDisk.rotation.z = -0.15;
+    scene.add(outerDisk);
+    
+    // Thin inner ring (hot accretion)
+    const innerRingGeo = new THREE.TorusGeometry(1.65, 0.06, 128, 384);
+    const innerRingMat = new THREE.MeshStandardMaterial({
+        color: 0xFFAA88,
+        emissive: 0xFF6644,
+        emissiveIntensity: 0.9,
+        metalness: 0.9,
+        roughness: 0.15
+    });
+    const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
+    innerRing.rotation.x = Math.PI / 2.2;
+    scene.add(innerRing);
+    
+    // ============================================
+    // ORBITING MATTER PARTICLES (Spiraling into black hole)
+    // ============================================
+    const particleCount = 4000;
+    const particlesGeo = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount; i++) {
+        const radius = 2.0 + Math.random() * 3.5;
+        const angle = Math.random() * Math.PI * 2;
+        const yOffset = (Math.random() - 0.5) * 0.8;
+        particlePositions[i * 3] = Math.cos(angle) * radius;
+        particlePositions[i * 3 + 1] = yOffset;
+        particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
+        
+        // Colors from hot white to orange to red
+        const t = (radius - 1.5) / 4;
+        if (Math.random() > 0.6) {
+            particleColors[i * 3] = 1.0;
+            particleColors[i * 3 + 1] = 0.7 + Math.random() * 0.3;
+            particleColors[i * 3 + 2] = 0.3 + Math.random() * 0.4;
+        } else {
+            particleColors[i * 3] = 1.0;
+            particleColors[i * 3 + 1] = 0.4 + Math.random() * 0.4;
+            particleColors[i * 3 + 2] = 0.1 + Math.random() * 0.3;
         }
-        percentElement.textContent = progress + '%';
-    }, 60);
-
-    // ========== UNSEEN STUDIO: SLOW CURSOR-CONTROLLED SCROLLING ==========
-    const scrollContainer = document.getElementById('scrollContainer');
-    const scrollFill = document.getElementById('scrollFill');
-    let targetScroll = 0;
-    let currentScroll = 0;
-    let mouseY = 0;
-    let scrollRaf;
+    }
+    particlesGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particlesGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+    const particleMat = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+    const particleSystem = new THREE.Points(particlesGeo, particleMat);
+    scene.add(particleSystem);
     
-    const maxScroll = scrollContainer.scrollHeight - window.innerHeight;
+    // ============================================
+    // GRAVITATIONAL LENSING RINGS
+    // ============================================
+    const lensRingGeo = new THREE.TorusGeometry(1.9, 0.03, 128, 512);
+    const lensRingMat = new THREE.MeshStandardMaterial({
+        color: 0xFFAA88,
+        emissive: 0xFF6644,
+        emissiveIntensity: 0.5,
+        transparent: true,
+        opacity: 0.6
+    });
+    const lensRing = new THREE.Mesh(lensRingGeo, lensRingMat);
+    lensRing.rotation.x = Math.PI / 2;
+    scene.add(lensRing);
     
-    document.addEventListener('mousemove', (e) => {
-        mouseY = e.clientY;
-        targetScroll = (mouseY / window.innerHeight) * maxScroll;
+    // Additional orbiting ring
+    const orbitRingGeo = new THREE.TorusGeometry(4.0, 0.04, 128, 512);
+    const orbitRingMat = new THREE.MeshStandardMaterial({ color: 0x88AAFF, emissive: 0x4466AA, emissiveIntensity: 0.3 });
+    const orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
+    orbitRing.rotation.x = Math.PI / 2 + 0.15;
+    scene.add(orbitRing);
+    
+    // ============================================
+    // LIGHTING (Cinematic)
+    // ============================================
+    const ambientLight = new THREE.AmbientLight(0x111111);
+    scene.add(ambientLight);
+    
+    const coreLight = new THREE.PointLight(0xFF3366, 1.8, 18);
+    coreLight.position.set(0, 0, 0);
+    scene.add(coreLight);
+    
+    const fillLight1 = new THREE.PointLight(0xFF8833, 0.6, 25);
+    fillLight1.position.set(2, 1.5, 3);
+    scene.add(fillLight1);
+    
+    const fillLight2 = new THREE.PointLight(0xAA44FF, 0.5, 22);
+    fillLight2.position.set(-1.5, -0.5, 4);
+    scene.add(fillLight2);
+    
+    const rimLight = new THREE.DirectionalLight(0xFFAA66, 0.7);
+    rimLight.position.set(1, 2, -3);
+    scene.add(rimLight);
+    
+    // ============================================
+    // ANIMATION LOOP (SLOW AND CINEMATIC)
+    // ============================================
+    let time = 0;
+    
+    function animateBlackHole() {
+        requestAnimationFrame(animateBlackHole);
+        time += 0.008;  // SLOW
+    
+        // Slow rotation of accretion disk
+        accretionDisk.rotation.z += 0.003;
+        outerDisk.rotation.z -= 0.002;
+        innerRing.rotation.z += 0.005;
+        orbitRing.rotation.y += 0.0015;
+        lensRing.rotation.z += 0.004;
+        
+        // Particles slowly drift inward
+        particleSystem.rotation.y += 0.001;
+        
+        // Pulsing light effect
+        const pulse = 0.85 + Math.sin(time * 1.5) * 0.15;
+        coreLight.intensity = 1.5 + Math.sin(time * 2) * 0.3;
+        photonSphereMat.opacity = 0.1 + Math.sin(time * 1.2) * 0.04;
+        
+        controls.update();
+        effectComposer.render();
+    }
+    
+    animateBlackHole();
+    
+    // ============================================
+    // POLAROID DATA
+    // ============================================
+    const polaroidData = [
+        { title: "Golden Hour", type: "Natural Light • Sunset", gradient: "linear-gradient(135deg, #FFD700, #FF8C00)" },
+        { title: "Studio Light", type: "Artificial • Rembrandt", gradient: "linear-gradient(135deg, #FFFFFF, #CCCCCC)" },
+        { title: "Bioluminescence", type: "Chemical Light • Ocean", gradient: "linear-gradient(135deg, #00FFCC, #0099FF)" },
+        { title: "Light Painting", type: "Long Exposure • LED", gradient: "linear-gradient(135deg, #FF1493, #9B30FF)" },
+        { title: "Macro Sunlight", type: "Natural • Dewdrop", gradient: "linear-gradient(135deg, #7FFF00, #32CD32)" },
+        { title: "Northern Lights", type: "Atmospheric • Aurora", gradient: "linear-gradient(135deg, #00FF88, #0066FF, #FF00FF)" },
+        { title: "Candlelight", type: "Warm • Ambience", gradient: "linear-gradient(135deg, #FF6600, #FF3300)" },
+        { title: "Neon Nights", type: "Urban • Neon", gradient: "linear-gradient(135deg, #FF00FF, #00FFFF)" },
+        { title: "Underwater Sun", type: "Natural • Refracted", gradient: "linear-gradient(135deg, #0099FF, #003366)" },
+        { title: "Light Spectrum", type: "Physics • ROYGBIV", gradient: "linear-gradient(135deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)" },
+        { title: "Starlight", type: "Astronomical • Distant Stars", gradient: "linear-gradient(135deg, #FFFFFF, #FFD700)" },
+        { title: "LED Art", type: "Digital • Pixel Light", gradient: "linear-gradient(135deg, #00FFFF, #FF00FF)" }
+    ];
+    
+    let polaroids = [];
+    let isTransitioning = false;
+    
+    // ============================================
+    // CREATE SPHERICAL POLAROIDS
+    // ============================================
+    function createSphericalPolaroids() {
+        document.querySelectorAll('.polaroid').forEach(p => p.remove());
+        polaroids = [];
+        
+        const radius = 320;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        polaroidData.forEach((data, index) => {
+            const polaroid = document.createElement('div');
+            polaroid.className = 'polaroid';
+            
+            // Fibonacci sphere for even distribution
+            const phi = Math.acos(1 - 2 * (index + 0.5) / polaroidData.length);
+            const theta = Math.PI * 2 * (index / polaroidData.length) * (Math.sqrt(5) - 1) / 2;
+            
+            const x = centerX + radius * Math.sin(phi) * Math.cos(theta);
+            const y = centerY + radius * Math.sin(phi) * Math.sin(theta);
+            
+            polaroid.style.left = x + 'px';
+            polaroid.style.top = y + 'px';
+            polaroid.style.transform = `translate(-50%, -50%) scale(0) rotate(${Math.random() * 30 - 15}deg)`;
+            polaroid.style.opacity = '0';
+            
+            polaroid.innerHTML = `
+                <div class="polaroid-image" style="background: ${data.gradient}; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-camera" style="font-size: 2.5rem; color: rgba(255,255,255,0.5);"></i>
+                </div>
+                <div class="polaroid-caption">${data.title}<br><span>${data.type}</span></div>
+            `;
+            document.body.appendChild(polaroid);
+            polaroids.push(polaroid);
+        });
+    }
+    
+    // ============================================
+    // EXPLODE POLAROIDS INTO SPHERE (SLOW)
+    // ============================================
+    function explodePolaroidsIntoScreen() {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const radius = 280;
+        
+        polaroids.forEach((polaroid, index) => {
+            const phi = Math.acos(1 - 2 * (index + 0.5) / polaroids.length);
+            const theta = Math.PI * 2 * (index / polaroids.length) * (Math.sqrt(5) - 1) / 2;
+            
+            const x = centerX + radius * Math.sin(phi) * Math.cos(theta);
+            const y = centerY + radius * Math.sin(phi) * Math.sin(theta);
+            const rotate = (Math.random() * 40 - 20);
+            
+            setTimeout(() => {
+                polaroid.style.transition = 'all 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+                polaroid.style.left = x + 'px';
+                polaroid.style.top = y + 'px';
+                polaroid.style.transform = `translate(-50%, -50%) scale(1) rotate(${rotate}deg)`;
+                polaroid.style.opacity = '1';
+                
+                polaroid.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    createRipple(e.clientX, e.clientY);
+                });
+            }, index * 80);
+        });
+    }
+    
+    // ============================================
+    // SUCK EVERYTHING INTO BLACK HOLE (SLOW)
+    // ============================================
+    function suckEverythingIntoBlackHole() {
+        const mainSection = document.getElementById('mainSection');
+        const blackholeX = window.innerWidth / 2;
+        const blackholeY = window.innerHeight / 2;
+        
+        // 1. Slow content crush
+        mainSection.classList.add('crushing');
+        
+        // 2. Create particles being sucked in
+        for (let i = 0; i < 200; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = Math.random() * 6 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = `radial-gradient(circle, #FFD700, #FF4466)`;
+            particle.style.borderRadius = '50%';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = Math.random() * window.innerHeight + 'px';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '20000';
+            particle.style.filter = 'blur(2px)';
+            document.body.appendChild(particle);
+            
+            const deltaX = blackholeX - parseFloat(particle.style.left);
+            const deltaY = blackholeY - parseFloat(particle.style.top);
+            
+            particle.style.transition = 'all 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+            setTimeout(() => {
+                particle.style.transform = `translate(${deltaX * 0.95}px, ${deltaY * 0.95}px) scale(0)`;
+                particle.style.opacity = '0';
+            }, 10);
+            setTimeout(() => particle.remove(), 1600);
+        }
+        
+        // 3. Intensify black hole glow
+        coreLight.intensity = 3.5;
+        bloomPass.strength = 1.3;
+        
+        // 4. After crushing, create and explode polaroids
+        setTimeout(() => {
+            mainSection.style.display = 'none';
+            mainSection.classList.remove('crushing');
+            
+            createSphericalPolaroids();
+            explodePolaroidsIntoScreen();
+            
+            setTimeout(() => {
+                bloomPass.strength = 0.7;
+                coreLight.intensity = 1.8;
+            }, 800);
+            
+        }, 2500);
+    }
+    
+    // ============================================
+    // REVERSE: SUCK POLAROIDS BACK
+    // ============================================
+    function suckPolaroidsBackAndRestore() {
+        const mainSection = document.getElementById('mainSection');
+        const blackholeX = window.innerWidth / 2;
+        const blackholeY = window.innerHeight / 2;
+        
+        // Fly polaroids into black hole
+        polaroids.forEach(polaroid => {
+            const rect = polaroid.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+            const deltaX = blackholeX - startX;
+            const deltaY = blackholeY - startY;
+            
+            polaroid.style.transition = 'all 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+            polaroid.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0) rotate(0deg)`;
+            polaroid.style.opacity = '0';
+        });
+        
+        coreLight.intensity = 3.5;
+        bloomPass.strength = 1.3;
+        
+        setTimeout(() => {
+            document.querySelectorAll('.polaroid').forEach(p => p.remove());
+            polaroids = [];
+            
+            mainSection.style.display = 'block';
+            mainSection.classList.add('reversing');
+            
+            setTimeout(() => {
+                mainSection.classList.remove('reversing');
+            }, 1200);
+            
+            setTimeout(() => {
+                bloomPass.strength = 0.7;
+                coreLight.intensity = 1.8;
+            }, 800);
+        }, 1400);
+    }
+    
+    // ============================================
+    // NAVIGATION
+    // ============================================
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const mainSection = document.getElementById('mainSection');
+    
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            createRipple(btn.getBoundingClientRect().left + btn.offsetWidth/2, btn.getBoundingClientRect().top + btn.offsetHeight/2);
+            if (btn.getAttribute('data-section') === 'gallery') {
+                if (mainSection.style.display !== 'none') {
+                    suckEverythingIntoBlackHole();
+                }
+            } else {
+                if (mainSection.style.display === 'none') {
+                    suckPolaroidsBackAndRestore();
+                }
+            }
+        });
     });
     
-    function smoothScroll() {
-        currentScroll += (targetScroll - currentScroll) * 0.045; // SLOW CINEMATIC SCROLL
-        scrollContainer.scrollTop = currentScroll;
-        const scrollPercent = (currentScroll / maxScroll) * 100;
-        scrollFill.style.height = scrollPercent + '%';
-        scrollRaf = requestAnimationFrame(smoothScroll);
-    }
-    smoothScroll();
-
-    // ========== UNSEEN STUDIO: CURSOR INERTIA PHYSICS ==========
-    const cursorDot = document.querySelector('.cursor-dot');
-    const cursorRing = document.querySelector('.cursor-ring');
-    let mouseX = 0, mouseY_cursor = 0, dotX = 0, dotY = 0, ringX = 0, ringY = 0, ringVX = 0, ringVY = 0;
+    // ============================================
+    // LOADING SCREEN
+    // ============================================
+    const loadingScreen = document.getElementById('loadingScreen');
+    const percentElement = document.getElementById('loadingPercent');
+    let progress = 0;
+    const loadInterval = setInterval(() => {
+        progress += Math.floor(Math.random() * 6) + 2;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(loadInterval);
+            loadingScreen.classList.add('hide');
+            
+            const letters = document.querySelectorAll('.hero-letter');
+            letters.forEach((letter, i) => {
+                setTimeout(() => {
+                    letter.style.opacity = '1';
+                    letter.style.transform = 'translateY(0)';
+                }, i * 30);
+            });
+            setTimeout(() => {
+                const heroSub = document.querySelector('.hero-sub');
+                const blessingTag = document.querySelector('.blessing-tag');
+                const scienceLine = document.querySelector('.science-line');
+                const funFooter = document.querySelector('.fun-footer');
+                if (heroSub) { heroSub.style.opacity = '1'; heroSub.style.transform = 'translateY(0)'; }
+                if (blessingTag) { blessingTag.style.opacity = '1'; blessingTag.style.transform = 'translateY(0)'; }
+                if (scienceLine) { scienceLine.style.opacity = '1'; scienceLine.style.transform = 'translateY(0)'; }
+                if (funFooter) { funFooter.style.opacity = '1'; funFooter.style.transform = 'translateY(0)'; }
+            }, 500);
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.card, .fun-fact, .quiz-container, .product-showcase').forEach(el => observer.observe(el));
+        }
+        percentElement.textContent = progress + '%';
+    }, 80);
+    
+    // ============================================
+    // CURSOR & UI FUNCTIONS
+    // ============================================
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, ringX = 0, ringY = 0, ringVX = 0, ringVY = 0;
     
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
-        mouseY_cursor = e.clientY;
-        const isClickable = e.target.closest('.product-showcase, .btn-buy, .price-tag, .curiosity-item, .quiz-option, .fun-fact, .card, .blessing-tag');
-        if (isClickable) { cursorRing.classList.add('active'); cursorDot.classList.add('active'); }
-        else { cursorRing.classList.remove('active'); cursorDot.classList.remove('active'); }
+        mouseY = e.clientY;
+        const isClickable = e.target.closest('.nav-btn, .product-showcase, .btn-buy, .price-tag, .curiosity-item, .quiz-option, .fun-fact, .card, .polaroid');
+        if (isClickable) {
+            cursorRing.style.borderColor = '#FFD700';
+            cursorRing.style.width = '70px';
+            cursorRing.style.height = '70px';
+            cursorDot.style.width = '10px';
+            cursorDot.style.height = '10px';
+        } else {
+            cursorRing.style.borderColor = 'rgba(255, 215, 0, 0.5)';
+            cursorRing.style.width = '40px';
+            cursorRing.style.height = '40px';
+            cursorDot.style.width = '6px';
+            cursorDot.style.height = '6px';
+        }
     });
     
-    document.addEventListener('mousedown', () => { cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) scale(0.9)`; setTimeout(() => { cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) scale(1)`; }, 150); });
-    
     function animateCursor() {
-        dotX += (mouseX - dotX) * 0.2;
-        dotY += (mouseY_cursor - dotY) * 0.2;
+        dotX += (mouseX - dotX) * 0.12;
+        dotY += (mouseY - dotY) * 0.12;
         cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
-        let forceX = (mouseX - ringX) * 0.06;
-        let forceY = (mouseY_cursor - ringY) * 0.06;
-        ringVX += forceX; ringVY += forceY;
-        ringVX *= 0.94; ringVY *= 0.94;
-        ringX += ringVX; ringY += ringVY;
+        let forceX = (mouseX - ringX) * 0.04;
+        let forceY = (mouseY - ringY) * 0.04;
+        ringVX += forceX;
+        ringVY += forceY;
+        ringVX *= 0.96;
+        ringVY *= 0.96;
+        ringX += ringVX;
+        ringY += ringVY;
         cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
         requestAnimationFrame(animateCursor);
     }
     animateCursor();
-
-    // ========== UNSEEN STUDIO: RIPPLE EFFECT ON EVERY REACTIVE ELEMENT ==========
-    const rippleContainer = document.getElementById('rippleContainer');
+    
     function createRipple(x, y) {
         const ripple = document.createElement('div');
-        ripple.className = 'ripple';
+        ripple.style.position = 'fixed';
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
-        rippleContainer.appendChild(ripple);
+        ripple.style.width = '10px';
+        ripple.style.height = '10px';
+        ripple.style.borderRadius = '50%';
+        ripple.style.background = 'radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4))';
+        ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+        ripple.style.pointerEvents = 'none';
+        ripple.style.zIndex = '100000';
+        ripple.style.animation = 'rippleExpand 0.8s ease-out forwards';
+        document.body.appendChild(ripple);
         setTimeout(() => ripple.remove(), 800);
     }
     
-    const reactiveElements = document.querySelectorAll('.curiosity-item, .quiz-option, .fun-fact, .card, .btn-buy, .price-tag, .product-showcase, .blessing-tag');
-    reactiveElements.forEach(el => {
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `@keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; } 100% { transform: translate(-50%, -50%) scale(20); opacity: 0; } }`;
+    document.head.appendChild(styleSheet);
+    
+    document.querySelectorAll('.curiosity-item, .quiz-option, .fun-fact, .btn-buy, .price-tag, .product-showcase').forEach(el => {
         el.addEventListener('click', (e) => {
             e.stopPropagation();
             const rect = el.getBoundingClientRect();
-            const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
-            createRipple(x, y);
-        });
-        el.addEventListener('mouseenter', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
-            createRipple(x, y);
+            createRipple(rect.left + rect.width/2, rect.top + rect.height/2);
         });
     });
-
-    // ========== CURIOSITY FACTS ==========
+    
+    // ============================================
+    // CURIOSITY FACTS
+    // ============================================
     document.querySelectorAll('.curiosity-item').forEach(item => {
         item.addEventListener('click', (e) => {
-            e.stopPropagation();
             const fact = item.getAttribute('data-fact');
             const toast = document.createElement('div');
             toast.textContent = `→ ${fact} ←`;
-            toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000;color:#FFD700;padding:12px 24px;border:1px solid #FFD700;z-index:1000;font-size:0.8rem;letter-spacing:1px;font-family:monospace;border-radius:40px;backdrop-filter:blur(10px);animation:fadeInUp 0.3s ease;`;
+            toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000;color:#FFD700;padding:12px 24px;border:1px solid #FFD700;z-index:1000;font-size:0.8rem;border-radius:40px;backdrop-filter:blur(10px);`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         });
     });
-
-    // ========== QUIZ ==========
+    
+    // ============================================
+    // QUIZ
+    // ============================================
     document.querySelectorAll('.quiz-option').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
             const isCorrect = btn.getAttribute('data-correct') === 'true';
             const container = btn.closest('.quiz-container');
             const feedback = container.querySelector('.quiz-feedback');
             if (isCorrect) {
                 feedback.innerHTML = '✓ CORRECT! 🌟';
                 feedback.style.color = '#FFD700';
-                createRipple(btn.getBoundingClientRect().left + btn.offsetWidth/2, btn.getBoundingClientRect().top + btn.offsetHeight/2);
             } else {
                 feedback.innerHTML = '✗ NOT QUITE. Try again! 💡';
                 feedback.style.color = '#FF6666';
@@ -815,27 +958,65 @@
             setTimeout(() => { feedback.innerHTML = ''; }, 1500);
         });
     });
-
-    // ========== MUSIC ==========
+    
+    // ============================================
+    // SCROLL PROGRESS
+    // ============================================
+    const scrollContainer = document.getElementById('scrollContainer');
+    const scrollFill = document.getElementById('scrollFill');
+    let targetScroll = 0;
+    let currentScroll = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+        targetScroll = (e.clientY / window.innerHeight) * (scrollContainer.scrollHeight - window.innerHeight);
+    });
+    
+    function updateScroll() {
+        currentScroll += (targetScroll - currentScroll) * 0.03;
+        scrollContainer.scrollTop = currentScroll;
+        const percent = (currentScroll / (scrollContainer.scrollHeight - window.innerHeight)) * 100;
+        scrollFill.style.height = percent + '%';
+        requestAnimationFrame(updateScroll);
+    }
+    updateScroll();
+    
+    // ============================================
+    // MUSIC
+    // ============================================
     const audio = document.getElementById('spaceMusic');
     const musicControl = document.getElementById('musicControl');
     const musicIcon = document.getElementById('musicIcon');
     let isMusicPlaying = false;
-    function toggleMusic() {
-        if (isMusicPlaying) { audio.pause(); isMusicPlaying = false; musicIcon.className = 'fas fa-music'; }
-        else { audio.play().then(() => { isMusicPlaying = true; musicIcon.className = 'fas fa-volume-up'; }).catch(() => {}); }
-    }
-    musicControl.addEventListener('click', toggleMusic);
-    setTimeout(() => { audio.play().then(() => { isMusicPlaying = true; musicIcon.className = 'fas fa-volume-up'; }).catch(() => {}); }, 2500);
-
-    // ========== JUMLA REDIRECT ==========
+    musicControl.addEventListener('click', () => {
+        if (isMusicPlaying) {
+            audio.pause();
+            isMusicPlaying = false;
+            musicIcon.className = 'fas fa-music';
+        } else {
+            audio.play().then(() => {
+                isMusicPlaying = true;
+                musicIcon.className = 'fas fa-volume-up';
+            }).catch(() => {});
+        }
+    });
+    setTimeout(() => {
+        audio.play().then(() => {
+            isMusicPlaying = true;
+            musicIcon.className = 'fas fa-volume-up';
+        }).catch(() => {});
+    }, 2000);
+    
+    // ============================================
+    // JUMLA REDIRECT
+    // ============================================
     const JUMLA_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
     document.getElementById('productCard')?.addEventListener('click', () => window.open(JUMLA_URL, '_blank'));
     document.getElementById('buyNowBtn')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     document.getElementById('priceTag')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     
-    console.log('%c✨ UNSEEN STUDIO TRANSITIONS ACTIVATED ✨', 'color: #FFD700; font-size: 14px; letter-spacing: 2px;');
-    console.log('%c→ Cursor inertia • Cinematic letter entry • Scroll-triggered reveals • 3D portal • Ripple effects', 'color: rgba(255,215,0,0.6); font-size: 10px;');
+    console.log('%c✨ GARGANTUA-STYLE BLACK HOLE ACTIVATED ✨', 'color: #FF4466; font-size: 14px;');
+    console.log('%c🌀 Interstellar-inspired accretion disk | Slow cinematic rotation', 'color: #FFD700; font-size: 12px;');
+    console.log('%c📸 Content gets gently pulled into the black hole → Explodes into spherical polaroids', 'color: #FFAA88; font-size: 12px;');
 </script>
 </body>
 </html>
