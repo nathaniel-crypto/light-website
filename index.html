@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>What Is Light Really? | Gargantua Black Hole</title>
-    <meta name="description" content="Interstellar-inspired Gargantua black hole with slow cinematic transitions and spherical polaroid formation">
+    <title>What Is Light Really? | INTO THE BLACK HOLE</title>
+    <meta name="description" content="Get sucked INTO the Gargantua black hole - then explode into polaroids">
     
     <script type="importmap">
         {
@@ -166,27 +166,48 @@
             transition: all 0.1s linear;
         }
 
-        /* Slow cinematic crushing animation */
+        /* Dramatic crushing animation - INTO the black hole */
         .page.crushing {
-            animation: slowPaperCrush 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: intoTheBlackHole 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             pointer-events: none;
         }
 
-        @keyframes slowPaperCrush {
-            0% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); }
-            20% { transform: scale(0.7) rotate(2deg) skewX(8deg); opacity: 0.9; filter: blur(3px); }
-            50% { transform: scale(0.3) rotate(6deg) skewX(15deg) skewY(8deg); opacity: 0.6; filter: blur(12px); }
-            80% { transform: scale(0.08) rotate(12deg) skewX(22deg) skewY(15deg); opacity: 0.2; filter: blur(30px); }
-            100% { transform: scale(0) rotate(15deg) skewX(25deg) skewY(18deg); opacity: 0; filter: blur(50px); display: none; }
+        @keyframes intoTheBlackHole {
+            0% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 1; filter: blur(0px); }
+            15% { transform: scale(0.8) rotate(3deg) translateX(-20px); opacity: 0.9; filter: blur(2px); }
+            35% { transform: scale(0.5) rotate(8deg) translateX(-50px) translateY(-30px); opacity: 0.7; filter: blur(8px); }
+            55% { transform: scale(0.2) rotate(15deg) translateX(-100px) translateY(-60px); opacity: 0.4; filter: blur(20px); }
+            75% { transform: scale(0.05) rotate(25deg) translateX(-150px) translateY(-100px); opacity: 0.1; filter: blur(40px); }
+            100% { transform: scale(0) rotate(30deg) translateX(-200px) translateY(-150px); opacity: 0; filter: blur(60px); display: none; }
         }
 
         .page.reversing {
-            animation: slowReverseUncrush 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            animation: emergeFromBlackHole 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
         }
 
-        @keyframes slowReverseUncrush {
-            0% { transform: scale(0) rotate(15deg) skewX(25deg); opacity: 0; filter: blur(50px); display: block; }
-            100% { transform: scale(1) rotate(0deg) skewX(0deg); opacity: 1; filter: blur(0px); }
+        @keyframes emergeFromBlackHole {
+            0% { transform: scale(0) rotate(30deg) translateX(-200px) translateY(-150px); opacity: 0; filter: blur(60px); display: block; }
+            100% { transform: scale(1) rotate(0deg) translate(0, 0); opacity: 1; filter: blur(0px); }
+        }
+
+        /* Black hole sucking overlay */
+        .suck-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #000000, #000000);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 20000;
+            pointer-events: none;
+            transition: all 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .suck-overlay.active {
+            transform: translate(-50%, -50%) scale(30);
+            background: radial-gradient(circle, #000000, #0a0015, #1a0030);
         }
 
         /* Polaroid styles */
@@ -299,10 +320,13 @@
 <!-- WebGL Canvas Container -->
 <div id="canvas-container"></div>
 
+<!-- Suck Overlay for dramatic effect -->
+<div class="suck-overlay" id="suckOverlay"></div>
+
 <!-- Navigation -->
 <div class="nav-bar" id="navBar">
     <button class="nav-btn active" data-section="main">✦ HOME ✦</button>
-    <button class="nav-btn" data-section="gallery">🌀 GARGANTUA 🌀</button>
+    <button class="nav-btn" data-section="gallery">🌀 INTO THE BLACK HOLE 🌀</button>
 </div>
 
 <!-- UI Elements -->
@@ -381,223 +405,176 @@
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     
     // ============================================
-    // GARGANTUA-STYLE BLACK HOLE (Interstellar inspired)
+    // GARGANTUA-STYLE BLACK HOLE
     // ============================================
     
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
-    scene.fog = new THREE.FogExp2(0x000000, 0.0005);
+    scene.fog = new THREE.FogExp2(0x000000, 0.0006);
     
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 1.5, 14);
+    camera.position.set(0, 1.2, 13);
     camera.lookAt(0, 0, 0);
     
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ReinhardToneMapping;
-    renderer.toneMappingExposure = 1.3;
+    renderer.toneMappingExposure = 1.4;
     container.appendChild(renderer.domElement);
     
-    // Bloom effect for that cinematic glow
     const renderScene = new RenderPass(scene, camera);
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.0, 0.2, 0.85);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.1, 0.2, 0.85);
     bloomPass.threshold = 0.05;
-    bloomPass.strength = 0.7;
-    bloomPass.radius = 0.8;
+    bloomPass.strength = 0.8;
+    bloomPass.radius = 0.9;
     const effectComposer = new EffectComposer(renderer);
     effectComposer.addPass(renderScene);
     effectComposer.addPass(bloomPass);
     
-    // Orbit controls for cinematic rotation
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.3;  // SLOW rotation like Interstellar
+    controls.autoRotateSpeed = 0.25;
     controls.enableZoom = false;
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     
-    // ============================================
-    // EVENT HORIZON (The black sphere)
-    // ============================================
-    const eventHorizonGeo = new THREE.SphereGeometry(1.1, 128, 128);
+    // Event Horizon
+    const eventHorizonGeo = new THREE.SphereGeometry(1.15, 128, 128);
     const eventHorizonMat = new THREE.MeshStandardMaterial({
         color: 0x000000,
-        emissive: 0x0a0030,
-        emissiveIntensity: 0.2,
+        emissive: 0x110033,
+        emissiveIntensity: 0.25,
         roughness: 0.1,
         metalness: 0.95
     });
     const eventHorizon = new THREE.Mesh(eventHorizonGeo, eventHorizonMat);
     scene.add(eventHorizon);
     
-    // Glow sphere around event horizon (photon sphere)
-    const photonSphereGeo = new THREE.SphereGeometry(1.28, 96, 96);
+    // Photon Sphere
+    const photonSphereGeo = new THREE.SphereGeometry(1.32, 96, 96);
     const photonSphereMat = new THREE.MeshBasicMaterial({
-        color: 0xFF6699,
+        color: 0xFF66AA,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.14,
         side: THREE.BackSide
     });
     const photonSphere = new THREE.Mesh(photonSphereGeo, photonSphereMat);
     scene.add(photonSphere);
     
-    // ============================================
-    // ACCRETION DISK (The glowing ring - Gargantua style)
-    // ============================================
-    const diskGeometry = new THREE.TorusGeometry(2.4, 0.22, 256, 512);
+    // Accretion Disk
+    const diskGeometry = new THREE.TorusGeometry(2.5, 0.24, 256, 512);
     const diskMaterial = new THREE.MeshStandardMaterial({
         color: 0xFF4466,
         emissive: 0xFF2266,
-        emissiveIntensity: 0.7,
+        emissiveIntensity: 0.75,
         metalness: 0.85,
         roughness: 0.25,
         transparent: true,
         opacity: 0.9
     });
     const accretionDisk = new THREE.Mesh(diskGeometry, diskMaterial);
-    accretionDisk.rotation.x = Math.PI / 2.15;
-    accretionDisk.rotation.z = 0.25;
+    accretionDisk.rotation.x = Math.PI / 2.12;
+    accretionDisk.rotation.z = 0.3;
     scene.add(accretionDisk);
     
-    // Outer disk (larger, more orange)
-    const outerDiskGeo = new THREE.TorusGeometry(3.2, 0.18, 256, 512);
+    // Outer Disk
+    const outerDiskGeo = new THREE.TorusGeometry(3.3, 0.2, 256, 512);
     const outerDiskMat = new THREE.MeshStandardMaterial({
         color: 0xFF6633,
         emissive: 0xFF4411,
-        emissiveIntensity: 0.5,
+        emissiveIntensity: 0.55,
         metalness: 0.75,
         roughness: 0.35,
         transparent: true,
         opacity: 0.7
     });
     const outerDisk = new THREE.Mesh(outerDiskGeo, outerDiskMat);
-    outerDisk.rotation.x = Math.PI / 2.08;
-    outerDisk.rotation.z = -0.15;
+    outerDisk.rotation.x = Math.PI / 2.05;
+    outerDisk.rotation.z = -0.2;
     scene.add(outerDisk);
     
-    // Thin inner ring (hot accretion)
-    const innerRingGeo = new THREE.TorusGeometry(1.65, 0.06, 128, 384);
+    // Inner hot ring
+    const innerRingGeo = new THREE.TorusGeometry(1.7, 0.07, 128, 384);
     const innerRingMat = new THREE.MeshStandardMaterial({
         color: 0xFFAA88,
         emissive: 0xFF6644,
-        emissiveIntensity: 0.9,
+        emissiveIntensity: 1.0,
         metalness: 0.9,
         roughness: 0.15
     });
     const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
-    innerRing.rotation.x = Math.PI / 2.2;
+    innerRing.rotation.x = Math.PI / 2.18;
     scene.add(innerRing);
     
-    // ============================================
-    // ORBITING MATTER PARTICLES (Spiraling into black hole)
-    // ============================================
-    const particleCount = 4000;
+    // Particle System
+    const particleCount = 5000;
     const particlesGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     const particleColors = new Float32Array(particleCount * 3);
     
     for (let i = 0; i < particleCount; i++) {
-        const radius = 2.0 + Math.random() * 3.5;
+        const radius = 2.2 + Math.random() * 3.8;
         const angle = Math.random() * Math.PI * 2;
-        const yOffset = (Math.random() - 0.5) * 0.8;
+        const yOffset = (Math.random() - 0.5) * 0.9;
         particlePositions[i * 3] = Math.cos(angle) * radius;
         particlePositions[i * 3 + 1] = yOffset;
         particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
         
-        // Colors from hot white to orange to red
-        const t = (radius - 1.5) / 4;
-        if (Math.random() > 0.6) {
+        if (Math.random() > 0.5) {
             particleColors[i * 3] = 1.0;
-            particleColors[i * 3 + 1] = 0.7 + Math.random() * 0.3;
-            particleColors[i * 3 + 2] = 0.3 + Math.random() * 0.4;
+            particleColors[i * 3 + 1] = 0.6 + Math.random() * 0.4;
+            particleColors[i * 3 + 2] = 0.2 + Math.random() * 0.5;
         } else {
             particleColors[i * 3] = 1.0;
-            particleColors[i * 3 + 1] = 0.4 + Math.random() * 0.4;
+            particleColors[i * 3 + 1] = 0.3 + Math.random() * 0.4;
             particleColors[i * 3 + 2] = 0.1 + Math.random() * 0.3;
         }
     }
     particlesGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
     particlesGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-    const particleMat = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+    const particleMat = new THREE.PointsMaterial({ size: 0.045, vertexColors: true, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
     const particleSystem = new THREE.Points(particlesGeo, particleMat);
     scene.add(particleSystem);
     
-    // ============================================
-    // GRAVITATIONAL LENSING RINGS
-    // ============================================
-    const lensRingGeo = new THREE.TorusGeometry(1.9, 0.03, 128, 512);
-    const lensRingMat = new THREE.MeshStandardMaterial({
-        color: 0xFFAA88,
-        emissive: 0xFF6644,
-        emissiveIntensity: 0.5,
-        transparent: true,
-        opacity: 0.6
-    });
-    const lensRing = new THREE.Mesh(lensRingGeo, lensRingMat);
-    lensRing.rotation.x = Math.PI / 2;
-    scene.add(lensRing);
-    
-    // Additional orbiting ring
-    const orbitRingGeo = new THREE.TorusGeometry(4.0, 0.04, 128, 512);
-    const orbitRingMat = new THREE.MeshStandardMaterial({ color: 0x88AAFF, emissive: 0x4466AA, emissiveIntensity: 0.3 });
+    // Orbiting ring
+    const orbitRingGeo = new THREE.TorusGeometry(4.2, 0.045, 128, 512);
+    const orbitRingMat = new THREE.MeshStandardMaterial({ color: 0x88AAFF, emissive: 0x4466AA, emissiveIntensity: 0.35 });
     const orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
-    orbitRing.rotation.x = Math.PI / 2 + 0.15;
+    orbitRing.rotation.x = Math.PI / 2 + 0.12;
     scene.add(orbitRing);
     
-    // ============================================
-    // LIGHTING (Cinematic)
-    // ============================================
+    // Lighting
     const ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
-    
     const coreLight = new THREE.PointLight(0xFF3366, 1.8, 18);
     coreLight.position.set(0, 0, 0);
     scene.add(coreLight);
-    
-    const fillLight1 = new THREE.PointLight(0xFF8833, 0.6, 25);
-    fillLight1.position.set(2, 1.5, 3);
-    scene.add(fillLight1);
-    
-    const fillLight2 = new THREE.PointLight(0xAA44FF, 0.5, 22);
-    fillLight2.position.set(-1.5, -0.5, 4);
-    scene.add(fillLight2);
-    
-    const rimLight = new THREE.DirectionalLight(0xFFAA66, 0.7);
+    const fillLight = new THREE.PointLight(0xFF8833, 0.7, 25);
+    fillLight.position.set(2, 1.5, 3);
+    scene.add(fillLight);
+    const rimLight = new THREE.DirectionalLight(0xFFAA66, 0.6);
     rimLight.position.set(1, 2, -3);
     scene.add(rimLight);
     
-    // ============================================
-    // ANIMATION LOOP (SLOW AND CINEMATIC)
-    // ============================================
+    // Animation
     let time = 0;
-    
     function animateBlackHole() {
         requestAnimationFrame(animateBlackHole);
-        time += 0.008;  // SLOW
-    
-        // Slow rotation of accretion disk
+        time += 0.007;
         accretionDisk.rotation.z += 0.003;
         outerDisk.rotation.z -= 0.002;
-        innerRing.rotation.z += 0.005;
-        orbitRing.rotation.y += 0.0015;
-        lensRing.rotation.z += 0.004;
-        
-        // Particles slowly drift inward
-        particleSystem.rotation.y += 0.001;
-        
-        // Pulsing light effect
-        const pulse = 0.85 + Math.sin(time * 1.5) * 0.15;
-        coreLight.intensity = 1.5 + Math.sin(time * 2) * 0.3;
-        photonSphereMat.opacity = 0.1 + Math.sin(time * 1.2) * 0.04;
-        
+        innerRing.rotation.z += 0.006;
+        orbitRing.rotation.y += 0.0012;
+        particleSystem.rotation.y += 0.0008;
+        coreLight.intensity = 1.4 + Math.sin(time * 1.8) * 0.35;
+        photonSphereMat.opacity = 0.12 + Math.sin(time * 1.3) * 0.04;
         controls.update();
         effectComposer.render();
     }
-    
     animateBlackHole();
     
     // ============================================
@@ -621,56 +598,38 @@
     let polaroids = [];
     let isTransitioning = false;
     
-    // ============================================
-    // CREATE SPHERICAL POLAROIDS
-    // ============================================
     function createSphericalPolaroids() {
         document.querySelectorAll('.polaroid').forEach(p => p.remove());
         polaroids = [];
-        
-        const radius = 320;
+        const radius = 300;
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
         
         polaroidData.forEach((data, index) => {
             const polaroid = document.createElement('div');
             polaroid.className = 'polaroid';
-            
-            // Fibonacci sphere for even distribution
             const phi = Math.acos(1 - 2 * (index + 0.5) / polaroidData.length);
             const theta = Math.PI * 2 * (index / polaroidData.length) * (Math.sqrt(5) - 1) / 2;
-            
             const x = centerX + radius * Math.sin(phi) * Math.cos(theta);
             const y = centerY + radius * Math.sin(phi) * Math.sin(theta);
-            
             polaroid.style.left = x + 'px';
             polaroid.style.top = y + 'px';
             polaroid.style.transform = `translate(-50%, -50%) scale(0) rotate(${Math.random() * 30 - 15}deg)`;
             polaroid.style.opacity = '0';
-            
-            polaroid.innerHTML = `
-                <div class="polaroid-image" style="background: ${data.gradient}; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-camera" style="font-size: 2.5rem; color: rgba(255,255,255,0.5);"></i>
-                </div>
-                <div class="polaroid-caption">${data.title}<br><span>${data.type}</span></div>
-            `;
+            polaroid.innerHTML = `<div class="polaroid-image" style="background: ${data.gradient}; display: flex; align-items: center; justify-content: center;"><i class="fas fa-camera" style="font-size: 2.5rem; color: rgba(255,255,255,0.5);"></i></div><div class="polaroid-caption">${data.title}<br><span>${data.type}</span></div>`;
             document.body.appendChild(polaroid);
             polaroids.push(polaroid);
         });
     }
     
-    // ============================================
-    // EXPLODE POLAROIDS INTO SPHERE (SLOW)
-    // ============================================
     function explodePolaroidsIntoScreen() {
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
-        const radius = 280;
+        const radius = 260;
         
         polaroids.forEach((polaroid, index) => {
             const phi = Math.acos(1 - 2 * (index + 0.5) / polaroids.length);
             const theta = Math.PI * 2 * (index / polaroids.length) * (Math.sqrt(5) - 1) / 2;
-            
             const x = centerX + radius * Math.sin(phi) * Math.cos(theta);
             const y = centerY + radius * Math.sin(phi) * Math.sin(theta);
             const rotate = (Math.random() * 40 - 20);
@@ -681,31 +640,41 @@
                 polaroid.style.top = y + 'px';
                 polaroid.style.transform = `translate(-50%, -50%) scale(1) rotate(${rotate}deg)`;
                 polaroid.style.opacity = '1';
-                
-                polaroid.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    createRipple(e.clientX, e.clientY);
-                });
-            }, index * 80);
+                polaroid.addEventListener('click', (e) => { e.stopPropagation(); createRipple(e.clientX, e.clientY); });
+            }, index * 70);
         });
     }
     
     // ============================================
-    // SUCK EVERYTHING INTO BLACK HOLE (SLOW)
+    // INTO THE BLACK HOLE - DRAMATIC SUCK
     // ============================================
+    const suckOverlay = document.getElementById('suckOverlay');
+    
     function suckEverythingIntoBlackHole() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        
         const mainSection = document.getElementById('mainSection');
         const blackholeX = window.innerWidth / 2;
         const blackholeY = window.innerHeight / 2;
         
-        // 1. Slow content crush
+        // Update active button
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            if (btn.getAttribute('data-section') === 'gallery') btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        
+        // Activate suck overlay
+        suckOverlay.classList.add('active');
+        
+        // Crush content
         mainSection.classList.add('crushing');
         
-        // 2. Create particles being sucked in
-        for (let i = 0; i < 200; i++) {
+        // Create particles being sucked in
+        for (let i = 0; i < 250; i++) {
             const particle = document.createElement('div');
             particle.style.position = 'fixed';
-            particle.style.width = Math.random() * 6 + 2 + 'px';
+            particle.style.width = Math.random() * 8 + 2 + 'px';
             particle.style.height = particle.style.width;
             particle.style.background = `radial-gradient(circle, #FFD700, #FF4466)`;
             particle.style.borderRadius = '50%';
@@ -713,49 +682,57 @@
             particle.style.top = Math.random() * window.innerHeight + 'px';
             particle.style.pointerEvents = 'none';
             particle.style.zIndex = '20000';
-            particle.style.filter = 'blur(2px)';
+            particle.style.filter = 'blur(3px)';
             document.body.appendChild(particle);
             
             const deltaX = blackholeX - parseFloat(particle.style.left);
             const deltaY = blackholeY - parseFloat(particle.style.top);
             
-            particle.style.transition = 'all 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+            particle.style.transition = 'all 1.8s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
             setTimeout(() => {
-                particle.style.transform = `translate(${deltaX * 0.95}px, ${deltaY * 0.95}px) scale(0)`;
+                particle.style.transform = `translate(${deltaX * 0.98}px, ${deltaY * 0.98}px) scale(0)`;
                 particle.style.opacity = '0';
             }, 10);
-            setTimeout(() => particle.remove(), 1600);
+            setTimeout(() => particle.remove(), 2000);
         }
         
-        // 3. Intensify black hole glow
-        coreLight.intensity = 3.5;
-        bloomPass.strength = 1.3;
+        // Intensify black hole
+        coreLight.intensity = 4.5;
+        bloomPass.strength = 1.6;
         
-        // 4. After crushing, create and explode polaroids
+        // After crushing, explode polaroids
         setTimeout(() => {
             mainSection.style.display = 'none';
             mainSection.classList.remove('crushing');
+            suckOverlay.classList.remove('active');
             
             createSphericalPolaroids();
             explodePolaroidsIntoScreen();
             
             setTimeout(() => {
-                bloomPass.strength = 0.7;
+                bloomPass.strength = 0.8;
                 coreLight.intensity = 1.8;
-            }, 800);
+            }, 1000);
             
-        }, 2500);
+            isTransitioning = false;
+        }, 2800);
     }
     
-    // ============================================
-    // REVERSE: SUCK POLAROIDS BACK
-    // ============================================
     function suckPolaroidsBackAndRestore() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        
         const mainSection = document.getElementById('mainSection');
         const blackholeX = window.innerWidth / 2;
         const blackholeY = window.innerHeight / 2;
         
-        // Fly polaroids into black hole
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            if (btn.getAttribute('data-section') === 'main') btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        
+        suckOverlay.classList.add('active');
+        
         polaroids.forEach(polaroid => {
             const rect = polaroid.getBoundingClientRect();
             const startX = rect.left + rect.width / 2;
@@ -768,8 +745,8 @@
             polaroid.style.opacity = '0';
         });
         
-        coreLight.intensity = 3.5;
-        bloomPass.strength = 1.3;
+        coreLight.intensity = 4.5;
+        bloomPass.strength = 1.6;
         
         setTimeout(() => {
             document.querySelectorAll('.polaroid').forEach(p => p.remove());
@@ -780,13 +757,16 @@
             
             setTimeout(() => {
                 mainSection.classList.remove('reversing');
-            }, 1200);
+                suckOverlay.classList.remove('active');
+            }, 1400);
             
             setTimeout(() => {
-                bloomPass.strength = 0.7;
+                bloomPass.strength = 0.8;
                 coreLight.intensity = 1.8;
-            }, 800);
-        }, 1400);
+            }, 1500);
+            
+            isTransitioning = false;
+        }, 1500);
     }
     
     // ============================================
@@ -799,13 +779,9 @@
         btn.addEventListener('click', () => {
             createRipple(btn.getBoundingClientRect().left + btn.offsetWidth/2, btn.getBoundingClientRect().top + btn.offsetHeight/2);
             if (btn.getAttribute('data-section') === 'gallery') {
-                if (mainSection.style.display !== 'none') {
-                    suckEverythingIntoBlackHole();
-                }
+                if (mainSection.style.display !== 'none') suckEverythingIntoBlackHole();
             } else {
-                if (mainSection.style.display === 'none') {
-                    suckPolaroidsBackAndRestore();
-                }
+                if (mainSection.style.display === 'none') suckPolaroidsBackAndRestore();
             }
         });
     });
@@ -817,7 +793,7 @@
     const percentElement = document.getElementById('loadingPercent');
     let progress = 0;
     const loadInterval = setInterval(() => {
-        progress += Math.floor(Math.random() * 6) + 2;
+        progress += Math.floor(Math.random() * 7) + 2;
         if (progress >= 100) {
             progress = 100;
             clearInterval(loadInterval);
@@ -825,10 +801,7 @@
             
             const letters = document.querySelectorAll('.hero-letter');
             letters.forEach((letter, i) => {
-                setTimeout(() => {
-                    letter.style.opacity = '1';
-                    letter.style.transform = 'translateY(0)';
-                }, i * 30);
+                setTimeout(() => { letter.style.opacity = '1'; letter.style.transform = 'translateY(0)'; }, i * 30);
             });
             setTimeout(() => {
                 const heroSub = document.querySelector('.hero-sub');
@@ -842,12 +815,7 @@
             }, 500);
             
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; } });
             }, { threshold: 0.1 });
             document.querySelectorAll('.card, .fun-fact, .quiz-container, .product-showcase').forEach(el => observer.observe(el));
         }
@@ -855,7 +823,7 @@
     }, 80);
     
     // ============================================
-    // CURSOR & UI FUNCTIONS
+    // CURSOR & UI
     // ============================================
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
@@ -926,9 +894,7 @@
         });
     });
     
-    // ============================================
-    // CURIOSITY FACTS
-    // ============================================
+    // Curiosity Facts
     document.querySelectorAll('.curiosity-item').forEach(item => {
         item.addEventListener('click', (e) => {
             const fact = item.getAttribute('data-fact');
@@ -940,9 +906,7 @@
         });
     });
     
-    // ============================================
-    // QUIZ
-    // ============================================
+    // Quiz
     document.querySelectorAll('.quiz-option').forEach(btn => {
         btn.addEventListener('click', () => {
             const isCorrect = btn.getAttribute('data-correct') === 'true';
@@ -959,9 +923,7 @@
         });
     });
     
-    // ============================================
-    // SCROLL PROGRESS
-    // ============================================
+    // Scroll Progress
     const scrollContainer = document.getElementById('scrollContainer');
     const scrollFill = document.getElementById('scrollFill');
     let targetScroll = 0;
@@ -980,9 +942,7 @@
     }
     updateScroll();
     
-    // ============================================
-    // MUSIC
-    // ============================================
+    // Music
     const audio = document.getElementById('spaceMusic');
     const musicControl = document.getElementById('musicControl');
     const musicIcon = document.getElementById('musicIcon');
@@ -1006,17 +966,15 @@
         }).catch(() => {});
     }, 2000);
     
-    // ============================================
-    // JUMLA REDIRECT
-    // ============================================
+    // Jumia Redirect
     const JUMLA_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
     document.getElementById('productCard')?.addEventListener('click', () => window.open(JUMLA_URL, '_blank'));
     document.getElementById('buyNowBtn')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     document.getElementById('priceTag')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     
-    console.log('%c✨ GARGANTUA-STYLE BLACK HOLE ACTIVATED ✨', 'color: #FF4466; font-size: 14px;');
-    console.log('%c🌀 Interstellar-inspired accretion disk | Slow cinematic rotation', 'color: #FFD700; font-size: 12px;');
-    console.log('%c📸 Content gets gently pulled into the black hole → Explodes into spherical polaroids', 'color: #FFAA88; font-size: 12px;');
+    console.log('%c✨ INTO THE BLACK HOLE — COMPLETE CINEMATIC SEQUENCE ✨', 'color: #FF4466; font-size: 14px;');
+    console.log('%c🌀 Content gets SUCKED INTO the event horizon', 'color: #FFD700; font-size: 12px;');
+    console.log('%c💥 EXPLODES into 12 polaroids in spherical formation', 'color: #FFAA88; font-size: 12px;');
 </script>
 </body>
 </html>
