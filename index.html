@@ -451,11 +451,20 @@
 
         <div class="product-showcase" id="productCard"><div class="flashlight-info"><div style="font-size:0.6rem; letter-spacing:3px; color:rgba(255,255,255,0.5);">LIMITED EDITION</div><h3>MYTHCO RECHARGEABLE TORCH</h3><div class="price-tag" id="priceTag">KSh 699 <small>was KSh 1,739</small></div><button class="btn-buy" id="buyNowBtn">SHOP NOW →</button></div><div class="flashlight-image"><svg viewBox="0 0 200 260" fill="none"><rect x="55" y="90" width="90" height="130" rx="12" fill="#111" stroke="#FFD700" stroke-width="1.5"/><circle cx="100" cy="110" r="8" fill="#FFD700"/><path d="M85 220 L115 220 L108 245 L92 245 L85 220Z" fill="#FF8C00" stroke="#FFD700" stroke-width="1"/></svg></div></div>
 
-        <div class="fun-footer"><span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span><span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span></div>
+        <div class="fun-footer"><span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span><span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span><span>⚡ ELECTROMAGNETIC RADIATION</span></div>
     </div>
 </div>
 
-<audio id="spaceMusic" loop preload="auto"><source src="https://cdn.pixabay.com/download/audio/2022/02/02/audio_bb6374e6f8.mp3?filename=ambient-space-music-140463.mp3" type="audio/mpeg"></audio>
+<!-- ============================================ -->
+<!-- MUSIC - AMBIENT SPACE TRACK (READY TO USE) -->
+<!-- ============================================ -->
+<audio id="spaceMusic" loop preload="auto">
+    <!-- OPTION 1: Using free online CDN (already working) -->
+    <source src="https://cdn.pixabay.com/download/audio/2022/02/02/audio_bb6374e6f8.mp3?filename=ambient-space-music-140463.mp3" type="audio/mpeg">
+    
+    <!-- OPTION 2: If you uploaded your own song, uncomment this and comment the line above -->
+    <!-- <source src="your-song.mp3" type="audio/mpeg"> -->
+</audio>
 
 <script type="importmap">
     {
@@ -928,12 +937,25 @@
     updateScroll();
     
     // ============================================
-    // MUSIC
+    // MUSIC CONTROL
     // ============================================
     const audio = document.getElementById('spaceMusic');
     const musicControl = document.getElementById('musicControl');
     const musicIcon = document.getElementById('musicIcon');
     let isMusicPlaying = false;
+    
+    // Try to play music (browsers may block autoplay)
+    function tryAutoPlay() {
+        audio.play().then(() => {
+            isMusicPlaying = true;
+            musicIcon.className = 'fas fa-volume-up';
+        }).catch(() => {
+            console.log('Autoplay blocked. Click music button to play.');
+            isMusicPlaying = false;
+            musicIcon.className = 'fas fa-music';
+        });
+    }
+    
     musicControl.addEventListener('click', () => {
         if (isMusicPlaying) {
             audio.pause();
@@ -946,12 +968,19 @@
             }).catch(() => {});
         }
     });
-    setTimeout(() => {
-        audio.play().then(() => {
-            isMusicPlaying = true;
-            musicIcon.className = 'fas fa-volume-up';
-        }).catch(() => {});
-    }, 2000);
+    
+    // Attempt autoplay after loading
+    setTimeout(tryAutoPlay, 2000);
+    
+    // Also try on first user interaction
+    document.body.addEventListener('click', () => {
+        if (!isMusicPlaying) {
+            audio.play().then(() => {
+                isMusicPlaying = true;
+                musicIcon.className = 'fas fa-volume-up';
+            }).catch(() => {});
+        }
+    }, { once: true });
     
     // ============================================
     // JUMLA REDIRECT
@@ -971,7 +1000,7 @@
     console.log('%c✨ ACTIVE THEORY BLACK HOLE ACTIVATED ✨', 'color: #FFD700; font-size: 14px;');
     console.log('%c🌀 Glitch effects | Scanlines | VHS distortion | Cyberpunk aesthetics', 'color: #FF00FF; font-size: 12px;');
     console.log('%c🕳️ 3D Black Hole | 8,000 particles | Accretion disk | Event horizon', 'color: #00FFFF; font-size: 12px;');
-    console.log('%c📸 Content gets SUCKED in → EXPLODES into 12 polaroids', 'color: #FFAA88; font-size: 12px;');
+    console.log('%c🎵 Ambient space music loaded - click the music button to play', 'color: #FFAA88; font-size: 12px;');
 </script>
 </body>
 </html>
