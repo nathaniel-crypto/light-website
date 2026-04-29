@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>What Is Light Really? | Active Theory Black Hole</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>What Is Light Really? | Black Hole Singularity</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
     
@@ -43,7 +43,7 @@
             height: 100% !important;
         }
 
-        /* ========== ACTIVE THEORY GLITCH EFFECTS ========== */
+        /* Active Theory Effects */
         .glitch {
             position: relative;
             animation: glitch-skew 3s infinite linear alternate-reverse;
@@ -97,39 +97,25 @@
             80% { transform: translate(-2px, 2px); }
         }
 
-        /* Scanline effect */
         .scanline {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0) 0px,
-                rgba(0, 0, 0, 0.05) 2px,
-                rgba(255, 255, 255, 0.02) 3px,
-                rgba(0, 0, 0, 0) 4px
-            );
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.05) 2px, rgba(255,255,255,0.02) 3px, rgba(0,0,0,0) 4px);
             pointer-events: none;
             z-index: 1002;
             opacity: 0.3;
         }
 
-        /* VHS distortion */
         .vhs-distortion {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(
-                90deg,
-                rgba(255, 0, 255, 0.02) 0px,
-                rgba(0, 255, 255, 0.02) 2px,
-                transparent 4px,
-                transparent 8px
-            );
+            background: repeating-linear-gradient(90deg, rgba(255,0,255,0.02) 0px, rgba(0,255,255,0.02) 2px, transparent 4px, transparent 8px);
             pointer-events: none;
             z-index: 1003;
             animation: vhsMove 8s linear infinite;
@@ -140,7 +126,6 @@
             100% { transform: translateX(10px); }
         }
 
-        /* Navigation - Active Theory style */
         .nav-bar {
             position: fixed;
             top: 20px;
@@ -154,7 +139,6 @@
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 215, 0, 0.4);
-            border-radius: 0px;
             clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
         }
 
@@ -195,7 +179,6 @@
             letter-spacing: 6px;
         }
 
-        /* Custom Cursor */
         .cursor-dot, .cursor-ring { 
             position: fixed; 
             pointer-events: none; 
@@ -216,16 +199,6 @@
             backdrop-filter: blur(3px); 
         }
 
-        .music-control {
-            position: fixed; bottom: 25px; left: 25px; width: 50px; height: 50px;
-            background: rgba(0,0,0,0.7); border: 1px solid rgba(255,215,0,0.5); color: #FFD700;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1001;
-            backdrop-filter: blur(15px); font-size: 1.3rem;
-            clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
-            transition: all 0.3s ease;
-        }
-        .music-control:hover { transform: scale(1.1) rotate(180deg); }
-
         .scroll-progress {
             position: fixed; right: 25px; top: 50%; transform: translateY(-50%); width: 4px; height: 200px;
             background: rgba(255,255,255,0.1); z-index: 1000; border-radius: 4px;
@@ -245,7 +218,6 @@
             clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
         }
 
-        /* Loading Screen */
         .loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000;
             z-index: 20000; display: flex; flex-direction: column; justify-content: center;
@@ -264,7 +236,6 @@
         @keyframes dotBounce { 0%,100% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(-15px); opacity: 1; } }
         .loading-percent { margin-top: 1rem; font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #FFD700, #FF1493); background-clip: text; -webkit-background-clip: text; color: transparent; }
 
-        /* Scroll Container */
         .scroll-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
             z-index: 10;
@@ -276,45 +247,21 @@
             position: relative; max-width: 1400px; margin: 0 auto; padding: 7rem 2rem 4rem;
             min-height: 100vh;
             backdrop-filter: blur(8px);
+            transition: opacity 0.5s ease;
         }
 
-        /* Crushing animation */
-        .page.crushing {
-            animation: crushContent 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        /* Content being sucked into black hole */
+        .page.sucking {
+            animation: suckIntoBlackHole 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             pointer-events: none;
         }
-        @keyframes crushContent {
+        @keyframes suckIntoBlackHole {
             0% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); }
-            100% { transform: scale(0) rotate(360deg); opacity: 0; filter: blur(50px); display: none; }
-        }
-        .page.reversing {
-            animation: reverseCrush 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-        }
-        @keyframes reverseCrush {
-            0% { transform: scale(0) rotate(360deg); opacity: 0; filter: blur(50px); }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); }
+            30% { transform: scale(0.5) rotate(10deg) translateX(-30px); opacity: 0.7; filter: blur(5px); }
+            60% { transform: scale(0.15) rotate(25deg) translateX(-80px); opacity: 0.3; filter: blur(20px); }
+            100% { transform: scale(0) rotate(45deg) translateX(-150px); opacity: 0; filter: blur(50px); display: none; }
         }
 
-        .suck-overlay {
-            position: fixed; top: 50%; left: 50%; width: 100px; height: 100px;
-            background: radial-gradient(circle, #000, #000); border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0); z-index: 20000; pointer-events: none;
-            transition: all 1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .suck-overlay.active { transform: translate(-50%, -50%) scale(30); background: radial-gradient(circle, #000, #0a0015, #1a0030); }
-
-        /* Polaroid styles */
-        .polaroid {
-            position: fixed; width: 220px; background: linear-gradient(145deg, #fff, #f5f5f5);
-            border-radius: 12px; padding: 12px 12px 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            z-index: 10005; opacity: 0; cursor: pointer; transition: all 0.4s ease;
-        }
-        .polaroid:hover { transform: scale(1.05) !important; }
-        .polaroid-image { width: 100%; height: 160px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-        .polaroid-caption { font-size: 0.7rem; color: #222; text-align: center; font-weight: 600; }
-        .polaroid-caption span { font-size: 0.6rem; color: #777; font-weight: 400; }
-
-        /* Content styles */
         .hero { text-align: center; padding: 2rem 0; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
         .hero-letters { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .hero-letter { font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 800; color: #fff; display: inline-block; opacity: 0; transform: translateY(30px); }
@@ -367,45 +314,33 @@
             .flashlight-info { text-align: center; }
             .cursor-dot, .cursor-ring { display: none; }
             body { cursor: auto; }
-            .polaroid { width: 160px; }
-            .polaroid-image { height: 120px; }
-            .nav-bar { gap: 0.5rem; padding: 0.5rem 1rem; top: 10px; }
-            .nav-btn { padding: 0.3rem 0.8rem; font-size: 0.65rem; letter-spacing: 2px; }
         }
     </style>
 </head>
 <body>
 
-<!-- Active Theory Effect Layers -->
 <div class="scanline"></div>
 <div class="vhs-distortion"></div>
 
-<!-- WebGL Canvas Container -->
 <div id="canvas-container"></div>
-<div class="suck-overlay" id="suckOverlay"></div>
 
-<!-- Navigation -->
 <div class="nav-bar" id="navBar">
     <button class="nav-btn active" data-section="main">✦ HOME ✦</button>
-    <button class="nav-btn" data-section="gallery">🌀 BLACK HOLE 🌀</button>
+    <button class="nav-btn" data-section="gallery">🌀 ENTER THE SINGULARITY 🌀</button>
 </div>
 
-<!-- UI Elements -->
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-<div class="music-control" id="musicControl"><i class="fas fa-music" id="musicIcon"></i></div>
 <div class="scroll-progress"><div class="scroll-progress-fill" id="scrollFill"></div></div>
 <div class="scroll-hint">✦ MOVE MOUSE UP/DOWN TO SCROLL ✦</div>
 
-<!-- Loading Screen -->
 <div class="loading-screen" id="loadingScreen">
     <div class="loading-core"></div>
-    <div class="loading-text">ACTIVE THEORY</div>
+    <div class="loading-text">BLACK HOLE SINGULARITY</div>
     <div class="loading-dots"><span></span><span></span><span></span><span></span><span></span></div>
     <div class="loading-percent" id="loadingPercent">0%</div>
 </div>
 
-<!-- Scroll Container -->
 <div class="scroll-container" id="scrollContainer">
     <div class="page" id="mainSection">
         <div class="hero">
@@ -413,21 +348,21 @@
             <div class="hero-letters glitch" data-text="IS"><span class="hero-letter">I</span><span class="hero-letter">S</span></div>
             <div class="hero-letters glitch" data-text="LIGHT"><span class="hero-letter">L</span><span class="hero-letter">I</span><span class="hero-letter">G</span><span class="hero-letter">H</span><span class="hero-letter">T</span></div>
             <div class="hero-letters glitch" data-text="REALLY?"><span class="hero-letter">R</span><span class="hero-letter">E</span><span class="hero-letter">A</span><span class="hero-letter">L</span><span class="hero-letter">L</span><span class="hero-letter">Y</span><span class="hero-letter">?</span></div>
-            <div class="hero-sub">ACTIVE THEORY // CINEMATIC BLACK HOLE</div>
+            <div class="hero-sub">ACTIVE THEORY // BLACK HOLE SINGULARITY</div>
             <div class="blessing-tag">💫 LIGHT IS A BLESSING FROM GOD 💫</div>
             <div class="science-line">⚡ ELECTROMAGNETIC RADIATION — VISIBLE TO THE HUMAN EYE ⚡</div>
         </div>
 
         <div class="facts-grid"><div class="card"><h2>👁️ LIGHT & VISION</h2><ul><li>Light makes us see — it reveals the world around us</li><li>The human eye can detect over 10 million colors</li><li>Light travels from the sun to Earth in 8 minutes</li></ul></div>
-        <div class="card"><h2>😊 LIGHT & MOOD</h2><ul><li>Light exposure affects serotonin — happiness chemical</li><li>Morning sunlight regulates your circadian rhythm</li><li>Bright light makes us more alert and focused</li></ul></div></div>
+        <div class="card"><h2>😊 LIGHT & MOOD</h2><ul><li>Light exposure affects serotonin — happiness chemical</li><li>Morning sunlight regulates your circadian rhythm</li></ul></div></div>
 
         <div class="facts-grid"><div class="card"><h2>🌱 PHOTOSYNTHESIS</h2><ul><li>Plants convert light energy into chemical energy</li><li>6CO₂ + 6H₂O + Light → C₆H₁₂O₆ + 6O₂</li><li>Without light, no oxygen — no us</li></ul></div>
-        <div class="card"><h2>🌍 LIGHT & CLIMATE</h2><ul><li>The sun provides Earth with 174 petawatts of energy</li><li>Light maintains Earth's habitable temperature</li></ul></div></div>
+        <div class="card"><h2>🌍 LIGHT & CLIMATE</h2><ul><li>The sun provides Earth with 174 petawatts of energy</li></ul></div></div>
 
         <div style="font-size:1.1rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">⚡ THE PHYSICS OF LIGHT</div>
         <div class="grid-3"><div class="card"><h2>📏 WAVE OR PARTICLE?</h2><ul><li>Light behaves as BOTH a wave AND a particle</li><li>Particles are called "photons"</li></ul></div>
         <div class="card"><h2>📐 SPEED OF LIGHT</h2><ul><li>299,792,458 meters per second</li><li>Nothing in the universe is faster</li></ul></div>
-        <div class="card"><h2>🌈 LIGHT SPECTRUM</h2><ul><li>Visible light is a tiny part of EM spectrum</li><li>ROYGBIV — Red, Orange, Yellow, Green, Blue, Indigo, Violet</li></ul></div></div>
+        <div class="card"><h2>🌈 LIGHT SPECTRUM</h2><ul><li>Visible light is a tiny part of EM spectrum</li><li>ROYGBIV</li></ul></div></div>
 
         <div class="spectrum-bar"></div>
 
@@ -435,8 +370,8 @@
         <div class="fun-facts-grid"><div class="fun-fact"><span class="emoji">🐙</span><h4>Bioluminescence</h4><p>Over 80% of deep-sea creatures produce their own light.</p></div>
         <div class="fun-fact"><span class="emoji">🎨</span><h4>Color is Light</h4><p>Objects don't have color — they reflect wavelengths.</p></div>
         <div class="fun-fact"><span class="emoji">⚡</span><h4>Lightning Speed</h4><p>A lightning bolt heats air to 50,000°F!</p></div>
-        <div class="fun-fact"><span class="emoji">🌙</span><h4>Moonlight</h4><p>Moonlight is reflected sunlight — takes 1.3 seconds.</p></div>
-        <div class="fun-fact"><span class="emoji">💎</span><h4>Diamond Sparkle</h4><p>Diamonds sparkle because they slow light down.</p></div>
+        <div class="fun-fact"><span class="emoji">🌙</span><h4>Moonlight</h4><p>Moonlight is reflected sunlight.</p></div>
+        <div class="fun-fact"><span class="emoji">💎</span><h4>Diamond Sparkle</h4><p>Diamonds slow light down.</p></div>
         <div class="fun-fact"><span class="emoji">🦋</span><h4>Butterfly Wings</h4><p>Wings create color through light interference.</p></div></div>
 
         <div style="font-size:1.1rem; letter-spacing:4px; color:#FFD700; margin:2rem 0 1rem 0;">❓ CURIOUS ABOUT LIGHT?</div>
@@ -451,20 +386,9 @@
 
         <div class="product-showcase" id="productCard"><div class="flashlight-info"><div style="font-size:0.6rem; letter-spacing:3px; color:rgba(255,255,255,0.5);">LIMITED EDITION</div><h3>MYTHCO RECHARGEABLE TORCH</h3><div class="price-tag" id="priceTag">KSh 699 <small>was KSh 1,739</small></div><button class="btn-buy" id="buyNowBtn">SHOP NOW →</button></div><div class="flashlight-image"><svg viewBox="0 0 200 260" fill="none"><rect x="55" y="90" width="90" height="130" rx="12" fill="#111" stroke="#FFD700" stroke-width="1.5"/><circle cx="100" cy="110" r="8" fill="#FFD700"/><path d="M85 220 L115 220 L108 245 L92 245 L85 220Z" fill="#FF8C00" stroke="#FFD700" stroke-width="1"/></svg></div></div>
 
-        <div class="fun-footer"><span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span><span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span><span>⚡ ELECTROMAGNETIC RADIATION</span></div>
+        <div class="fun-footer"><span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span><span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span></div>
     </div>
 </div>
-
-<!-- ============================================ -->
-<!-- MUSIC - AMBIENT SPACE TRACK (READY TO USE) -->
-<!-- ============================================ -->
-<audio id="spaceMusic" loop preload="auto">
-    <!-- OPTION 1: Using free online CDN (already working) -->
-    <source src="https://cdn.pixabay.com/download/audio/2022/02/02/audio_bb6374e6f8.mp3?filename=ambient-space-music-140463.mp3" type="audio/mpeg">
-    
-    <!-- OPTION 2: If you uploaded your own song, uncomment this and comment the line above -->
-    <!-- <source src="your-song.mp3" type="audio/mpeg"> -->
-</audio>
 
 <script type="importmap">
     {
@@ -478,88 +402,118 @@
 <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     
     // ============================================
-    // THREE.JS BLACK HOLE
+    // BLACK HOLE RENDER
     // ============================================
     
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
+    scene.fog = new THREE.FogExp2(0x000000, 0.0005);
     
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 1.5, 12);
+    camera.position.set(0, 1.2, 13);
     
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.3;
     container.appendChild(renderer.domElement);
     
-    // Controls
+    const renderScene = new RenderPass(scene, camera);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.0, 0.3, 0.85);
+    bloomPass.threshold = 0.05;
+    bloomPass.strength = 0.8;
+    bloomPass.radius = 0.7;
+    const effectComposer = new EffectComposer(renderer);
+    effectComposer.addPass(renderScene);
+    effectComposer.addPass(bloomPass);
+    
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.5;
+    controls.autoRotateSpeed = 0.3;
     controls.enableZoom = false;
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     
-    // Event Horizon (Black sphere)
+    // Event Horizon
     const eventHorizon = new THREE.Mesh(
-        new THREE.SphereGeometry(1.2, 64, 64),
-        new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x330033, emissiveIntensity: 0.3, metalness: 0.9, roughness: 0.1 })
+        new THREE.SphereGeometry(1.2, 128, 128),
+        new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x330033, emissiveIntensity: 0.35, metalness: 0.95, roughness: 0.08 })
     );
     scene.add(eventHorizon);
     
-    // Inner Glow (Photon sphere)
+    // Photon Sphere
     const glowSphere = new THREE.Mesh(
-        new THREE.SphereGeometry(1.35, 64, 64),
-        new THREE.MeshBasicMaterial({ color: 0xFF3366, transparent: true, opacity: 0.15, side: THREE.BackSide })
+        new THREE.SphereGeometry(1.36, 128, 128),
+        new THREE.MeshBasicMaterial({ color: 0xFF3366, transparent: true, opacity: 0.18, side: THREE.BackSide })
     );
     scene.add(glowSphere);
     
     // Accretion Disk
     const disk = new THREE.Mesh(
-        new THREE.TorusGeometry(2.4, 0.2, 128, 256),
-        new THREE.MeshStandardMaterial({ color: 0xFF4466, emissive: 0xFF2266, emissiveIntensity: 0.7, metalness: 0.85, roughness: 0.3 })
+        new THREE.TorusGeometry(2.5, 0.22, 256, 512),
+        new THREE.MeshStandardMaterial({ color: 0xFF4466, emissive: 0xFF2266, emissiveIntensity: 0.75, metalness: 0.88, roughness: 0.28 })
     );
-    disk.rotation.x = Math.PI / 2.2;
+    disk.rotation.x = Math.PI / 2.18;
+    disk.rotation.z = 0.3;
     scene.add(disk);
     
     // Outer Disk
     const outerDisk = new THREE.Mesh(
-        new THREE.TorusGeometry(3.2, 0.15, 128, 256),
-        new THREE.MeshStandardMaterial({ color: 0xFF6633, emissive: 0xFF4411, emissiveIntensity: 0.5, metalness: 0.8, roughness: 0.4 })
+        new THREE.TorusGeometry(3.4, 0.18, 256, 512),
+        new THREE.MeshStandardMaterial({ color: 0xFF6633, emissive: 0xFF4411, emissiveIntensity: 0.55, metalness: 0.82, roughness: 0.38 })
     );
-    outerDisk.rotation.x = Math.PI / 2.1;
+    outerDisk.rotation.x = Math.PI / 2.08;
+    outerDisk.rotation.z = -0.2;
     scene.add(outerDisk);
     
+    // Inner Hot Ring
+    const innerRing = new THREE.Mesh(
+        new THREE.TorusGeometry(1.7, 0.08, 256, 512),
+        new THREE.MeshStandardMaterial({ color: 0xFFAA88, emissive: 0xFF6644, emissiveIntensity: 1.0, metalness: 0.92, roughness: 0.12 })
+    );
+    innerRing.rotation.x = Math.PI / 2.15;
+    scene.add(innerRing);
+    
     // Particle System
-    const particleCount = 8000;
+    const particleCount = 12000;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     
     for (let i = 0; i < particleCount; i++) {
-        const radius = 2 + Math.random() * 3;
+        const radius = 2.2 + Math.random() * 3.5;
         const angle = Math.random() * Math.PI * 2;
-        const yOffset = (Math.random() - 0.5) * 1;
+        const yOffset = (Math.random() - 0.5) * 1.1;
         positions[i * 3] = Math.cos(angle) * radius;
         positions[i * 3 + 1] = yOffset;
         positions[i * 3 + 2] = Math.sin(angle) * radius;
         
-        colors[i * 3] = 1;
-        colors[i * 3 + 1] = 0.5 + Math.random() * 0.5;
-        colors[i * 3 + 2] = 0.2 + Math.random() * 0.4;
+        if (Math.random() > 0.6) {
+            colors[i * 3] = 1.0;
+            colors[i * 3 + 1] = 0.6 + Math.random() * 0.4;
+            colors[i * 3 + 2] = 0.3 + Math.random() * 0.5;
+        } else {
+            colors[i * 3] = 1.0;
+            colors[i * 3 + 1] = 0.3 + Math.random() * 0.4;
+            colors[i * 3 + 2] = 0.1 + Math.random() * 0.3;
+        }
     }
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ size: 0.05, vertexColors: true, blending: THREE.AdditiveBlending }));
+    const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ size: 0.045, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 }));
     scene.add(particles);
     
-    // Starfield Background
-    const starCount = 2000;
+    // Starfield
+    const starCount = 3000;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount; i++) {
@@ -568,113 +522,127 @@
         starPositions[i * 3 + 2] = (Math.random() - 0.5) * 80 - 40;
     }
     starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, transparent: true, opacity: 0.6 }));
+    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, transparent: true, opacity: 0.5 }));
     scene.add(stars);
     
     // Lighting
     const ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
-    const coreLight = new THREE.PointLight(0xFF3366, 1.5, 15);
+    const coreLight = new THREE.PointLight(0xFF3366, 1.6, 18);
     coreLight.position.set(0, 0, 0);
     scene.add(coreLight);
-    
-    // Rim lights
-    const rimLight = new THREE.PointLight(0xFF8833, 0.8, 20);
-    rimLight.position.set(2, 1.5, 3);
+    const rimLight = new THREE.PointLight(0xFF8833, 0.7, 22);
+    rimLight.position.set(2, 1.5, 3.5);
     scene.add(rimLight);
     
-    // Animation
     let time = 0;
     function animate() {
         requestAnimationFrame(animate);
-        time += 0.01;
+        time += 0.008;
         
-        disk.rotation.z += 0.01;
-        outerDisk.rotation.z -= 0.008;
-        particles.rotation.y += 0.003;
-        stars.rotation.y += 0.0005;
-        glowSphere.material.opacity = 0.12 + Math.sin(time * 2) * 0.04;
-        coreLight.intensity = 1.3 + Math.sin(time * 3) * 0.3;
+        disk.rotation.z += 0.009;
+        outerDisk.rotation.z -= 0.007;
+        innerRing.rotation.z += 0.006;
+        particles.rotation.y += 0.002;
+        stars.rotation.y += 0.0003;
+        glowSphere.material.opacity = 0.14 + Math.sin(time * 1.8) * 0.05;
+        coreLight.intensity = 1.4 + Math.sin(time * 2.5) * 0.3;
         
         controls.update();
-        renderer.render(scene, camera);
+        effectComposer.render();
     }
     animate();
     
     // ============================================
-    // POLAROID DATA
+    // BLACK HOLE SINGULARITY TRANSITION
     // ============================================
-    const polaroidData = [
-        { title: "Golden Hour", type: "Natural Light • Sunset", gradient: "linear-gradient(135deg, #FFD700, #FF8C00)" },
-        { title: "Studio Light", type: "Artificial • Rembrandt", gradient: "linear-gradient(135deg, #FFFFFF, #CCCCCC)" },
-        { title: "Bioluminescence", type: "Chemical Light • Ocean", gradient: "linear-gradient(135deg, #00FFCC, #0099FF)" },
-        { title: "Light Painting", type: "Long Exposure • LED", gradient: "linear-gradient(135deg, #FF1493, #9B30FF)" },
-        { title: "Macro Sunlight", type: "Natural • Dewdrop", gradient: "linear-gradient(135deg, #7FFF00, #32CD32)" },
-        { title: "Northern Lights", type: "Atmospheric • Aurora", gradient: "linear-gradient(135deg, #00FF88, #0066FF, #FF00FF)" },
-        { title: "Candlelight", type: "Warm • Ambience", gradient: "linear-gradient(135deg, #FF6600, #FF3300)" },
-        { title: "Neon Nights", type: "Urban • Neon", gradient: "linear-gradient(135deg, #FF00FF, #00FFFF)" },
-        { title: "Underwater Sun", type: "Natural • Refracted", gradient: "linear-gradient(135deg, #0099FF, #003366)" },
-        { title: "Light Spectrum", type: "Physics • ROYGBIV", gradient: "linear-gradient(135deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)" },
-        { title: "Starlight", type: "Astronomical • Distant Stars", gradient: "linear-gradient(135deg, #FFFFFF, #FFD700)" },
-        { title: "LED Art", type: "Digital • Pixel Light", gradient: "linear-gradient(135deg, #00FFFF, #FF00FF)" }
-    ];
-    
-    let polaroids = [];
     let isTransitioning = false;
+    let expandAnimation = null;
     
-    function createSphericalPolaroids() {
-        document.querySelectorAll('.polaroid').forEach(p => p.remove());
-        polaroids = [];
-        const radius = 300;
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
+    function expandBlackHole() {
+        // Animate the black hole growing to consume everything
+        let scale = 1;
+        let targetScale = 30;
         
-        polaroidData.forEach((data, index) => {
-            const polaroid = document.createElement('div');
-            polaroid.className = 'polaroid';
-            const phi = Math.acos(1 - 2 * (index + 0.5) / polaroidData.length);
-            const theta = Math.PI * 2 * (index / polaroidData.length) * (Math.sqrt(5) - 1) / 2;
-            const x = centerX + radius * Math.sin(phi) * Math.cos(theta);
-            const y = centerY + radius * Math.sin(phi) * Math.sin(theta);
-            polaroid.style.left = x + 'px';
-            polaroid.style.top = y + 'px';
-            polaroid.style.transform = `translate(-50%, -50%) scale(0) rotate(${Math.random() * 30 - 15}deg)`;
-            polaroid.style.opacity = '0';
-            polaroid.innerHTML = `<div class="polaroid-image" style="background: ${data.gradient}; display: flex; align-items: center; justify-content: center;"><i class="fas fa-camera" style="font-size: 2.5rem; color: rgba(255,255,255,0.5);"></i></div><div class="polaroid-caption">${data.title}<br><span>${data.type}</span></div>`;
-            document.body.appendChild(polaroid);
-            polaroids.push(polaroid);
-        });
+        function expandStep() {
+            scale += 0.25;
+            if (scale >= targetScale) {
+                scale = targetScale;
+                // Black hole has consumed everything - implode
+                setTimeout(() => {
+                    createImplosion();
+                }, 200);
+                return;
+            }
+            
+            // Scale all black hole components
+            eventHorizon.scale.set(scale, scale, scale);
+            glowSphere.scale.set(scale, scale, scale);
+            disk.scale.set(scale, scale, scale);
+            outerDisk.scale.set(scale, scale, scale);
+            innerRing.scale.set(scale, scale, scale);
+            particles.scale.set(scale, scale, scale);
+            
+            // Increase intensity as it grows
+            coreLight.intensity = 1.6 + scale * 0.3;
+            bloomPass.strength = 0.8 + scale * 0.1;
+            
+            expandAnimation = requestAnimationFrame(expandStep);
+        }
+        
+        expandAnimation = requestAnimationFrame(expandStep);
     }
     
-    function explodePolaroids() {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        const radius = 260;
+    function createImplosion() {
+        // Cancel expansion animation
+        if (expandAnimation) cancelAnimationFrame(expandAnimation);
         
-        polaroids.forEach((polaroid, index) => {
-            const phi = Math.acos(1 - 2 * (index + 0.5) / polaroids.length);
-            const theta = Math.PI * 2 * (index / polaroids.length) * (Math.sqrt(5) - 1) / 2;
-            const x = centerX + radius * Math.sin(phi) * Math.cos(theta);
-            const y = centerY + radius * Math.sin(phi) * Math.sin(theta);
-            const rotate = (Math.random() * 40 - 20);
+        // Flash white (implosion)
+        const implosionFlash = document.createElement('div');
+        implosionFlash.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 20001;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        `;
+        document.body.appendChild(implosionFlash);
+        
+        setTimeout(() => { implosionFlash.style.opacity = '1'; }, 10);
+        
+        // Then black screen
+        setTimeout(() => {
+            implosionFlash.style.opacity = '0';
+            
+            const blackScreen = document.createElement('div');
+            blackScreen.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #000000;
+                z-index: 20002;
+                opacity: 0;
+                transition: opacity 0.5s ease;
+                pointer-events: none;
+            `;
+            document.body.appendChild(blackScreen);
+            
+            setTimeout(() => { blackScreen.style.opacity = '1'; }, 50);
             
             setTimeout(() => {
-                polaroid.style.transition = 'all 1s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
-                polaroid.style.left = x + 'px';
-                polaroid.style.top = y + 'px';
-                polaroid.style.transform = `translate(-50%, -50%) scale(1) rotate(${rotate}deg)`;
-                polaroid.style.opacity = '1';
-                polaroid.addEventListener('click', (e) => { e.stopPropagation(); createRipple(e.clientX, e.clientY); });
-            }, index * 60);
-        });
+                window.location.href = "gallery.html";
+            }, 600);
+        }, 300);
     }
     
-    // ============================================
-    // TRANSITIONS
-    // ============================================
-    const suckOverlay = document.getElementById('suckOverlay');
-    
-    function suckEverythingIntoBlackHole() {
+    function transitionToGallery() {
         if (isTransitioning) return;
         isTransitioning = true;
         
@@ -685,70 +653,25 @@
             else btn.classList.remove('active');
         });
         
-        suckOverlay.classList.add('active');
-        mainSection.classList.add('crushing');
+        // Step 1: Content gets sucked into black hole
+        mainSection.classList.add('sucking');
         
+        // Step 2: Intensify black hole (sucking energy)
         coreLight.intensity = 3;
-        disk.material.emissiveIntensity = 1.5;
+        bloomPass.strength = 1.5;
+        disk.material.emissiveIntensity = 1.8;
+        outerDisk.material.emissiveIntensity = 1.2;
+        innerRing.material.emissiveIntensity = 2.0;
         
+        // Step 3: Black hole physically expands
         setTimeout(() => {
-            mainSection.style.display = 'none';
-            mainSection.classList.remove('crushing');
-            suckOverlay.classList.remove('active');
-            
-            createSphericalPolaroids();
-            explodePolaroids();
-            
-            setTimeout(() => {
-                coreLight.intensity = 1.5;
-                disk.material.emissiveIntensity = 0.7;
-            }, 500);
-            
-            isTransitioning = false;
-        }, 2000);
-    }
-    
-    function suckPolaroidsBack() {
-        if (isTransitioning) return;
-        isTransitioning = true;
+            expandBlackHole();
+        }, 800);
         
-        const mainSection = document.getElementById('mainSection');
-        
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            if (btn.getAttribute('data-section') === 'main') btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-        
-        suckOverlay.classList.add('active');
-        
-        polaroids.forEach(polaroid => {
-            polaroid.style.transition = 'all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
-            polaroid.style.transform = `translate(-50%, -50%) scale(0) rotate(0deg)`;
-            polaroid.style.opacity = '0';
-        });
-        
-        coreLight.intensity = 3;
-        disk.material.emissiveIntensity = 1.5;
-        
+        // Step 4: Hide content completely
         setTimeout(() => {
-            document.querySelectorAll('.polaroid').forEach(p => p.remove());
-            polaroids = [];
-            
-            mainSection.style.display = 'block';
-            mainSection.classList.add('reversing');
-            
-            setTimeout(() => {
-                mainSection.classList.remove('reversing');
-                suckOverlay.classList.remove('active');
-            }, 1500);
-            
-            setTimeout(() => {
-                coreLight.intensity = 1.5;
-                disk.material.emissiveIntensity = 0.7;
-            }, 500);
-            
-            isTransitioning = false;
-        }, 1000);
+            mainSection.style.opacity = '0';
+        }, 1500);
     }
     
     // ============================================
@@ -759,11 +682,8 @@
     
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            createRipple(btn.getBoundingClientRect().left + btn.offsetWidth/2, btn.getBoundingClientRect().top + btn.offsetHeight/2);
             if (btn.getAttribute('data-section') === 'gallery') {
-                if (mainSection.style.display !== 'none') suckEverythingIntoBlackHole();
-            } else {
-                if (mainSection.style.display === 'none') suckPolaroidsBack();
+                transitionToGallery();
             }
         });
     });
@@ -823,7 +743,7 @@
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        const isClickable = e.target.closest('.nav-btn, .product-showcase, .btn-buy, .price-tag, .curiosity-item, .quiz-option, .fun-fact, .card, .polaroid');
+        const isClickable = e.target.closest('.nav-btn, .product-showcase, .btn-buy, .price-tag, .curiosity-item, .quiz-option, .fun-fact, .card');
         if (isClickable) {
             cursorRing.style.borderColor = '#FFD700';
             cursorRing.style.width = '70px';
@@ -858,17 +778,12 @@
     
     function createRipple(x, y) {
         const ripple = document.createElement('div');
-        ripple.style.position = 'fixed';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        ripple.style.width = '10px';
-        ripple.style.height = '10px';
-        ripple.style.borderRadius = '50%';
-        ripple.style.background = 'radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4))';
-        ripple.style.transform = 'translate(-50%, -50%) scale(0)';
-        ripple.style.pointerEvents = 'none';
-        ripple.style.zIndex = '100000';
-        ripple.style.animation = 'rippleExpand 0.8s ease-out forwards';
+        ripple.style.cssText = `
+            position: fixed; left: ${x}px; top: ${y}px; width: 10px; height: 10px;
+            border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4));
+            transform: translate(-50%, -50%) scale(0); pointer-events: none; z-index: 100000;
+            animation: rippleExpand 0.8s ease-out forwards;
+        `;
         document.body.appendChild(ripple);
         setTimeout(() => ripple.remove(), 800);
     }
@@ -877,9 +792,6 @@
     styleSheet.textContent = `@keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; } 100% { transform: translate(-50%, -50%) scale(20); opacity: 0; } }`;
     document.head.appendChild(styleSheet);
     
-    // ============================================
-    // INTERACTIONS
-    // ============================================
     document.querySelectorAll('.curiosity-item, .quiz-option, .fun-fact, .btn-buy, .price-tag, .product-showcase').forEach(el => {
         el.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -892,8 +804,8 @@
         item.addEventListener('click', () => {
             const fact = item.getAttribute('data-fact');
             const toast = document.createElement('div');
-            toast.textContent = `→ ${fact} ←`;
             toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#000;color:#FFD700;padding:12px 24px;border:1px solid #FFD700;z-index:1000;font-size:0.8rem;border-radius:40px;backdrop-filter:blur(10px);`;
+            toast.textContent = `→ ${fact} ←`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         });
@@ -915,9 +827,6 @@
         });
     });
     
-    // ============================================
-    // SCROLL PROGRESS
-    // ============================================
     const scrollContainer = document.getElementById('scrollContainer');
     const scrollFill = document.getElementById('scrollFill');
     let targetScroll = 0;
@@ -936,71 +845,22 @@
     }
     updateScroll();
     
-    // ============================================
-    // MUSIC CONTROL
-    // ============================================
-    const audio = document.getElementById('spaceMusic');
-    const musicControl = document.getElementById('musicControl');
-    const musicIcon = document.getElementById('musicIcon');
-    let isMusicPlaying = false;
-    
-    // Try to play music (browsers may block autoplay)
-    function tryAutoPlay() {
-        audio.play().then(() => {
-            isMusicPlaying = true;
-            musicIcon.className = 'fas fa-volume-up';
-        }).catch(() => {
-            console.log('Autoplay blocked. Click music button to play.');
-            isMusicPlaying = false;
-            musicIcon.className = 'fas fa-music';
-        });
-    }
-    
-    musicControl.addEventListener('click', () => {
-        if (isMusicPlaying) {
-            audio.pause();
-            isMusicPlaying = false;
-            musicIcon.className = 'fas fa-music';
-        } else {
-            audio.play().then(() => {
-                isMusicPlaying = true;
-                musicIcon.className = 'fas fa-volume-up';
-            }).catch(() => {});
-        }
-    });
-    
-    // Attempt autoplay after loading
-    setTimeout(tryAutoPlay, 2000);
-    
-    // Also try on first user interaction
-    document.body.addEventListener('click', () => {
-        if (!isMusicPlaying) {
-            audio.play().then(() => {
-                isMusicPlaying = true;
-                musicIcon.className = 'fas fa-volume-up';
-            }).catch(() => {});
-        }
-    }, { once: true });
-    
-    // ============================================
-    // JUMLA REDIRECT
-    // ============================================
     const JUMLA_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
     document.getElementById('productCard')?.addEventListener('click', () => window.open(JUMLA_URL, '_blank'));
     document.getElementById('buyNowBtn')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     document.getElementById('priceTag')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
     
-    // Resize handler
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        effectComposer.setSize(window.innerWidth, window.innerHeight);
     });
     
-    console.log('%c✨ ACTIVE THEORY BLACK HOLE ACTIVATED ✨', 'color: #FFD700; font-size: 14px;');
-    console.log('%c🌀 Glitch effects | Scanlines | VHS distortion | Cyberpunk aesthetics', 'color: #FF00FF; font-size: 12px;');
-    console.log('%c🕳️ 3D Black Hole | 8,000 particles | Accretion disk | Event horizon', 'color: #00FFFF; font-size: 12px;');
-    console.log('%c🎵 Ambient space music loaded - click the music button to play', 'color: #FFAA88; font-size: 12px;');
+    console.log('%c✨ BLACK HOLE SINGULARITY ACTIVATED ✨', 'color: #FFD700; font-size: 14px;');
+    console.log('%c🌀 Step 1: Content gets SUCKED into black hole', 'color: #FF00FF; font-size: 12px;');
+    console.log('%c🕳️ Step 2: Black hole PHYSICALLY EXPANDS to consume screen', 'color: #FF6666; font-size: 12px;');
+    console.log('%c💥 Step 3: IMPLOSION → white flash → black screen → gallery', 'color: #FFAA88; font-size: 12px;');
 </script>
 </body>
 </html>
