@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Unseen World | Light Gallery</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.05) 2px, rgba(255,255,255,0.02) 3px, rgba(0,0,0,0) 4px);
+            pointer-events: none;
+            z-index: 1002;
+            opacity: 0.3;
+        }
+
+        /* UNSEEN WORLD GALLERY LAYOUT - Scattered Masonry Grid */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .gallery-header h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFD700, #FF1493, #9B30FF);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .gallery-header p {
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 4px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        /* SCATTERED MASONRY GRID - Like Unseen Studio */
+        .unseen-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        /* Different sizes for scattered effect */
+        .polaroid-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 16px;
+            padding: 12px 12px 20px 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            opacity: 0;
+            transform: translateY(40px) rotate(var(--rotate));
+            position: relative;
+        }
+
+        .polaroid-card:nth-child(1) { --rotate: -4deg; grid-column: span 1; }
+        .polaroid-card:nth-child(2) { --rotate: 3deg; grid-column: span 2; }
+        .polaroid-card:nth-child(3) { --rotate: -2deg; grid-column: span 1; }
+        .polaroid-card:nth-child(4) { --rotate: 5deg; grid-column: span 1; }
+        .polaroid-card:nth-child(5) { --rotate: -3deg; grid-column: span 2; }
+        .polaroid-card:nth-child(6) { --rotate: 2deg; grid-column: span 1; }
+        .polaroid-card:nth-child(7) { --rotate: -5deg; grid-column: span 1; }
+        .polaroid-card:nth-child(8) { --rotate: 4deg; grid-column: span 2; }
+        .polaroid-card:nth-child(9) { --rotate: -1deg; grid-column: span 1; }
+        .polaroid-card:nth-child(10) { --rotate: 3deg; grid-column: span 1; }
+        .polaroid-card:nth-child(11) { --rotate: -4deg; grid-column: span 2; }
+        .polaroid-card:nth-child(12) { --rotate: 2deg; grid-column: span 1; }
+
+        .polaroid-card.visible {
+            opacity: 1;
+            transform: translateY(0) rotate(var(--rotate));
+        }
+
+        .polaroid-card:hover {
+            transform: scale(1.03) rotate(var(--rotate)) translateY(-8px);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .polaroid-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .polaroid-caption {
+            font-size: 0.75rem;
+            color: #222;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .polaroid-caption span {
+            font-size: 0.65rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            padding: 0.8rem 2rem;
+            color: #FFD700;
+            text-decoration: none;
+            letter-spacing: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
+            transition: all 0.3s ease;
+            z-index: 100;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .back-btn:hover {
+            letter-spacing: 6px;
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+        }
+
+        /* Custom cursor for gallery */
+        .cursor-dot, .cursor-ring { 
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 10000; 
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
+        .cursor-dot { 
+            width: 6px; 
+            height: 6px; 
+            background: #FFD700; 
+            box-shadow: 0 0 15px #FFD700; 
+        }
+        .cursor-ring { 
+            width: 40px; 
+            height: 40px; 
+            border: 2px solid rgba(255, 215, 0, 0.6); 
+            backdrop-filter: blur(3px); 
+        }
+
+        @media (max-width: 1000px) {
+            .unseen-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .polaroid-card:nth-child(n) {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .unseen-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<a href="index.html" class="back-btn">← BACK TO PORTAL</a>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h1>UNSEEN WORLD</h1>
+        <p>LIGHT CAPTURED THROUGH DIFFERENT LENSES</p>
+    </div>
+
+    <div class="unseen-grid" id="galleryGrid">
+        <!-- Polaroids will be dynamically generated -->
+    </div>
+</div>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<script>
+    // Gallery Data - 12 polaroids for scattered grid
+    const galleryData = [
+        { title: "Golden Hour Serenity", type: "Natural Light • Sunset", gradient: "linear-gradient(135deg, #FFD700, #FF8C00)", icon: "fa-sun" },
+        { title: "Studio Portrait Light", type: "Artificial • Rembrandt", gradient: "linear-gradient(135deg, #FFFFFF, #CCCCCC)", icon: "fa-camera" },
+        { title: "Bioluminescent Bay", type: "Chemical Light • Ocean", gradient: "linear-gradient(135deg, #00FFCC, #0099FF)", icon: "fa-water" },
+        { title: "Light Painting Art", type: "Long Exposure • LED", gradient: "linear-gradient(135deg, #FF1493, #9B30FF)", icon: "fa-paintbrush" },
+        { title: "Macro Sunlight", type: "Natural • Dewdrop", gradient: "linear-gradient(135deg, #7FFF00, #32CD32)", icon: "fa-leaf" },
+        { title: "Northern Lights Aurora", type: "Atmospheric • Aurora", gradient: "linear-gradient(135deg, #00FF88, #0066FF, #FF00FF)", icon: "fa-cloud-sun" },
+        { title: "Candlelit Ambience", type: "Warm Light • Candle", gradient: "linear-gradient(135deg, #FF6600, #FF3300)", icon: "fa-fire" },
+        { title: "Neon City Nights", type: "Neon Light • Urban", gradient: "linear-gradient(135deg, #FF00FF, #00FFFF)", icon: "fa-city" },
+        { title: "Underwater Sunrays", type: "Natural Light • Refracted", gradient: "linear-gradient(135deg, #0099FF, #003366)", icon: "fa-fish" },
+        { title: "Light Spectrum Prism", type: "Physics • Refraction", gradient: "linear-gradient(135deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)", icon: "fa-chart-simple" },
+        { title: "Starlight Telescope", type: "Astronomical • Distant", gradient: "linear-gradient(135deg, #FFFFFF, #FFD700)", icon: "fa-star" },
+        { title: "LED Digital Art", type: "Digital • Pixel Light", gradient: "linear-gradient(135deg, #00FFFF, #FF00FF)", icon: "fa-display" }
+    ];
+
+    // Generate gallery
+    const galleryGrid = document.getElementById('galleryGrid');
+    
+    galleryData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'polaroid-card';
+        card.innerHTML = `
+            <div class="polaroid-image" style="background: ${item.gradient}; display: flex; align-items: center; justify-content: center;">
+                <i class="fas ${item.icon}" style="font-size: 3rem; color: rgba(255,255,255,0.7);"></i>
+            </div>
+            <div class="polaroid-caption">${item.title}<br><span>${item.type}</span></div>
+        `;
+        galleryGrid.appendChild(card);
+        
+        // Staggered entrance animation
+        setTimeout(() => {
+            card.classList.add('visible');
+        }, index * 80);
+    });
+
+    // ============================================
+    // EMERGE FROM BLACK HOLE TRANSITION
+    // ============================================
+    function emergeFromBlackHole() {
+        const galleryHeader = document.querySelector('.gallery-header');
+        
+        // Create black hole overlay that shrinks
+        const blackholeOverlay = document.createElement('div');
+        blackholeOverlay.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #000000, #0a0015, #1a0030);
+            transform: translate(-50%, -50%) scale(30);
+            z-index: 20000;
+            pointer-events: none;
+            transition: all 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        `;
+        document.body.appendChild(blackholeOverlay);
+        
+        // Shrink black hole to reveal content
+        setTimeout(() => {
+            blackholeOverlay.style.transform = 'translate(-50%, -50%) scale(0)';
+            setTimeout(() => blackholeOverlay.remove(), 1500);
+        }, 100);
+        
+        // Fade in header
+        setTimeout(() => {
+            galleryHeader.style.opacity = '1';
+            galleryHeader.style.transform = 'translateY(0)';
+        }, 500);
+    }
+    
+    // Call emergence on load
+    emergeFromBlackHole();
+
+    // ============================================
+    // CURSOR PHYSICS
+    // ============================================
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, ringX = 0, ringY = 0, ringVX = 0, ringVY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        const isClickable = e.target.closest('.polaroid-card, .back-btn');
+        if (isClickable) {
+            cursorRing.style.borderColor = '#FFD700';
+            cursorRing.style.width = '70px';
+            cursorRing.style.height = '70px';
+            cursorDot.style.width = '12px';
+            cursorDot.style.height = '12px';
+        } else {
+            cursorRing.style.borderColor = 'rgba(255, 215, 0, 0.5)';
+            cursorRing.style.width = '40px';
+            cursorRing.style.height = '40px';
+            cursorDot.style.width = '6px';
+            cursorDot.style.height = '6px';
+        }
+    });
+    
+    function animateCursor() {
+        dotX += (mouseX - dotX) * 0.15;
+        dotY += (mouseY - dotY) * 0.15;
+        cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
+        let forceX = (mouseX - ringX) * 0.06;
+        let forceY = (mouseY - ringY) * 0.06;
+        ringVX += forceX;
+        ringVY += forceY;
+        ringVX *= 0.94;
+        ringVY *= 0.94;
+        ringX += ringVX;
+        ringY += ringVY;
+        cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+    
+    // Ripple effect on polaroids
+    function createRipple(x, y) {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: fixed; left: ${x}px; top: ${y}px; width: 10px; height: 10px;
+            border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4));
+            transform: translate(-50%, -50%) scale(0); pointer-events: none; z-index: 100000;
+            animation: rippleExpand 0.8s ease-out forwards;
+        `;
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 800);
+    }
+    
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `@keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; } 100% { transform: translate(-50%, -50%) scale(20); opacity: 0; } }`;
+    document.head.appendChild(styleSheet);
+    
+    document.querySelectorAll('.polaroid-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            const rect = card.getBoundingClientRect();
+            createRipple(rect.left + rect.width/2, rect.top + rect.height/2);
+        });
+    });
+    
+    console.log('%c✨ UNSEEN WORLD GALLERY ACTIVATED ✨', 'color: #FFD700; font-size: 14px;');
+    console.log('%c📸 Scattered masonry grid | 12 polaroids | Cinematic emergence', 'color: #FF00FF; font-size: 12px;');
+</script>
+</body
