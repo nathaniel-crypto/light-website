@@ -43,7 +43,6 @@
             height: 100% !important;
         }
 
-        /* Active Theory Effects */
         .glitch {
             position: relative;
             animation: glitch-skew 3s infinite linear alternate-reverse;
@@ -250,7 +249,6 @@
             transition: opacity 0.5s ease;
         }
 
-        /* Content being sucked into black hole */
         .page.sucking {
             animation: suckIntoBlackHole 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             pointer-events: none;
@@ -406,10 +404,6 @@
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     
-    // ============================================
-    // BLACK HOLE RENDER
-    // ============================================
-    
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -443,21 +437,18 @@
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     
-    // Event Horizon
     const eventHorizon = new THREE.Mesh(
         new THREE.SphereGeometry(1.2, 128, 128),
         new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x330033, emissiveIntensity: 0.35, metalness: 0.95, roughness: 0.08 })
     );
     scene.add(eventHorizon);
     
-    // Photon Sphere
     const glowSphere = new THREE.Mesh(
         new THREE.SphereGeometry(1.36, 128, 128),
         new THREE.MeshBasicMaterial({ color: 0xFF3366, transparent: true, opacity: 0.18, side: THREE.BackSide })
     );
     scene.add(glowSphere);
     
-    // Accretion Disk
     const disk = new THREE.Mesh(
         new THREE.TorusGeometry(2.5, 0.22, 256, 512),
         new THREE.MeshStandardMaterial({ color: 0xFF4466, emissive: 0xFF2266, emissiveIntensity: 0.75, metalness: 0.88, roughness: 0.28 })
@@ -466,7 +457,6 @@
     disk.rotation.z = 0.3;
     scene.add(disk);
     
-    // Outer Disk
     const outerDisk = new THREE.Mesh(
         new THREE.TorusGeometry(3.4, 0.18, 256, 512),
         new THREE.MeshStandardMaterial({ color: 0xFF6633, emissive: 0xFF4411, emissiveIntensity: 0.55, metalness: 0.82, roughness: 0.38 })
@@ -475,7 +465,6 @@
     outerDisk.rotation.z = -0.2;
     scene.add(outerDisk);
     
-    // Inner Hot Ring
     const innerRing = new THREE.Mesh(
         new THREE.TorusGeometry(1.7, 0.08, 256, 512),
         new THREE.MeshStandardMaterial({ color: 0xFFAA88, emissive: 0xFF6644, emissiveIntensity: 1.0, metalness: 0.92, roughness: 0.12 })
@@ -483,7 +472,6 @@
     innerRing.rotation.x = Math.PI / 2.15;
     scene.add(innerRing);
     
-    // Particle System
     const particleCount = 12000;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -512,7 +500,6 @@
     const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ size: 0.045, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 }));
     scene.add(particles);
     
-    // Starfield
     const starCount = 3000;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
@@ -525,7 +512,6 @@
     const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, transparent: true, opacity: 0.5 }));
     scene.add(stars);
     
-    // Lighting
     const ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
     const coreLight = new THREE.PointLight(0xFF3366, 1.6, 18);
@@ -553,14 +539,10 @@
     }
     animate();
     
-    // ============================================
-    // BLACK HOLE SINGULARITY TRANSITION
-    // ============================================
     let isTransitioning = false;
     let expandAnimation = null;
     
     function expandBlackHole() {
-        // Animate the black hole growing to consume everything
         let scale = 1;
         let targetScale = 30;
         
@@ -568,14 +550,12 @@
             scale += 0.25;
             if (scale >= targetScale) {
                 scale = targetScale;
-                // Black hole has consumed everything - implode
                 setTimeout(() => {
                     createImplosion();
                 }, 200);
                 return;
             }
             
-            // Scale all black hole components
             eventHorizon.scale.set(scale, scale, scale);
             glowSphere.scale.set(scale, scale, scale);
             disk.scale.set(scale, scale, scale);
@@ -583,7 +563,6 @@
             innerRing.scale.set(scale, scale, scale);
             particles.scale.set(scale, scale, scale);
             
-            // Increase intensity as it grows
             coreLight.intensity = 1.6 + scale * 0.3;
             bloomPass.strength = 0.8 + scale * 0.1;
             
@@ -594,10 +573,8 @@
     }
     
     function createImplosion() {
-        // Cancel expansion animation
         if (expandAnimation) cancelAnimationFrame(expandAnimation);
         
-        // Flash white (implosion)
         const implosionFlash = document.createElement('div');
         implosionFlash.style.cssText = `
             position: fixed;
@@ -615,7 +592,6 @@
         
         setTimeout(() => { implosionFlash.style.opacity = '1'; }, 10);
         
-        // Then black screen
         setTimeout(() => {
             implosionFlash.style.opacity = '0';
             
@@ -637,7 +613,7 @@
             setTimeout(() => { blackScreen.style.opacity = '1'; }, 50);
             
             setTimeout(() => {
-                window.location.href = "gallery.html";
+                window.location.href = "realgallery.html";
             }, 600);
         }, 300);
     }
@@ -653,30 +629,23 @@
             else btn.classList.remove('active');
         });
         
-        // Step 1: Content gets sucked into black hole
         mainSection.classList.add('sucking');
         
-        // Step 2: Intensify black hole (sucking energy)
         coreLight.intensity = 3;
         bloomPass.strength = 1.5;
         disk.material.emissiveIntensity = 1.8;
         outerDisk.material.emissiveIntensity = 1.2;
         innerRing.material.emissiveIntensity = 2.0;
         
-        // Step 3: Black hole physically expands
         setTimeout(() => {
             expandBlackHole();
         }, 800);
         
-        // Step 4: Hide content completely
         setTimeout(() => {
             mainSection.style.opacity = '0';
         }, 1500);
     }
     
-    // ============================================
-    // NAVIGATION
-    // ============================================
     const navBtns = document.querySelectorAll('.nav-btn');
     const mainSection = document.getElementById('mainSection');
     
@@ -688,9 +657,6 @@
         });
     });
     
-    // ============================================
-    // LOADING SCREEN
-    // ============================================
     const loadingScreen = document.getElementById('loadingScreen');
     const percentElement = document.getElementById('loadingPercent');
     let progress = 0;
@@ -733,9 +699,6 @@
         percentElement.textContent = progress + '%';
     }, 60);
     
-    // ============================================
-    // CURSOR PHYSICS
-    // ============================================
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
     let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, ringX = 0, ringY = 0, ringVX = 0, ringVY = 0;
