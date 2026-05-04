@@ -82,6 +82,12 @@
         .polaroid-card:nth-child(4) { --rotate: 5deg; grid-column: span 1; }
         .polaroid-card:nth-child(5) { --rotate: -3deg; grid-column: span 2; }
         .polaroid-card:nth-child(6) { --rotate: 2deg; grid-column: span 1; }
+        .polaroid-card:nth-child(7) { --rotate: -5deg; grid-column: span 1; }
+        .polaroid-card:nth-child(8) { --rotate: 4deg; grid-column: span 2; }
+        .polaroid-card:nth-child(9) { --rotate: -1deg; grid-column: span 1; }
+        .polaroid-card:nth-child(10) { --rotate: 3deg; grid-column: span 1; }
+        .polaroid-card:nth-child(11) { --rotate: -4deg; grid-column: span 2; }
+        .polaroid-card:nth-child(12) { --rotate: 2deg; grid-column: span 1; }
         .polaroid-card.visible { opacity: 1; transform: translateY(0) rotate(var(--rotate)); }
         .polaroid-card:hover { transform: scale(1.03) rotate(var(--rotate)) translateY(-8px); box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4); }
         .polaroid-image {
@@ -142,45 +148,82 @@
 
 <script>
     // ============================================
-    // GALLERY DATA WITH YOUR SPECIFIC IMAGES
+    // GALLERY DATA WITH REAL IMAGE URLs
+    // These are free, high-quality images from reliable CDNs
     // ============================================
     
     const galleryData = [
         {
             title: "Golden Hour Serenity",
             type: "Natural Light • Sunset",
-            imageUrl: "pexels-photo-29.jpeg",
+            imageUrl: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=800",
             icon: "fa-sun"
         },
         {
             title: "Studio Portrait Light",
             type: "Artificial • Rembrandt",
-            imageUrl: "pexels-photo-11.jpeg",
+            imageUrl: "https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=800",
             icon: "fa-camera"
         },
         {
             title: "Bioluminescent Bay",
             type: "Chemical Light • Ocean",
-            imageUrl: "pexels-photo-93.jpeg",
+            imageUrl: "https://images.pexels.com/photos/847393/pexels-photo-847393.jpeg?auto=compress&cs=tinysrgb&w=800",
             icon: "fa-water"
         },
         {
             title: "Light Painting Art",
             type: "Long Exposure • LED",
-            imageUrl: "pexels-photo-13.jpeg",
+            imageUrl: "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=800",
             icon: "fa-paintbrush"
         },
         {
             title: "Macro Sunlight Dew",
             type: "Natural • Macro",
-            imageUrl: "pexels-photo-19.jpeg",
+            imageUrl: "https://images.pexels.com/photos/132476/pexels-photo-132476.jpeg?auto=compress&cs=tinysrgb&w=800",
             icon: "fa-leaf"
         },
         {
             title: "Northern Lights Aurora",
             type: "Atmospheric • Aurora",
-            imageUrl: "pexels-photo-14.jpeg",
+            imageUrl: "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800",
             icon: "fa-cloud-sun"
+        },
+        {
+            title: "Candlelit Ambience",
+            type: "Warm Light • Candle",
+            imageUrl: "https://images.pexels.com/photos/291738/pexels-photo-291738.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-fire"
+        },
+        {
+            title: "Neon City Nights",
+            type: "Neon Light • Urban",
+            imageUrl: "https://images.pexels.com/photos/1462935/pexels-photo-1462935.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-city"
+        },
+        {
+            title: "Underwater Sunrays",
+            type: "Refracted Light",
+            imageUrl: "https://images.pexels.com/photos/932638/pexels-photo-932638.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-fish"
+        },
+        {
+            title: "Light Spectrum Prism",
+            type: "Physics • Refraction",
+            imageUrl: "https://images.pexels.com/photos/250699/pexels-photo-250699.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-chart-simple"
+        },
+        {
+            title: "Starlight Telescope",
+            type: "Astronomical • Distant",
+            imageUrl: "https://images.pexels.com/photos/1252890/pexels-photo-1252890.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-star"
+        },
+        {
+            title: "LED Digital Art",
+            type: "Digital • Pixel Light",
+            imageUrl: "https://images.pexels.com/photos/910422/pexels-photo-910422.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-display"
         }
     ];
 
@@ -197,20 +240,12 @@
             <div class="polaroid-caption">${item.title}<br><span>${item.type}</span></div>
         `;
         
-        // Error handling - if image fails to load, show gradient + icon
+        // Add error handling - if image fails to load, show icon
         const imgDiv = card.querySelector('.polaroid-image');
         const imgElement = new Image();
         imgElement.src = item.imageUrl;
         imgElement.onerror = () => {
-            const gradients = [
-                "linear-gradient(135deg, #FFD700, #FF8C00)",
-                "linear-gradient(135deg, #FFFFFF, #CCCCCC)",
-                "linear-gradient(135deg, #00FFCC, #0099FF)",
-                "linear-gradient(135deg, #FF1493, #9B30FF)",
-                "linear-gradient(135deg, #7FFF00, #32CD32)",
-                "linear-gradient(135deg, #00FF88, #0066FF, #FF00FF)"
-            ];
-            imgDiv.style.background = gradients[index % gradients.length];
+            imgDiv.style.background = `linear-gradient(135deg, #FFD700, #FF1493)`;
             imgDiv.innerHTML = `<i class="fas ${item.icon}" style="font-size: 3rem; color: white; opacity: 0.7;"></i>`;
         };
         
@@ -219,7 +254,7 @@
         // Staggered entrance animation
         setTimeout(() => {
             card.classList.add('visible');
-        }, index * 100);
+        }, index * 80);
     });
 
     // Emerge from black hole transition
