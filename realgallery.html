@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,6 +74,7 @@ html
             transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             opacity: 0;
             transform: translateY(40px) rotate(var(--rotate));
+            overflow: hidden;
         }
         .polaroid-card:nth-child(1) { --rotate: -4deg; grid-column: span 1; }
         .polaroid-card:nth-child(2) { --rotate: 3deg; grid-column: span 2; }
@@ -90,7 +90,18 @@ html
         .polaroid-card:nth-child(12) { --rotate: 2deg; grid-column: span 1; }
         .polaroid-card.visible { opacity: 1; transform: translateY(0) rotate(var(--rotate)); }
         .polaroid-card:hover { transform: scale(1.03) rotate(var(--rotate)) translateY(-8px); box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4); }
-        .polaroid-image { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .polaroid-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
         .polaroid-caption { font-size: 0.75rem; color: #222; text-align: center; font-weight: 600; }
         .polaroid-caption span { font-size: 0.65rem; color: #666; font-weight: 400; }
         .back-btn {
@@ -136,43 +147,152 @@ html
 <div class="cursor-ring" id="cursorRing"></div>
 
 <script>
+    // ============================================
+    // GALLERY DATA WITH REAL IMAGE URLs
+    // These are free, high-quality images from reliable CDNs
+    // ============================================
+    
     const galleryData = [
-        { title: "Golden Hour Serenity", type: "Natural Light • Sunset", gradient: "linear-gradient(135deg, #FFD700, #FF8C00)", icon: "fa-sun" },
-        { title: "Studio Portrait Light", type: "Artificial • Rembrandt", gradient: "linear-gradient(135deg, #FFFFFF, #CCCCCC)", icon: "fa-camera" },
-        { title: "Bioluminescent Bay", type: "Chemical Light • Ocean", gradient: "linear-gradient(135deg, #00FFCC, #0099FF)", icon: "fa-water" },
-        { title: "Light Painting Art", type: "Long Exposure • LED", gradient: "linear-gradient(135deg, #FF1493, #9B30FF)", icon: "fa-paintbrush" },
-        { title: "Macro Sunlight", type: "Natural • Dewdrop", gradient: "linear-gradient(135deg, #7FFF00, #32CD32)", icon: "fa-leaf" },
-        { title: "Northern Lights Aurora", type: "Atmospheric • Aurora", gradient: "linear-gradient(135deg, #00FF88, #0066FF, #FF00FF)", icon: "fa-cloud-sun" },
-        { title: "Candlelit Ambience", type: "Warm Light • Candle", gradient: "linear-gradient(135deg, #FF6600, #FF3300)", icon: "fa-fire" },
-        { title: "Neon City Nights", type: "Neon Light • Urban", gradient: "linear-gradient(135deg, #FF00FF, #00FFFF)", icon: "fa-city" },
-        { title: "Underwater Sunrays", type: "Natural Light • Refracted", gradient: "linear-gradient(135deg, #0099FF, #003366)", icon: "fa-fish" },
-        { title: "Light Spectrum Prism", type: "Physics • Refraction", gradient: "linear-gradient(135deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)", icon: "fa-chart-simple" },
-        { title: "Starlight Telescope", type: "Astronomical • Distant", gradient: "linear-gradient(135deg, #FFFFFF, #FFD700)", icon: "fa-star" },
-        { title: "LED Digital Art", type: "Digital • Pixel Light", gradient: "linear-gradient(135deg, #00FFFF, #FF00FF)", icon: "fa-display" }
+        {
+            title: "Golden Hour Serenity",
+            type: "Natural Light • Sunset",
+            imageUrl: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-sun"
+        },
+        {
+            title: "Studio Portrait Light",
+            type: "Artificial • Rembrandt",
+            imageUrl: "https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-camera"
+        },
+        {
+            title: "Bioluminescent Bay",
+            type: "Chemical Light • Ocean",
+            imageUrl: "https://images.pexels.com/photos/847393/pexels-photo-847393.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-water"
+        },
+        {
+            title: "Light Painting Art",
+            type: "Long Exposure • LED",
+            imageUrl: "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-paintbrush"
+        },
+        {
+            title: "Macro Sunlight Dew",
+            type: "Natural • Macro",
+            imageUrl: "https://images.pexels.com/photos/132476/pexels-photo-132476.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-leaf"
+        },
+        {
+            title: "Northern Lights Aurora",
+            type: "Atmospheric • Aurora",
+            imageUrl: "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-cloud-sun"
+        },
+        {
+            title: "Candlelit Ambience",
+            type: "Warm Light • Candle",
+            imageUrl: "https://images.pexels.com/photos/291738/pexels-photo-291738.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-fire"
+        },
+        {
+            title: "Neon City Nights",
+            type: "Neon Light • Urban",
+            imageUrl: "https://images.pexels.com/photos/1462935/pexels-photo-1462935.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-city"
+        },
+        {
+            title: "Underwater Sunrays",
+            type: "Refracted Light",
+            imageUrl: "https://images.pexels.com/photos/932638/pexels-photo-932638.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-fish"
+        },
+        {
+            title: "Light Spectrum Prism",
+            type: "Physics • Refraction",
+            imageUrl: "https://images.pexels.com/photos/250699/pexels-photo-250699.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-chart-simple"
+        },
+        {
+            title: "Starlight Telescope",
+            type: "Astronomical • Distant",
+            imageUrl: "https://images.pexels.com/photos/1252890/pexels-photo-1252890.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-star"
+        },
+        {
+            title: "LED Digital Art",
+            type: "Digital • Pixel Light",
+            imageUrl: "https://images.pexels.com/photos/910422/pexels-photo-910422.jpeg?auto=compress&cs=tinysrgb&w=800",
+            icon: "fa-display"
+        }
     ];
 
+    // Generate gallery
     const galleryGrid = document.getElementById('galleryGrid');
+    
     galleryData.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = 'polaroid-card';
-        card.innerHTML = `<div class="polaroid-image" style="background: ${item.gradient}; display: flex; align-items: center; justify-content: center;"><i class="fas ${item.icon}" style="font-size: 3rem; color: rgba(255,255,255,0.7);"></i></div><div class="polaroid-caption">${item.title}<br><span>${item.type}</span></div>`;
+        card.innerHTML = `
+            <div class="polaroid-image" style="background-image: url('${item.imageUrl}'); background-size: cover; background-position: center;">
+                <i class="fas ${item.icon}" style="font-size: 2.5rem; color: rgba(255,255,255,0.8); text-shadow: 0 0 10px rgba(0,0,0,0.5); display: none;"></i>
+            </div>
+            <div class="polaroid-caption">${item.title}<br><span>${item.type}</span></div>
+        `;
+        
+        // Add error handling - if image fails to load, show icon
+        const imgDiv = card.querySelector('.polaroid-image');
+        const imgElement = new Image();
+        imgElement.src = item.imageUrl;
+        imgElement.onerror = () => {
+            imgDiv.style.background = `linear-gradient(135deg, #FFD700, #FF1493)`;
+            imgDiv.innerHTML = `<i class="fas ${item.icon}" style="font-size: 3rem; color: white; opacity: 0.7;"></i>`;
+        };
+        
         galleryGrid.appendChild(card);
-        setTimeout(() => card.classList.add('visible'), index * 80);
+        
+        // Staggered entrance animation
+        setTimeout(() => {
+            card.classList.add('visible');
+        }, index * 80);
     });
 
+    // Emerge from black hole transition
     function emergeFromBlackHole() {
         const galleryHeader = document.querySelector('.gallery-header');
         const blackholeOverlay = document.createElement('div');
-        blackholeOverlay.style.cssText = `position: fixed; top: 50%; left: 50%; width: 100%; height: 100%; background: radial-gradient(circle, #000000, #0a0015, #1a0030); transform: translate(-50%, -50%) scale(30); z-index: 20000; pointer-events: none; transition: all 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);`;
+        blackholeOverlay.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #000000, #0a0015, #1a0030);
+            transform: translate(-50%, -50%) scale(30);
+            z-index: 20000;
+            pointer-events: none;
+            transition: all 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        `;
         document.body.appendChild(blackholeOverlay);
-        setTimeout(() => { blackholeOverlay.style.transform = 'translate(-50%, -50%) scale(0)'; setTimeout(() => blackholeOverlay.remove(), 1500); }, 100);
-        setTimeout(() => { galleryHeader.style.opacity = '1'; galleryHeader.style.transform = 'translateY(0)'; }, 500);
+        setTimeout(() => { 
+            blackholeOverlay.style.transform = 'translate(-50%, -50%) scale(0)'; 
+            setTimeout(() => blackholeOverlay.remove(), 1500); 
+        }, 100);
+        setTimeout(() => { 
+            galleryHeader.style.opacity = '1'; 
+            galleryHeader.style.transform = 'translateY(0)'; 
+        }, 500);
     }
+    
     emergeFromBlackHole();
 
+    // ============================================
+    // CURSOR PHYSICS
+    // ============================================
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
     let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, ringX = 0, ringY = 0, ringVX = 0, ringVY = 0;
+    
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
@@ -184,13 +304,14 @@ html
             cursorDot.style.width = '12px';
             cursorDot.style.height = '12px';
         } else {
-            cursorRing.style.borderColor = 'rgba(255, 215, 0, 0.5)';
+            cursorRing.style.borderColor = 'rgba(255, 215, 0, 0.6)';
             cursorRing.style.width = '40px';
             cursorRing.style.height = '40px';
             cursorDot.style.width = '6px';
             cursorDot.style.height = '6px';
         }
     });
+    
     function animateCursor() {
         dotX += (mouseX - dotX) * 0.15;
         dotY += (mouseY - dotY) * 0.15;
@@ -210,13 +331,20 @@ html
     
     function createRipple(x, y) {
         const ripple = document.createElement('div');
-        ripple.style.cssText = `position: fixed; left: ${x}px; top: ${y}px; width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4)); transform: translate(-50%, -50%) scale(0); pointer-events: none; z-index: 100000; animation: rippleExpand 0.8s ease-out forwards;`;
+        ripple.style.cssText = `
+            position: fixed; left: ${x}px; top: ${y}px; width: 10px; height: 10px;
+            border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4));
+            transform: translate(-50%, -50%) scale(0); pointer-events: none; z-index: 100000;
+            animation: rippleExpand 0.8s ease-out forwards;
+        `;
         document.body.appendChild(ripple);
         setTimeout(() => ripple.remove(), 800);
     }
+    
     const styleSheet = document.createElement('style');
     styleSheet.textContent = `@keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; } 100% { transform: translate(-50%, -50%) scale(20); opacity: 0; } }`;
     document.head.appendChild(styleSheet);
+    
     document.querySelectorAll('.polaroid-card').forEach(card => {
         card.addEventListener('click', (e) => {
             const rect = card.getBoundingClientRect();
