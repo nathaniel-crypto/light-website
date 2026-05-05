@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>What Is Light Really? | Black Hole Singularity | 244FPS ELITE</title>
+    <title>What Is Light Really? | Black Hole Singularity | FAST TRANSITION</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
     
@@ -11,223 +11,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #000000;
-            font-family: 'Space Grotesk', sans-serif;
-            color: #ffffff;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000000; font-family: 'Space Grotesk', sans-serif; color: #ffffff; overflow: hidden; height: 100vh; width: 100vw; }
         ::-webkit-scrollbar { display: none; }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        canvas { display: block; width: 100% !important; height: 100% !important; }
 
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
+        .glitch { position: relative; animation: glitch-skew 3s infinite linear alternate-reverse; }
+        @keyframes glitch-skew { 0% { transform: skew(0deg); } 20% { transform: skew(2deg); } 40% { transform: skew(-1.5deg); } 60% { transform: skew(1.5deg); } 80% { transform: skew(-0.5deg); } 100% { transform: skew(0deg); } }
+        .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8; }
+        .glitch::before { color: #FF00FF; z-index: -1; animation: glitch-1 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite; }
+        .glitch::after { color: #00FFFF; z-index: -2; animation: glitch-2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite; }
+        @keyframes glitch-1 { 0%,100% { transform: translate(0); } 20% { transform: translate(-3px, 2px); } 40% { transform: translate(-2px, -1px); } 60% { transform: translate(1px, 2px); } 80% { transform: translate(2px, -2px); } }
+        @keyframes glitch-2 { 0%,100% { transform: translate(0); } 20% { transform: translate(3px, -2px); } 40% { transform: translate(2px, 1px); } 60% { transform: translate(-1px, -2px); } 80% { transform: translate(-2px, 2px); } }
 
-        canvas {
-            display: block;
-            width: 100% !important;
-            height: 100% !important;
-        }
+        .scanline { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.05) 2px, rgba(255,255,255,0.02) 3px, rgba(0,0,0,0) 4px); pointer-events: none; z-index: 1002; opacity: 0.3; }
+        .vhs-distortion { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(90deg, rgba(255,0,255,0.02) 0px, rgba(0,255,255,0.02) 2px, transparent 4px, transparent 8px); pointer-events: none; z-index: 1003; animation: vhsMove 8s linear infinite; }
+        @keyframes vhsMove { 0% { transform: translateX(0); } 100% { transform: translateX(10px); } }
 
-        .glitch {
-            position: relative;
-            animation: glitch-skew 3s infinite linear alternate-reverse;
-        }
-        
-        @keyframes glitch-skew {
-            0% { transform: skew(0deg); }
-            20% { transform: skew(2deg); }
-            40% { transform: skew(-1.5deg); }
-            60% { transform: skew(1.5deg); }
-            80% { transform: skew(-0.5deg); }
-            100% { transform: skew(0deg); }
-        }
-        
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
-        }
-        
-        .glitch::before {
-            color: #FF00FF;
-            z-index: -1;
-            animation: glitch-1 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
-        }
-        
-        .glitch::after {
-            color: #00FFFF;
-            z-index: -2;
-            animation: glitch-2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
-        }
-        
-        @keyframes glitch-1 {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-3px, 2px); }
-            40% { transform: translate(-2px, -1px); }
-            60% { transform: translate(1px, 2px); }
-            80% { transform: translate(2px, -2px); }
-        }
-        
-        @keyframes glitch-2 {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(3px, -2px); }
-            40% { transform: translate(2px, 1px); }
-            60% { transform: translate(-1px, -2px); }
-            80% { transform: translate(-2px, 2px); }
-        }
+        .nav-bar { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1001; display: flex; justify-content: center; gap: 2rem; padding: 0.8rem 2rem; background: rgba(0,0,0,0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,215,0,0.4); clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); }
+        .nav-btn { background: transparent; border: none; color: rgba(255,255,255,0.8); font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; letter-spacing: 4px; padding: 0.5rem 1.8rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); position: relative; font-weight: 500; text-transform: uppercase; }
+        .nav-btn::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0%; height: 2px; background: #FFD700; transition: width 0.3s ease; }
+        .nav-btn:hover::before, .nav-btn.active::before { width: 80%; }
+        .nav-btn:hover, .nav-btn.active { color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.5); letter-spacing: 6px; }
 
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.05) 2px, rgba(255,255,255,0.02) 3px, rgba(0,0,0,0) 4px);
-            pointer-events: none;
-            z-index: 1002;
-            opacity: 0.3;
-        }
+        .cursor-dot, .cursor-ring { position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); border-radius: 50%; }
+        .cursor-dot { width: 6px; height: 6px; background: #FFD700; box-shadow: 0 0 15px #FFD700; }
+        .cursor-ring { width: 40px; height: 40px; border: 2px solid rgba(255,215,0,0.6); backdrop-filter: blur(3px); }
 
-        .vhs-distortion {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(90deg, rgba(255,0,255,0.02) 0px, rgba(0,255,255,0.02) 2px, transparent 4px, transparent 8px);
-            pointer-events: none;
-            z-index: 1003;
-            animation: vhsMove 8s linear infinite;
-        }
-        
-        @keyframes vhsMove {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(10px); }
-        }
+        .scroll-progress { position: fixed; right: 25px; top: 50%; transform: translateY(-50%); width: 4px; height: 200px; background: rgba(255,255,255,0.1); z-index: 1000; border-radius: 4px; }
+        .scroll-progress-fill { position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(to top, #FFD700, #FF1493); box-shadow: 0 0 10px #FFD700; }
+        .scroll-hint { position: fixed; bottom: 25px; right: 25px; font-size: 0.7rem; letter-spacing: 3px; color: rgba(255,255,255,0.4); z-index: 1000; font-family: monospace; background: rgba(0,0,0,0.5); padding: 0.4rem 1rem; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); }
 
-        .nav-bar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            padding: 0.8rem 2rem;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.8);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            padding: 0.5rem 1.8rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            position: relative;
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0%;
-            height: 2px;
-            background: #FFD700;
-            transition: width 0.3s ease;
-        }
-
-        .nav-btn:hover::before, .nav-btn.active::before {
-            width: 80%;
-        }
-
-        .nav-btn:hover, .nav-btn.active {
-            color: #FFD700;
-            text-shadow: 0 0 10px rgba(255,215,0,0.5);
-            letter-spacing: 6px;
-        }
-
-        .cursor-dot, .cursor-ring { 
-            position: fixed; 
-            pointer-events: none; 
-            z-index: 10000; 
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-        }
-        .cursor-dot { 
-            width: 6px; 
-            height: 6px; 
-            background: #FFD700; 
-            box-shadow: 0 0 15px #FFD700; 
-        }
-        .cursor-ring { 
-            width: 40px; 
-            height: 40px; 
-            border: 2px solid rgba(255, 215, 0, 0.6); 
-            backdrop-filter: blur(3px); 
-        }
-
-        .scroll-progress {
-            position: fixed; right: 25px; top: 50%; transform: translateY(-50%); width: 4px; height: 200px;
-            background: rgba(255,255,255,0.1); z-index: 1000; border-radius: 4px;
-        }
-        .scroll-progress-fill {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
-            background: linear-gradient(to top, #FFD700, #FF1493);
-            box-shadow: 0 0 10px #FFD700;
-        }
-
-        .scroll-hint {
-            position: fixed; bottom: 25px; right: 25px; font-size: 0.7rem; letter-spacing: 3px;
-            color: rgba(255,255,255,0.4); z-index: 1000; font-family: monospace;
-            background: rgba(0,0,0,0.5); padding: 0.4rem 1rem;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.1);
-            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
-        }
-
-        .loading-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000;
-            z-index: 20000; display: flex; flex-direction: column; justify-content: center;
-            align-items: center; transition: opacity 1s ease; opacity: 1; visibility: visible;
-        }
+        .loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; z-index: 20000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; opacity: 1; visibility: visible; }
         .loading-screen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-        .loading-core {
-            width: 120px; height: 120px; background: radial-gradient(circle, #FFD700, #FF1493, #4B0082);
-            border-radius: 50%; box-shadow: 0 0 80px rgba(255,215,0,0.6);
-            animation: pulse3D 1.5s ease-in-out infinite;
-        }
+        .loading-core { width: 120px; height: 120px; background: radial-gradient(circle, #FFD700, #FF1493, #4B0082); border-radius: 50%; box-shadow: 0 0 80px rgba(255,215,0,0.6); animation: pulse3D 1.5s ease-in-out infinite; }
         @keyframes pulse3D { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }
         .loading-text { margin-top: 2rem; font-size: 1rem; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,255,255,0.8); }
         .loading-dots { display: flex; gap: 0.5rem; margin-top: 1rem; }
@@ -235,31 +53,17 @@
         @keyframes dotBounce { 0%,100% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(-15px); opacity: 1; } }
         .loading-percent { margin-top: 1rem; font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #FFD700, #FF1493); background-clip: text; -webkit-background-clip: text; color: transparent; }
 
-        .scroll-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
-            z-index: 10;
-            pointer-events: auto;
-        }
+        .scroll-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; z-index: 10; pointer-events: auto; }
         .scroll-container::-webkit-scrollbar { display: none; }
+        .page { position: relative; max-width: 1400px; margin: 0 auto; padding: 7rem 2rem 4rem; min-height: 100vh; backdrop-filter: blur(8px); transition: opacity 0.5s ease; }
 
-        .page {
-            position: relative; max-width: 1400px; margin: 0 auto; padding: 7rem 2rem 4rem;
-            min-height: 100vh;
-            backdrop-filter: blur(8px);
-            transition: opacity 0.5s ease;
-        }
-
-        /* ENHANCED SUCKING ANIMATION */
-        .page.sucking {
-            animation: suckIntoBlackHole 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            pointer-events: none;
-        }
+        /* FASTER SUCKING ANIMATION */
+        .page.sucking { animation: suckIntoBlackHole 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: none; }
         @keyframes suckIntoBlackHole {
             0% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); }
-            25% { transform: scale(0.55) rotate(8deg) translateX(-40px) translateY(-25px); opacity: 0.75; filter: blur(6px); }
-            50% { transform: scale(0.2) rotate(18deg) translateX(-100px) translateY(-60px); opacity: 0.35; filter: blur(20px); }
-            75% { transform: scale(0.05) rotate(30deg) translateX(-160px) translateY(-100px); opacity: 0.08; filter: blur(45px); }
-            100% { transform: scale(0) rotate(40deg) translateX(-220px) translateY(-140px); opacity: 0; filter: blur(70px); display: none; }
+            30% { transform: scale(0.5) rotate(8deg); opacity: 0.7; filter: blur(8px); }
+            60% { transform: scale(0.15) rotate(18deg); opacity: 0.3; filter: blur(25px); }
+            100% { transform: scale(0) rotate(28deg); opacity: 0; filter: blur(60px); display: none; }
         }
 
         .hero { text-align: center; padding: 2rem 0; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
@@ -279,23 +83,19 @@
 
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 2rem 0; }
         .spectrum-bar { height: 50px; background: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3); margin: 2rem 0; }
-        
         .fun-facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
         .fun-fact { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.1); padding: 1.2rem; cursor: pointer; opacity: 0; transform: translateY(30px); transition: all 0.3s ease; }
         .fun-fact:hover { transform: translateY(-3px); border-color: rgba(255,215,0,0.4); }
         .fun-fact .emoji { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
         .fun-fact h4 { color: #FFD700; font-size: 0.9rem; margin-bottom: 0.3rem; }
-
         .curiosity-grid { display: flex; justify-content: flex-start; gap: 1.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
         .curiosity-item { font-size: 0.8rem; cursor: pointer; color: rgba(255,255,255,0.6); letter-spacing: 1px; border-bottom: 1px solid transparent; padding: 0.3rem 0; transition: all 0.2s ease; }
         .curiosity-item:hover { color: #FFD700; border-bottom-color: #FFD700; }
-
         .quiz-container { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.2); padding: 1.5rem; margin: 2rem 0; opacity: 0; transform: translateY(30px); }
         .quiz-question { font-size: 1rem; margin-bottom: 1rem; color: #FFD700; }
         .quiz-options { display: flex; gap: 1rem; flex-wrap: wrap; }
         .quiz-option { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1.2rem; border-radius: 30px; cursor: pointer; font-family: inherit; color: white; transition: all 0.2s ease; }
         .quiz-option:hover { background: #FFD700; color: #000; }
-
         .product-showcase { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2rem; padding: 2rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,215,0,0.2); cursor: pointer; opacity: 0; transform: translateY(30px); transition: all 0.3s ease; }
         .product-showcase:hover { transform: translateY(-5px); border-color: rgba(255,215,0,0.5); }
         .flashlight-info { flex: 1; text-align: left; }
@@ -304,7 +104,6 @@
         .price-tag small { font-size: 0.9rem; text-decoration: line-through; color: rgba(255,255,255,0.4); }
         .btn-buy { background: linear-gradient(135deg, #FFD700, #FF8C00); border: none; color: #000; font-weight: 700; font-size: 0.8rem; padding: 0.7rem 1.5rem; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; border-radius: 40px; }
         .flashlight-image svg { max-width: 150px; width: 100%; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
-
         .fun-footer { margin-top: 4rem; text-align: center; padding: 1.5rem 0; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; opacity: 0; transform: translateY(20px); }
         .fun-footer span { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
 
@@ -407,7 +206,7 @@
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     
     // ============================================
-    // ULTRA 244FPS BLACK HOLE SETUP
+    // BLACK HOLE SETUP
     // ============================================
     
     const container = document.getElementById('canvas-container');
@@ -418,11 +217,7 @@
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 1.2, 13);
     
-    const renderer = new THREE.WebGLRenderer({ 
-        antialias: true, 
-        alpha: false, 
-        powerPreference: "high-performance" 
-    });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -447,7 +242,7 @@
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     
-    // ===== BLACK HOLE OBJECTS (THESE WILL EXPAND) =====
+    // Black hole objects
     const eventHorizon = new THREE.Mesh(
         new THREE.SphereGeometry(1.2, 128, 128),
         new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x330033, emissiveIntensity: 0.35, metalness: 0.95, roughness: 0.08 })
@@ -483,7 +278,7 @@
     innerRing.rotation.x = Math.PI / 2.15;
     scene.add(innerRing);
     
-    // 12,000 particles for dust/energy effect
+    // Particles
     const particleCount = 12000;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -512,7 +307,7 @@
     const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ size: 0.045, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 }));
     scene.add(particles);
     
-    // Starfield
+    // Stars
     const starCount = 3000;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
@@ -554,71 +349,50 @@
     animate();
     
     // ============================================
-    // ELITE 4.5-SECOND SMOOTH EXPANSION
+    // FAST TRANSITION (1.8 seconds total)
     // ============================================
     
     let isTransitioning = false;
     let expandAnimation = null;
-    let expandProgress = 0;
     
     const blackHoleObjects = [eventHorizon, glowSphere, disk, outerDisk, innerRing, particles];
     
-    function eliteExpandBlackHole() {
+    function fastExpandBlackHole() {
         if (isTransitioning) return;
         isTransitioning = true;
         
         const startTime = performance.now();
-        const duration = 4500; // 4.5 seconds of buttery smooth expansion
+        const duration = 800; // 0.8 seconds fast expansion
         const startScale = 1;
-        const endScale = 45;
+        const endScale = 40;
         
         function smoothExpand(currentTime) {
             const elapsed = currentTime - startTime;
             let progress = Math.min(1, elapsed / duration);
-            
-            // Buttery smooth easing curve
-            const easeOut = 1 - Math.pow(1 - progress, 1.8);
+            const easeOut = 1 - Math.pow(1 - progress, 1.5);
             const currentScale = startScale + (endScale - startScale) * easeOut;
             
-            // Apply scale to all black hole objects
-            blackHoleObjects.forEach(obj => {
-                obj.scale.set(currentScale, currentScale, currentScale);
-            });
+            blackHoleObjects.forEach(obj => { obj.scale.set(currentScale, currentScale, currentScale); });
             
-            // Dynamic intensity based on progress
             const intensityFactor = easeOut;
-            coreLight.intensity = 1.6 + intensityFactor * 4.5;
+            coreLight.intensity = 1.6 + intensityFactor * 4;
             bloomPass.strength = 0.8 + intensityFactor * 1.2;
-            innerRing.material.emissiveIntensity = 1.0 + intensityFactor * 1.5;
-            disk.material.emissiveIntensity = 0.75 + intensityFactor * 1.2;
             
             if (progress < 1) {
                 requestAnimationFrame(smoothExpand);
             } else {
                 // Implosion flash
                 const flash = document.createElement('div');
-                flash.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: radial-gradient(circle, #ffffff, #ffcc88, #ff3366);
-                    z-index: 10001;
-                    opacity: 0;
-                    transition: opacity 0.25s ease;
-                    pointer-events: none;
-                `;
+                flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,#ffffff,#ffcc88,#ff3366);z-index:10001;opacity:0;transition:opacity 0.15s ease;pointer-events:none;`;
                 document.body.appendChild(flash);
-                setTimeout(() => { flash.style.opacity = '0.95'; }, 10);
-                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 250); }, 250);
+                setTimeout(() => { flash.style.opacity = '1'; }, 5);
+                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 150); }, 150);
                 
                 setTimeout(() => {
-                    transitionOverlay.classList.add('active');
-                    setTimeout(() => {
-                        window.location.href = "realgallery.html";
-                    }, 500);
-                }, 400);
+                    const overlay = document.getElementById('transitionOverlay');
+                    if (overlay) overlay.classList.add('active');
+                    setTimeout(() => { window.location.href = "realgallery.html"; }, 300);
+                }, 200);
             }
         }
         
@@ -630,66 +404,44 @@
         
         const mainSection = document.getElementById('mainSection');
         
-        // Update active button
         document.querySelectorAll('.nav-btn').forEach(btn => {
             if (btn.getAttribute('data-section') === 'gallery') btn.classList.add('active');
             else btn.classList.remove('active');
         });
         
-        // Start content sucking animation
         mainSection.classList.add('sucking');
         
-        // Intensify black hole effects
         coreLight.intensity = 3.5;
-        bloomPass.strength = 1.6;
+        bloomPass.strength = 1.5;
         disk.material.emissiveIntensity = 1.8;
         outerDisk.material.emissiveIntensity = 1.3;
         innerRing.material.emissiveIntensity = 2.2;
         
-        // Create suction particles (being pulled into black hole)
-        for (let i = 0; i < 120; i++) {
+        // Suction particles
+        for (let i = 0; i < 80; i++) {
             const particle = document.createElement('div');
-            particle.style.cssText = `
-                position: fixed;
-                left: ${Math.random() * window.innerWidth}px;
-                top: ${Math.random() * window.innerHeight}px;
-                width: ${6 + Math.random() * 10}px;
-                height: ${6 + Math.random() * 10}px;
-                background: radial-gradient(circle, #ffcc99, #ff6688, #ff3366);
-                border-radius: 50%;
-                z-index: 10002;
-                pointer-events: none;
-                filter: blur(3px);
-                transition: all 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            `;
+            particle.style.cssText = `position:fixed;left:${Math.random() * window.innerWidth}px;top:${Math.random() * window.innerHeight}px;width:${6 + Math.random() * 8}px;height:${6 + Math.random() * 8}px;background:radial-gradient(circle,#ffcc99,#ff6688,#ff3366);border-radius:50%;z-index:10002;pointer-events:none;filter:blur(3px);transition:all 0.8s cubic-bezier(0.2,0.9,0.4,1.1);`;
             document.body.appendChild(particle);
-            
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             const deltaX = centerX - parseFloat(particle.style.left);
             const deltaY = centerY - parseFloat(particle.style.top);
-            
-            setTimeout(() => {
-                particle.style.transform = `translate(${deltaX * 0.95}px, ${deltaY * 0.95}px) scale(0)`;
-                particle.style.opacity = '0';
-            }, 20);
-            setTimeout(() => particle.remove(), 1400);
+            setTimeout(() => { particle.style.transform = `translate(${deltaX * 0.95}px, ${deltaY * 0.95}px) scale(0)`; particle.style.opacity = '0'; }, 10);
+            setTimeout(() => particle.remove(), 900);
         }
         
-        // Hide content overlay
-        setTimeout(() => {
-            mainSection.style.opacity = '0';
-        }, 300);
-        
-        // Begin elite expansion
-        setTimeout(() => {
-            eliteExpandBlackHole();
-        }, 600);
+        setTimeout(() => { mainSection.style.opacity = '0'; }, 200);
+        setTimeout(() => { fastExpandBlackHole(); }, 400);
     }
     
     const navBtns = document.querySelectorAll('.nav-btn');
     const mainSection = document.getElementById('mainSection');
-    const transitionOverlay = document.getElementById('transitionOverlay');
+    
+    // Create transition overlay
+    const transitionOverlay = document.createElement('div');
+    transitionOverlay.className = 'transition-overlay';
+    transitionOverlay.id = 'transitionOverlay';
+    document.body.appendChild(transitionOverlay);
     
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -718,10 +470,7 @@
             
             const letters = document.querySelectorAll('.hero-letter');
             letters.forEach((letter, i) => {
-                setTimeout(() => {
-                    letter.style.opacity = '1';
-                    letter.style.transform = 'translateY(0)';
-                }, i * 30);
+                setTimeout(() => { letter.style.opacity = '1'; letter.style.transform = 'translateY(0)'; }, i * 30);
             });
             
             setTimeout(() => {
@@ -794,12 +543,7 @@
     
     function createRipple(x, y) {
         const ripple = document.createElement('div');
-        ripple.style.cssText = `
-            position: fixed; left: ${x}px; top: ${y}px; width: 10px; height: 10px;
-            border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4));
-            transform: translate(-50%, -50%) scale(0); pointer-events: none; z-index: 100000;
-            animation: rippleExpand 0.8s ease-out forwards;
-        `;
+        ripple.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,0,0.8),rgba(255,20,147,0.4));transform:translate(-50%,-50%) scale(0);pointer-events:none;z-index:100000;animation:rippleExpand 0.8s ease-out forwards;`;
         document.body.appendChild(ripple);
         setTimeout(() => ripple.remove(), 800);
     }
@@ -843,10 +587,7 @@
         });
     });
     
-    // ============================================
-    // SCROLL PROGRESS
-    // ============================================
-    
+    // Scroll progress
     const scrollContainer = document.getElementById('scrollContainer');
     const scrollFill = document.getElementById('scrollFill');
     let targetScroll = 0;
@@ -865,23 +606,15 @@
     }
     updateScroll();
     
-    // ============================================
-    // FPS COUNTER
-    // ============================================
-    
+    // FPS Counter
     let frameCount = 0;
     let lastTime = performance.now();
-    
     function updateFPS() {
         const now = performance.now();
         frameCount++;
         if (now - lastTime >= 1000) {
-            document.getElementById('fps').innerHTML = `FPS: ${frameCount}`;
             const fpsElement = document.getElementById('fps');
-            if (frameCount >= 120) fpsElement.style.color = '#00ff88';
-            else if (frameCount >= 90) fpsElement.style.color = '#ffff00';
-            else if (frameCount >= 60) fpsElement.style.color = '#ffaa00';
-            else fpsElement.style.color = '#ff3366';
+            if (fpsElement) fpsElement.innerHTML = `FPS: ${frameCount}`;
             frameCount = 0;
             lastTime = now;
         }
@@ -889,10 +622,7 @@
     }
     updateFPS();
     
-    // ============================================
-    // JUMLA REDIRECT & RESIZE
-    // ============================================
-    
+    // Jumia redirect
     const JUMLA_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
     document.getElementById('productCard')?.addEventListener('click', () => window.open(JUMLA_URL, '_blank'));
     document.getElementById('buyNowBtn')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
@@ -905,10 +635,8 @@
         effectComposer.setSize(window.innerWidth, window.innerHeight);
     });
     
-    console.log('%c✨ BLACK HOLE SINGULARITY - 244FPS ELITE EDITION ✨', 'color: #FFD700; font-size: 14px; font-weight: bold;');
-    console.log('%c🌀 4.5 Second Smooth Expansion | 12,000 Particles | GPU Accelerated', 'color: #FF00FF; font-size: 12px;');
-    console.log('%c🕳️ Click "ENTER THE SINGULARITY" to watch the black hole expand and consume everything', 'color: #FFAA88; font-size: 12px;');
-    console.log('%c💥 Implosion → White Flash → Redirects to realgallery.html', 'color: #FF6666; font-size: 12px;');
+    console.log('%c✨ BLACK HOLE SINGULARITY - FAST TRANSITION ✨', 'color: #FFD700; font-size: 14px;');
+    console.log('%c🌀 Total transition time: ~1.8 seconds | Fast expansion | Instant redirect', 'color: #FF00FF; font-size: 12px');
 </script>
 </body>
 </html>
