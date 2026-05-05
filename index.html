@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>What Is Light Really? | Black Hole Singularity</title>
+    <title>What Is Light Really? | Black Hole Singularity | 244FPS ELITE</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
     
@@ -249,15 +249,17 @@
             transition: opacity 0.5s ease;
         }
 
+        /* ENHANCED SUCKING ANIMATION */
         .page.sucking {
-            animation: suckIntoBlackHole 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: suckIntoBlackHole 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             pointer-events: none;
         }
         @keyframes suckIntoBlackHole {
             0% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); }
-            30% { transform: scale(0.5) rotate(10deg) translateX(-30px); opacity: 0.7; filter: blur(5px); }
-            60% { transform: scale(0.15) rotate(25deg) translateX(-80px); opacity: 0.3; filter: blur(20px); }
-            100% { transform: scale(0) rotate(45deg) translateX(-150px); opacity: 0; filter: blur(50px); display: none; }
+            25% { transform: scale(0.55) rotate(8deg) translateX(-40px) translateY(-25px); opacity: 0.75; filter: blur(6px); }
+            50% { transform: scale(0.2) rotate(18deg) translateX(-100px) translateY(-60px); opacity: 0.35; filter: blur(20px); }
+            75% { transform: scale(0.05) rotate(30deg) translateX(-160px) translateY(-100px); opacity: 0.08; filter: blur(45px); }
+            100% { transform: scale(0) rotate(40deg) translateX(-220px) translateY(-140px); opacity: 0; filter: blur(70px); display: none; }
         }
 
         .hero { text-align: center; padding: 2rem 0; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
@@ -404,6 +406,10 @@
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     
+    // ============================================
+    // ULTRA 244FPS BLACK HOLE SETUP
+    // ============================================
+    
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -412,7 +418,11 @@
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 1.2, 13);
     
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+    const renderer = new THREE.WebGLRenderer({ 
+        antialias: true, 
+        alpha: false, 
+        powerPreference: "high-performance" 
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -437,6 +447,7 @@
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     
+    // ===== BLACK HOLE OBJECTS (THESE WILL EXPAND) =====
     const eventHorizon = new THREE.Mesh(
         new THREE.SphereGeometry(1.2, 128, 128),
         new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x330033, emissiveIntensity: 0.35, metalness: 0.95, roughness: 0.08 })
@@ -472,6 +483,7 @@
     innerRing.rotation.x = Math.PI / 2.15;
     scene.add(innerRing);
     
+    // 12,000 particles for dust/energy effect
     const particleCount = 12000;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -500,6 +512,7 @@
     const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ size: 0.045, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 }));
     scene.add(particles);
     
+    // Starfield
     const starCount = 3000;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
@@ -512,6 +525,7 @@
     const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, transparent: true, opacity: 0.5 }));
     scene.add(stars);
     
+    // Lighting
     const ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
     const coreLight = new THREE.PointLight(0xFF3366, 1.6, 18);
@@ -539,123 +553,158 @@
     }
     animate();
     
+    // ============================================
+    // ELITE 4.5-SECOND SMOOTH EXPANSION
+    // ============================================
+    
     let isTransitioning = false;
     let expandAnimation = null;
+    let expandProgress = 0;
     
-    function expandBlackHole() {
-        let scale = 1;
-        let targetScale = 30;
-        
-        function expandStep() {
-            scale += 0.25;
-            if (scale >= targetScale) {
-                scale = targetScale;
-                setTimeout(() => {
-                    createImplosion();
-                }, 200);
-                return;
-            }
-            
-            eventHorizon.scale.set(scale, scale, scale);
-            glowSphere.scale.set(scale, scale, scale);
-            disk.scale.set(scale, scale, scale);
-            outerDisk.scale.set(scale, scale, scale);
-            innerRing.scale.set(scale, scale, scale);
-            particles.scale.set(scale, scale, scale);
-            
-            coreLight.intensity = 1.6 + scale * 0.3;
-            bloomPass.strength = 0.8 + scale * 0.1;
-            
-            expandAnimation = requestAnimationFrame(expandStep);
-        }
-        
-        expandAnimation = requestAnimationFrame(expandStep);
-    }
+    const blackHoleObjects = [eventHorizon, glowSphere, disk, outerDisk, innerRing, particles];
     
-    function createImplosion() {
-        if (expandAnimation) cancelAnimationFrame(expandAnimation);
-        
-        const implosionFlash = document.createElement('div');
-        implosionFlash.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 20001;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
-        `;
-        document.body.appendChild(implosionFlash);
-        
-        setTimeout(() => { implosionFlash.style.opacity = '1'; }, 10);
-        
-        setTimeout(() => {
-            implosionFlash.style.opacity = '0';
-            
-            const blackScreen = document.createElement('div');
-            blackScreen.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: #000000;
-                z-index: 20002;
-                opacity: 0;
-                transition: opacity 0.5s ease;
-                pointer-events: none;
-            `;
-            document.body.appendChild(blackScreen);
-            
-            setTimeout(() => { blackScreen.style.opacity = '1'; }, 50);
-            
-            setTimeout(() => {
-                window.location.href = "realgallery.html";
-            }, 600);
-        }, 300);
-    }
-    
-    function transitionToGallery() {
+    function eliteExpandBlackHole() {
         if (isTransitioning) return;
         isTransitioning = true;
         
+        const startTime = performance.now();
+        const duration = 4500; // 4.5 seconds of buttery smooth expansion
+        const startScale = 1;
+        const endScale = 45;
+        
+        function smoothExpand(currentTime) {
+            const elapsed = currentTime - startTime;
+            let progress = Math.min(1, elapsed / duration);
+            
+            // Buttery smooth easing curve
+            const easeOut = 1 - Math.pow(1 - progress, 1.8);
+            const currentScale = startScale + (endScale - startScale) * easeOut;
+            
+            // Apply scale to all black hole objects
+            blackHoleObjects.forEach(obj => {
+                obj.scale.set(currentScale, currentScale, currentScale);
+            });
+            
+            // Dynamic intensity based on progress
+            const intensityFactor = easeOut;
+            coreLight.intensity = 1.6 + intensityFactor * 4.5;
+            bloomPass.strength = 0.8 + intensityFactor * 1.2;
+            innerRing.material.emissiveIntensity = 1.0 + intensityFactor * 1.5;
+            disk.material.emissiveIntensity = 0.75 + intensityFactor * 1.2;
+            
+            if (progress < 1) {
+                requestAnimationFrame(smoothExpand);
+            } else {
+                // Implosion flash
+                const flash = document.createElement('div');
+                flash.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: radial-gradient(circle, #ffffff, #ffcc88, #ff3366);
+                    z-index: 10001;
+                    opacity: 0;
+                    transition: opacity 0.25s ease;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(flash);
+                setTimeout(() => { flash.style.opacity = '0.95'; }, 10);
+                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 250); }, 250);
+                
+                setTimeout(() => {
+                    transitionOverlay.classList.add('active');
+                    setTimeout(() => {
+                        window.location.href = "realgallery.html";
+                    }, 500);
+                }, 400);
+            }
+        }
+        
+        requestAnimationFrame(smoothExpand);
+    }
+    
+    function startTransition() {
+        if (isTransitioning) return;
+        
         const mainSection = document.getElementById('mainSection');
         
+        // Update active button
         document.querySelectorAll('.nav-btn').forEach(btn => {
             if (btn.getAttribute('data-section') === 'gallery') btn.classList.add('active');
             else btn.classList.remove('active');
         });
         
+        // Start content sucking animation
         mainSection.classList.add('sucking');
         
-        coreLight.intensity = 3;
-        bloomPass.strength = 1.5;
+        // Intensify black hole effects
+        coreLight.intensity = 3.5;
+        bloomPass.strength = 1.6;
         disk.material.emissiveIntensity = 1.8;
-        outerDisk.material.emissiveIntensity = 1.2;
-        innerRing.material.emissiveIntensity = 2.0;
+        outerDisk.material.emissiveIntensity = 1.3;
+        innerRing.material.emissiveIntensity = 2.2;
         
-        setTimeout(() => {
-            expandBlackHole();
-        }, 800);
+        // Create suction particles (being pulled into black hole)
+        for (let i = 0; i < 120; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * window.innerWidth}px;
+                top: ${Math.random() * window.innerHeight}px;
+                width: ${6 + Math.random() * 10}px;
+                height: ${6 + Math.random() * 10}px;
+                background: radial-gradient(circle, #ffcc99, #ff6688, #ff3366);
+                border-radius: 50%;
+                z-index: 10002;
+                pointer-events: none;
+                filter: blur(3px);
+                transition: all 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            `;
+            document.body.appendChild(particle);
+            
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const deltaX = centerX - parseFloat(particle.style.left);
+            const deltaY = centerY - parseFloat(particle.style.top);
+            
+            setTimeout(() => {
+                particle.style.transform = `translate(${deltaX * 0.95}px, ${deltaY * 0.95}px) scale(0)`;
+                particle.style.opacity = '0';
+            }, 20);
+            setTimeout(() => particle.remove(), 1400);
+        }
         
+        // Hide content overlay
         setTimeout(() => {
             mainSection.style.opacity = '0';
-        }, 1500);
+        }, 300);
+        
+        // Begin elite expansion
+        setTimeout(() => {
+            eliteExpandBlackHole();
+        }, 600);
     }
     
     const navBtns = document.querySelectorAll('.nav-btn');
     const mainSection = document.getElementById('mainSection');
+    const transitionOverlay = document.getElementById('transitionOverlay');
     
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
+            createRipple(btn.getBoundingClientRect().left + btn.offsetWidth/2, btn.getBoundingClientRect().top + btn.offsetHeight/2);
             if (btn.getAttribute('data-section') === 'gallery') {
-                transitionToGallery();
+                if (mainSection.style.display !== 'none') {
+                    startTransition();
+                }
             }
         });
     });
+    
+    // ============================================
+    // LOADING SCREEN
+    // ============================================
     
     const loadingScreen = document.getElementById('loadingScreen');
     const percentElement = document.getElementById('loadingPercent');
@@ -698,6 +747,10 @@
         }
         percentElement.textContent = progress + '%';
     }, 60);
+    
+    // ============================================
+    // CURSOR PHYSICS
+    // ============================================
     
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
@@ -790,6 +843,10 @@
         });
     });
     
+    // ============================================
+    // SCROLL PROGRESS
+    // ============================================
+    
     const scrollContainer = document.getElementById('scrollContainer');
     const scrollFill = document.getElementById('scrollFill');
     let targetScroll = 0;
@@ -808,6 +865,34 @@
     }
     updateScroll();
     
+    // ============================================
+    // FPS COUNTER
+    // ============================================
+    
+    let frameCount = 0;
+    let lastTime = performance.now();
+    
+    function updateFPS() {
+        const now = performance.now();
+        frameCount++;
+        if (now - lastTime >= 1000) {
+            document.getElementById('fps').innerHTML = `FPS: ${frameCount}`;
+            const fpsElement = document.getElementById('fps');
+            if (frameCount >= 120) fpsElement.style.color = '#00ff88';
+            else if (frameCount >= 90) fpsElement.style.color = '#ffff00';
+            else if (frameCount >= 60) fpsElement.style.color = '#ffaa00';
+            else fpsElement.style.color = '#ff3366';
+            frameCount = 0;
+            lastTime = now;
+        }
+        requestAnimationFrame(updateFPS);
+    }
+    updateFPS();
+    
+    // ============================================
+    // JUMLA REDIRECT & RESIZE
+    // ============================================
+    
     const JUMLA_URL = "https://www.jumia.co.ke/mythco-rechargeable-led-torch-2-pack-3-modes-zoomable-flashlights-for-home-emergency-and-outdoor-camping-326528147.html";
     document.getElementById('productCard')?.addEventListener('click', () => window.open(JUMLA_URL, '_blank'));
     document.getElementById('buyNowBtn')?.addEventListener('click', (e) => { e.stopPropagation(); window.open(JUMLA_URL, '_blank'); });
@@ -820,10 +905,10 @@
         effectComposer.setSize(window.innerWidth, window.innerHeight);
     });
     
-    console.log('%c✨ BLACK HOLE SINGULARITY ACTIVATED ✨', 'color: #FFD700; font-size: 14px;');
-    console.log('%c🌀 Step 1: Content gets SUCKED into black hole', 'color: #FF00FF; font-size: 12px;');
-    console.log('%c🕳️ Step 2: Black hole PHYSICALLY EXPANDS to consume screen', 'color: #FF6666; font-size: 12px;');
-    console.log('%c💥 Step 3: IMPLOSION → white flash → black screen → gallery', 'color: #FFAA88; font-size: 12px;');
+    console.log('%c✨ BLACK HOLE SINGULARITY - 244FPS ELITE EDITION ✨', 'color: #FFD700; font-size: 14px; font-weight: bold;');
+    console.log('%c🌀 4.5 Second Smooth Expansion | 12,000 Particles | GPU Accelerated', 'color: #FF00FF; font-size: 12px;');
+    console.log('%c🕳️ Click "ENTER THE SINGULARITY" to watch the black hole expand and consume everything', 'color: #FFAA88; font-size: 12px;');
+    console.log('%c💥 Implosion → White Flash → Redirects to realgallery.html', 'color: #FF6666; font-size: 12px;');
 </script>
 </body>
 </html>
