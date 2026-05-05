@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>What Is Light Really? | Black Hole Singularity | FAST TRANSITION</title>
+    <title>What Is Light Really? | Black Hole Singularity | CINEMATIC</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
     
@@ -57,13 +57,14 @@
         .scroll-container::-webkit-scrollbar { display: none; }
         .page { position: relative; max-width: 1400px; margin: 0 auto; padding: 7rem 2rem 4rem; min-height: 100vh; backdrop-filter: blur(8px); transition: opacity 0.5s ease; }
 
-        /* FASTER SUCKING ANIMATION */
-        .page.sucking { animation: suckIntoBlackHole 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: none; }
+        /* BALANCED SUCKING ANIMATION - 1.5 seconds */
+        .page.sucking { animation: suckIntoBlackHole 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: none; }
         @keyframes suckIntoBlackHole {
             0% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); }
-            30% { transform: scale(0.5) rotate(8deg); opacity: 0.7; filter: blur(8px); }
-            60% { transform: scale(0.15) rotate(18deg); opacity: 0.3; filter: blur(25px); }
-            100% { transform: scale(0) rotate(28deg); opacity: 0; filter: blur(60px); display: none; }
+            25% { transform: scale(0.6) rotate(5deg); opacity: 0.8; filter: blur(5px); }
+            50% { transform: scale(0.25) rotate(12deg); opacity: 0.5; filter: blur(18px); }
+            75% { transform: scale(0.08) rotate(20deg); opacity: 0.2; filter: blur(40px); }
+            100% { transform: scale(0) rotate(28deg); opacity: 0; filter: blur(70px); display: none; }
         }
 
         .hero { text-align: center; padding: 2rem 0; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; }
@@ -106,6 +107,8 @@
         .flashlight-image svg { max-width: 150px; width: 100%; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
         .fun-footer { margin-top: 4rem; text-align: center; padding: 1.5rem 0; border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; opacity: 0; transform: translateY(20px); }
         .fun-footer span { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
+        .transition-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .transition-overlay.active { opacity: 1; pointer-events: all; }
 
         @media (max-width: 900px) {
             .facts-grid, .grid-3 { grid-template-columns: 1fr; }
@@ -188,6 +191,8 @@
         <div class="fun-footer"><span>💡 LIGHT MAKES US SEE</span><span>🌎 HELPS US SEE THE WORLD</span><span>😊 LIGHT = MOOD BOOSTER</span><span>🌿 PHOTOSYNTHESIS = OXYGEN</span><span>✨ BLESSING FROM GOD</span></div>
     </div>
 </div>
+
+<div class="transition-overlay" id="transitionOverlay"></div>
 
 <script type="importmap">
     {
@@ -349,7 +354,7 @@
     animate();
     
     // ============================================
-    // FAST TRANSITION (1.8 seconds total)
+    // PERFECT BALANCED TRANSITION (2.5 seconds total)
     // ============================================
     
     let isTransitioning = false;
@@ -357,19 +362,19 @@
     
     const blackHoleObjects = [eventHorizon, glowSphere, disk, outerDisk, innerRing, particles];
     
-    function fastExpandBlackHole() {
+    function balancedExpandBlackHole() {
         if (isTransitioning) return;
         isTransitioning = true;
         
         const startTime = performance.now();
-        const duration = 800; // 0.8 seconds fast expansion
+        const duration = 1200; // 1.2 seconds smooth expansion
         const startScale = 1;
-        const endScale = 40;
+        const endScale = 45;
         
         function smoothExpand(currentTime) {
             const elapsed = currentTime - startTime;
             let progress = Math.min(1, elapsed / duration);
-            const easeOut = 1 - Math.pow(1 - progress, 1.5);
+            const easeOut = 1 - Math.pow(1 - progress, 1.6);
             const currentScale = startScale + (endScale - startScale) * easeOut;
             
             blackHoleObjects.forEach(obj => { obj.scale.set(currentScale, currentScale, currentScale); });
@@ -383,16 +388,15 @@
             } else {
                 // Implosion flash
                 const flash = document.createElement('div');
-                flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,#ffffff,#ffcc88,#ff3366);z-index:10001;opacity:0;transition:opacity 0.15s ease;pointer-events:none;`;
+                flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,#ffffff,#ffcc88,#ff3366);z-index:10001;opacity:0;transition:opacity 0.2s ease;pointer-events:none;`;
                 document.body.appendChild(flash);
-                setTimeout(() => { flash.style.opacity = '1'; }, 5);
-                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 150); }, 150);
+                setTimeout(() => { flash.style.opacity = '1'; }, 10);
+                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 200); }, 200);
                 
                 setTimeout(() => {
-                    const overlay = document.getElementById('transitionOverlay');
-                    if (overlay) overlay.classList.add('active');
-                    setTimeout(() => { window.location.href = "realgallery.html"; }, 300);
-                }, 200);
+                    transitionOverlay.classList.add('active');
+                    setTimeout(() => { window.location.href = "realgallery.html"; }, 400);
+                }, 300);
             }
         }
         
@@ -418,30 +422,25 @@
         innerRing.material.emissiveIntensity = 2.2;
         
         // Suction particles
-        for (let i = 0; i < 80; i++) {
+        for (let i = 0; i < 100; i++) {
             const particle = document.createElement('div');
-            particle.style.cssText = `position:fixed;left:${Math.random() * window.innerWidth}px;top:${Math.random() * window.innerHeight}px;width:${6 + Math.random() * 8}px;height:${6 + Math.random() * 8}px;background:radial-gradient(circle,#ffcc99,#ff6688,#ff3366);border-radius:50%;z-index:10002;pointer-events:none;filter:blur(3px);transition:all 0.8s cubic-bezier(0.2,0.9,0.4,1.1);`;
+            particle.style.cssText = `position:fixed;left:${Math.random() * window.innerWidth}px;top:${Math.random() * window.innerHeight}px;width:${5 + Math.random() * 8}px;height:${5 + Math.random() * 8}px;background:radial-gradient(circle,#ffcc99,#ff6688,#ff3366);border-radius:50%;z-index:10002;pointer-events:none;filter:blur(3px);transition:all 1s cubic-bezier(0.2,0.9,0.4,1.1);`;
             document.body.appendChild(particle);
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             const deltaX = centerX - parseFloat(particle.style.left);
             const deltaY = centerY - parseFloat(particle.style.top);
             setTimeout(() => { particle.style.transform = `translate(${deltaX * 0.95}px, ${deltaY * 0.95}px) scale(0)`; particle.style.opacity = '0'; }, 10);
-            setTimeout(() => particle.remove(), 900);
+            setTimeout(() => particle.remove(), 1100);
         }
         
-        setTimeout(() => { mainSection.style.opacity = '0'; }, 200);
-        setTimeout(() => { fastExpandBlackHole(); }, 400);
+        setTimeout(() => { mainSection.style.opacity = '0'; }, 300);
+        setTimeout(() => { balancedExpandBlackHole(); }, 500);
     }
     
     const navBtns = document.querySelectorAll('.nav-btn');
     const mainSection = document.getElementById('mainSection');
-    
-    // Create transition overlay
-    const transitionOverlay = document.createElement('div');
-    transitionOverlay.className = 'transition-overlay';
-    transitionOverlay.id = 'transitionOverlay';
-    document.body.appendChild(transitionOverlay);
+    const transitionOverlay = document.getElementById('transitionOverlay');
     
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -635,8 +634,8 @@
         effectComposer.setSize(window.innerWidth, window.innerHeight);
     });
     
-    console.log('%c✨ BLACK HOLE SINGULARITY - FAST TRANSITION ✨', 'color: #FFD700; font-size: 14px;');
-    console.log('%c🌀 Total transition time: ~1.8 seconds | Fast expansion | Instant redirect', 'color: #FF00FF; font-size: 12px');
+    console.log('%c✨ BLACK HOLE SINGULARITY - PERFECT BALANCE ✨', 'color: #FFD700; font-size: 14px;');
+    console.log('%c🌀 Total transition time: ~2.5 seconds | Smooth | Dramatic | Cinematic', 'color: #FF00FF; font-size: 12px');
 </script>
 </body>
 </html>
