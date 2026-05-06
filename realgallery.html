@@ -3,354 +3,589 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Unseen World | Light Gallery</title>
+    <title>UNSEEN WORLD | 3D ORBIT GALLERY | POLAROIDS AROUND PORTAL</title>
     
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23000000' stroke='%23FFD700' stroke-width='3'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='55' fill='%23FFD700' font-family='monospace' font-weight='bold'%3EU%3C/text%3E%3C/svg%3E">
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background: #000000;
             font-family: 'Space Grotesk', sans-serif;
             color: #ffffff;
-            overflow-x: hidden;
-            min-height: 100vh;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
         }
-        .scanline {
+
+        ::-webkit-scrollbar { display: none; }
+
+        #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0.05) 2px, rgba(255,255,255,0.02) 3px, rgba(0,0,0,0) 4px);
-            pointer-events: none;
-            z-index: 1002;
-            opacity: 0.3;
+            z-index: 0;
         }
-        .gallery-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 6rem 2rem 4rem;
-            position: relative;
-            z-index: 10;
+
+        canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
-        .gallery-header {
+
+        /* UI Overlay */
+        .ui-overlay {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            padding: 12px 24px;
+            color: #FFD700;
+            text-decoration: none;
+            letter-spacing: 3px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .btn:hover {
+            letter-spacing: 5px;
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            transform: translateX(5px);
+        }
+
+        .title {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            margin-bottom: 4rem;
+            z-index: 100;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: opacity 1s ease;
+            pointer-events: none;
         }
-        .gallery-header h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #FFD700, #FF1493, #9B30FF);
+
+        .title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #FFD700, #FF1493);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            letter-spacing: -0.02em;
         }
-        .gallery-header p {
-            color: rgba(255,255,255,0.5);
+
+        .title p {
+            font-size: 0.6rem;
             letter-spacing: 4px;
-            font-size: 0.8rem;
-            margin-top: 1rem;
+            color: rgba(255,255,255,0.5);
         }
-        .unseen-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            position: relative;
+
+        .title.visible {
+            opacity: 1;
         }
-        .polaroid-card {
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
-            border-radius: 16px;
-            padding: 12px 12px 20px 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            opacity: 0;
-            transform: translateY(40px) rotate(var(--rotate));
-            overflow: hidden;
-        }
-        .polaroid-card:nth-child(1) { --rotate: -4deg; grid-column: span 1; }
-        .polaroid-card:nth-child(2) { --rotate: 3deg; grid-column: span 2; }
-        .polaroid-card:nth-child(3) { --rotate: -2deg; grid-column: span 1; }
-        .polaroid-card:nth-child(4) { --rotate: 5deg; grid-column: span 1; }
-        .polaroid-card:nth-child(5) { --rotate: -3deg; grid-column: span 2; }
-        .polaroid-card:nth-child(6) { --rotate: 2deg; grid-column: span 1; }
-        .polaroid-card:nth-child(7) { --rotate: -5deg; grid-column: span 1; }
-        .polaroid-card:nth-child(8) { --rotate: 4deg; grid-column: span 2; }
-        .polaroid-card:nth-child(9) { --rotate: -1deg; grid-column: span 1; }
-        .polaroid-card:nth-child(10) { --rotate: 3deg; grid-column: span 1; }
-        .polaroid-card:nth-child(11) { --rotate: -4deg; grid-column: span 2; }
-        .polaroid-card:nth-child(12) { --rotate: 2deg; grid-column: span 1; }
-        .polaroid-card.visible { opacity: 1; transform: translateY(0) rotate(var(--rotate)); }
-        .polaroid-card:hover { transform: scale(1.03) rotate(var(--rotate)) translateY(-8px); box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4); }
-        .polaroid-image {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-        }
-        .polaroid-caption { font-size: 0.75rem; color: #222; text-align: center; font-weight: 600; }
-        .polaroid-caption span { font-size: 0.65rem; color: #666; font-weight: 400; }
-        .back-btn {
+
+        .fps-counter {
             position: fixed;
             top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            padding: 0.8rem 2rem;
-            color: #FFD700;
-            text-decoration: none;
-            letter-spacing: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
-            transition: all 0.3s ease;
+            right: 20px;
+            color: #00ff88;
+            font-family: monospace;
+            font-size: 11px;
+            background: rgba(0,0,0,0.6);
+            padding: 4px 10px;
+            border-radius: 4px;
             z-index: 100;
-            font-family: 'Space Grotesk', sans-serif;
         }
-        .back-btn:hover { letter-spacing: 6px; background: rgba(255, 215, 0, 0.2); border-color: #FFD700; }
-        .cursor-dot, .cursor-ring { position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); border-radius: 50%; }
-        .cursor-dot { width: 6px; height: 6px; background: #FFD700; box-shadow: 0 0 15px #FFD700; }
-        .cursor-ring { width: 40px; height: 40px; border: 2px solid rgba(255, 215, 0, 0.6); backdrop-filter: blur(3px); }
-        @media (max-width: 1000px) { .unseen-grid { grid-template-columns: repeat(2, 1fr); } .polaroid-card:nth-child(n) { grid-column: span 1; } }
-        @media (max-width: 600px) { .unseen-grid { grid-template-columns: 1fr; } .gallery-header h1 { font-size: 2.5rem; } }
+
+        @media (max-width: 768px) {
+            .btn { padding: 8px 16px; font-size: 0.6rem; letter-spacing: 2px; }
+            .title h1 { font-size: 1rem; letter-spacing: 4px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="scanline"></div>
-<a href="index.html" class="back-btn">← BACK TO PORTAL</a>
+<div id="canvas-container"></div>
 
-<div class="gallery-container">
-    <div class="gallery-header">
-        <h1>UNSEEN WORLD</h1>
-        <p>LIGHT CAPTURED THROUGH DIFFERENT LENSES</p>
-    </div>
-    <div class="unseen-grid" id="galleryGrid"></div>
+<div class="title" id="title">
+    <h1>UNSEEN WORLD</h1>
+    <p>LIGHT CAPTURED IN ORBIT</p>
 </div>
 
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div class="ui-overlay">
+    <button class="btn" id="backBtn">← BACK TO PORTAL</button>
+</div>
 
-<script>
-    // ============================================
-    // GALLERY DATA WITH REAL IMAGE URLs
-    // These are free, high-quality images from reliable CDNs
-    // ============================================
-    
-    const galleryData = [
-        {
-            title: "Golden Hour Serenity",
-            type: "Natural Light • Sunset",
-            imageUrl: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-sun"
-        },
-        {
-            title: "Studio Portrait Light",
-            type: "Artificial • Rembrandt",
-            imageUrl: "https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-camera"
-        },
-        {
-            title: "Bioluminescent Bay",
-            type: "Chemical Light • Ocean",
-            imageUrl: "https://images.pexels.com/photos/847393/pexels-photo-847393.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-water"
-        },
-        {
-            title: "Light Painting Art",
-            type: "Long Exposure • LED",
-            imageUrl: "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-paintbrush"
-        },
-        {
-            title: "Macro Sunlight Dew",
-            type: "Natural • Macro",
-            imageUrl: "https://images.pexels.com/photos/132476/pexels-photo-132476.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-leaf"
-        },
-        {
-            title: "Northern Lights Aurora",
-            type: "Atmospheric • Aurora",
-            imageUrl: "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-cloud-sun"
-        },
-        {
-            title: "Candlelit Ambience",
-            type: "Warm Light • Candle",
-            imageUrl: "https://images.pexels.com/photos/291738/pexels-photo-291738.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-fire"
-        },
-        {
-            title: "Neon City Nights",
-            type: "Neon Light • Urban",
-            imageUrl: "https://images.pexels.com/photos/1462935/pexels-photo-1462935.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-city"
-        },
-        {
-            title: "Underwater Sunrays",
-            type: "Refracted Light",
-            imageUrl: "https://images.pexels.com/photos/932638/pexels-photo-932638.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-fish"
-        },
-        {
-            title: "Light Spectrum Prism",
-            type: "Physics • Refraction",
-            imageUrl: "https://images.pexels.com/photos/250699/pexels-photo-250699.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-chart-simple"
-        },
-        {
-            title: "Starlight Telescope",
-            type: "Astronomical • Distant",
-            imageUrl: "https://images.pexels.com/photos/1252890/pexels-photo-1252890.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-star"
-        },
-        {
-            title: "LED Digital Art",
-            type: "Digital • Pixel Light",
-            imageUrl: "https://images.pexels.com/photos/910422/pexels-photo-910422.jpeg?auto=compress&cs=tinysrgb&w=800",
-            icon: "fa-display"
+<div class="fps-counter" id="fps">FPS: --</div>
+
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
         }
-    ];
+    }
+</script>
 
-    // Generate gallery
-    const galleryGrid = document.getElementById('galleryGrid');
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     
-    galleryData.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'polaroid-card';
-        card.innerHTML = `
-            <div class="polaroid-image" style="background-image: url('${item.imageUrl}'); background-size: cover; background-position: center;">
-                <i class="fas ${item.icon}" style="font-size: 2.5rem; color: rgba(255,255,255,0.8); text-shadow: 0 0 10px rgba(0,0,0,0.5); display: none;"></i>
-            </div>
-            <div class="polaroid-caption">${item.title}<br><span>${item.type}</span></div>
-        `;
-        
-        // Add error handling - if image fails to load, show icon
-        const imgDiv = card.querySelector('.polaroid-image');
-        const imgElement = new Image();
-        imgElement.src = item.imageUrl;
-        imgElement.onerror = () => {
-            imgDiv.style.background = `linear-gradient(135deg, #FFD700, #FF1493)`;
-            imgDiv.innerHTML = `<i class="fas ${item.icon}" style="font-size: 3rem; color: white; opacity: 0.7;"></i>`;
-        };
-        
-        galleryGrid.appendChild(card);
-        
-        // Staggered entrance animation
-        setTimeout(() => {
-            card.classList.add('visible');
-        }, index * 80);
+    // ============================================
+    // 3D ORBIT GALLERY SETUP
+    // ============================================
+    
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050510);
+    scene.fog = new THREE.FogExp2(0x050510, 0.003);
+    
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 2, 14);
+    camera.lookAt(0, 0, 0);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.5;
+    container.appendChild(renderer.domElement);
+    
+    // Controls for user interaction
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.8;
+    controls.enableZoom = true;
+    controls.zoomSpeed = 0.8;
+    controls.enablePan = false;
+    controls.target.set(0, 0, 0);
+    
+    // Bloom effect
+    const renderScene = new RenderPass(scene, camera);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.3, 0.85);
+    bloomPass.threshold = 0.05;
+    bloomPass.strength = 0.9;
+    bloomPass.radius = 0.7;
+    const effectComposer = new EffectComposer(renderer);
+    effectComposer.addPass(renderScene);
+    effectComposer.addPass(bloomPass);
+    
+    // ============================================
+    // CENTRAL PORTAL (Like Earth in your image)
+    // ============================================
+    
+    const portalGroup = new THREE.Group();
+    scene.add(portalGroup);
+    
+    // Glowing portal core
+    const coreGeo = new THREE.SphereGeometry(1.2, 128, 128);
+    const coreMat = new THREE.MeshStandardMaterial({
+        color: 0xFF6688,
+        emissive: 0xFF3366,
+        emissiveIntensity: 0.8,
+        metalness: 0.85,
+        roughness: 0.15,
+        transparent: true,
+        opacity: 0.95
     });
-
-    // Emerge from black hole transition
-    function emergeFromBlackHole() {
-        const galleryHeader = document.querySelector('.gallery-header');
-        const blackholeOverlay = document.createElement('div');
-        blackholeOverlay.style.cssText = `
+    const coreSphere = new THREE.Mesh(coreGeo, coreMat);
+    portalGroup.add(coreSphere);
+    
+    // Inner glow ring
+    const innerRingGeo = new THREE.TorusGeometry(1.35, 0.06, 128, 256);
+    const innerRingMat = new THREE.MeshStandardMaterial({
+        color: 0xFF88AA,
+        emissive: 0xFF4466,
+        emissiveIntensity: 0.9,
+        metalness: 0.92,
+        roughness: 0.12
+    });
+    const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
+    portalGroup.add(innerRing);
+    
+    // Middle ring
+    const midRingGeo = new THREE.TorusGeometry(1.6, 0.08, 128, 256);
+    const midRingMat = new THREE.MeshStandardMaterial({
+        color: 0xFFAA88,
+        emissive: 0xFF6644,
+        emissiveIntensity: 0.7,
+        metalness: 0.88,
+        roughness: 0.18
+    });
+    const midRing = new THREE.Mesh(midRingGeo, midRingMat);
+    portalGroup.add(midRing);
+    
+    // Outer ring
+    const outerRingGeo = new THREE.TorusGeometry(1.9, 0.1, 128, 256);
+    const outerRingMat = new THREE.MeshStandardMaterial({
+        color: 0xFFCCAA,
+        emissive: 0xFF8866,
+        emissiveIntensity: 0.6,
+        metalness: 0.85,
+        roughness: 0.22
+    });
+    const outerRing = new THREE.Mesh(outerRingGeo, outerRingMat);
+    portalGroup.add(outerRing);
+    
+    // Floating particles around portal
+    const portalParticleCount = 3000;
+    const portalParticleGeo = new THREE.BufferGeometry();
+    const portalParticlePositions = new Float32Array(portalParticleCount * 3);
+    for (let i = 0; i < portalParticleCount; i++) {
+        const radius = 1.4 + Math.random() * 0.8;
+        const angle = Math.random() * Math.PI * 2;
+        const y = (Math.random() - 0.5) * 1.5;
+        portalParticlePositions[i * 3] = Math.cos(angle) * radius;
+        portalParticlePositions[i * 3 + 1] = y;
+        portalParticlePositions[i * 3 + 2] = Math.sin(angle) * radius;
+    }
+    portalParticleGeo.setAttribute('position', new THREE.BufferAttribute(portalParticlePositions, 3));
+    const portalParticles = new THREE.Points(portalParticleGeo, new THREE.PointsMaterial({ color: 0xFF8866, size: 0.03, blending: THREE.AdditiveBlending }));
+    portalGroup.add(portalParticles);
+    
+    // ============================================
+    // 3D POLAROIDS IN ORBIT (Like planets)
+    // ============================================
+    
+    const polaroidData = [
+        { title: "Golden Hour", type: "Sunset Light", color: 0xFFD700, radius: 3.0, speed: 0.5 },
+        { title: "Studio Light", type: "Rembrandt", color: 0xFFFFFF, radius: 3.5, speed: 0.4 },
+        { title: "Bioluminescence", type: "Ocean Light", color: 0x00FFCC, radius: 4.0, speed: 0.35 },
+        { title: "Light Painting", type: "LED Art", color: 0xFF1493, radius: 4.5, speed: 0.3 },
+        { title: "Macro Sunlight", type: "Dewdrop", color: 0x7FFF00, radius: 3.2, speed: 0.45 },
+        { title: "Northern Lights", type: "Aurora", color: 0x00FF88, radius: 3.8, speed: 0.38 },
+        { title: "Candlelight", type: "Warm Light", color: 0xFF6600, radius: 4.2, speed: 0.32 },
+        { title: "Neon Nights", type: "Urban Light", color: 0xFF00FF, radius: 4.8, speed: 0.28 },
+        { title: "Underwater", type: "Refracted", color: 0x0099FF, radius: 3.4, speed: 0.42 },
+        { title: "Prism", type: "Spectrum", color: 0xFFFF00, radius: 5.0, speed: 0.25 },
+        { title: "Starlight", type: "Astronomical", color: 0xFFD700, radius: 2.8, speed: 0.55 },
+        { title: "Digital LED", type: "Pixel Art", color: 0x00FFFF, radius: 5.2, speed: 0.22 }
+    ];
+    
+    const polaroids = [];
+    const orbitAngles = [];
+    
+    // Create polaroid planes
+    polaroidData.forEach((data, index) => {
+        // Create a group for each polaroid
+        const group = new THREE.Group();
+        
+        // Polaroid plane (white backing)
+        const planeGeo = new THREE.PlaneGeometry(1.2, 1.5);
+        const planeMat = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            side: THREE.DoubleSide,
+            roughness: 0.3,
+            metalness: 0.05
+        });
+        const plane = new THREE.Mesh(planeGeo, planeMat);
+        group.add(plane);
+        
+        // Image placeholder (colored gradient)
+        const imageGeo = new THREE.PlaneGeometry(1.0, 1.0);
+        const gradientCanvas = document.createElement('canvas');
+        gradientCanvas.width = 512;
+        gradientCanvas.height = 512;
+        const ctx = gradientCanvas.getContext('2d');
+        const grad = ctx.createLinearGradient(0, 0, gradientCanvas.width, gradientCanvas.height);
+        grad.addColorStop(0, `hsl(${index * 30}, 100%, 60%)`);
+        grad.addColorStop(1, `hsl(${index * 30 + 40}, 100%, 50%)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, gradientCanvas.width, gradientCanvas.height);
+        ctx.fillStyle = 'white';
+        ctx.font = 'Bold 40px "Space Grotesk"';
+        ctx.textAlign = 'center';
+        ctx.fillText(data.title.charAt(0), 256, 280);
+        
+        const imageTexture = new THREE.CanvasTexture(gradientCanvas);
+        const imageMat = new THREE.MeshStandardMaterial({
+            map: imageTexture,
+            side: THREE.DoubleSide,
+            roughness: 0.2,
+            metalness: 0.1
+        });
+        const imagePlane = new THREE.Mesh(imageGeo, imageMat);
+        imagePlane.position.z = 0.01;
+        group.add(imagePlane);
+        
+        // Add a thin border
+        const borderGeo = new THREE.BoxGeometry(1.22, 1.52, 0.03);
+        const borderMat = new THREE.MeshStandardMaterial({ color: 0xFFD700, metalness: 0.8, roughness: 0.2 });
+        const border = new THREE.Mesh(borderGeo, borderMat);
+        border.position.z = -0.02;
+        group.add(border);
+        
+        // Position in orbit
+        const angle = (index / polaroidData.length) * Math.PI * 2;
+        const radius = data.radius;
+        const yOffset = Math.sin(angle * 2) * 0.8;
+        group.position.x = Math.cos(angle) * radius;
+        group.position.y = yOffset;
+        group.position.z = Math.sin(angle) * radius;
+        
+        // Look at center
+        group.lookAt(0, 0, 0);
+        
+        scene.add(group);
+        
+        polaroids.push({
+            group: group,
+            radius: data.radius,
+            speed: data.speed,
+            angle: angle,
+            yAmplitude: 0.8,
+            color: data.color,
+            title: data.title,
+            type: data.type,
+            yOffset: yOffset
+        });
+        
+        orbitAngles.push(angle);
+    });
+    
+    // ============================================
+    // ADDITIONAL ORBITING PARTICLES (Stars around portal)
+    // ============================================
+    
+    const starCount = 8000;
+    const starGeo = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+        const radius = 6 + Math.random() * 4;
+        const angle = Math.random() * Math.PI * 2;
+        const y = (Math.random() - 0.5) * 5;
+        starPositions[i * 3] = Math.cos(angle) * radius;
+        starPositions[i * 3 + 1] = y;
+        starPositions[i * 3 + 2] = Math.sin(angle) * radius;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x88AACC, size: 0.05, transparent: true, opacity: 0.5 }));
+    scene.add(stars);
+    
+    // Distant starfield
+    const distantStarCount = 5000;
+    const distantStarGeo = new THREE.BufferGeometry();
+    const distantStarPositions = new Float32Array(distantStarCount * 3);
+    for (let i = 0; i < distantStarCount; i++) {
+        distantStarPositions[i * 3] = (Math.random() - 0.5) * 200;
+        distantStarPositions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+        distantStarPositions[i * 3 + 2] = (Math.random() - 0.5) * 150 - 50;
+    }
+    distantStarGeo.setAttribute('position', new THREE.BufferAttribute(distantStarPositions, 3));
+    const distantStars = new THREE.Points(distantStarGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.06, transparent: true, opacity: 0.4 }));
+    scene.add(distantStars);
+    
+    // ============================================
+    // LIGHTING
+    // ============================================
+    
+    const ambientLight = new THREE.AmbientLight(0x111122);
+    scene.add(ambientLight);
+    
+    const portalLight = new THREE.PointLight(0xFF6688, 1.8, 20);
+    portalLight.position.set(0, 0, 0);
+    scene.add(portalLight);
+    
+    const fillLight = new THREE.DirectionalLight(0xFFAA88, 0.8);
+    fillLight.position.set(2, 3, 4);
+    scene.add(fillLight);
+    
+    const backLight = new THREE.DirectionalLight(0x4488FF, 0.5);
+    backLight.position.set(-1, 1, -5);
+    scene.add(backLight);
+    
+    // ============================================
+    // ANIMATION LOOP
+    // ============================================
+    
+    let time = 0;
+    let frameCount = 0;
+    let lastTime = performance.now();
+    
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.016;
+        
+        // Update polaroid orbits
+        polaroids.forEach(polaroid => {
+            polaroid.angle += 0.005 * polaroid.speed;
+            const newX = Math.cos(polaroid.angle) * polaroid.radius;
+            const newZ = Math.sin(polaroid.angle) * polaroid.radius;
+            const newY = Math.sin(polaroid.angle * 2) * polaroid.yAmplitude;
+            
+            polaroid.group.position.x = newX;
+            polaroid.group.position.z = newZ;
+            polaroid.group.position.y = newY;
+            
+            // Always face center
+            polaroid.group.lookAt(0, 0, 0);
+            
+            // Add slight rotation to polaroids
+            polaroid.group.rotateY(Math.sin(time * 0.5) * 0.1);
+        });
+        
+        // Rotate portal rings
+        innerRing.rotation.z += 0.01;
+        innerRing.rotation.x = Math.sin(time * 0.5) * 0.1;
+        midRing.rotation.z -= 0.008;
+        midRing.rotation.x = Math.cos(time * 0.4) * 0.08;
+        outerRing.rotation.z += 0.006;
+        outerRing.rotation.y = Math.sin(time * 0.3) * 0.05;
+        
+        // Pulse portal light
+        const pulse = 1.2 + Math.sin(time * 4) * 0.3;
+        portalLight.intensity = 1.5 + Math.sin(time * 5) * 0.4;
+        coreSphere.material.emissiveIntensity = 0.6 + Math.sin(time * 3) * 0.2;
+        
+        // Rotate stars
+        stars.rotation.y += 0.001;
+        distantStars.rotation.y += 0.0003;
+        portalParticles.rotation.y += 0.005;
+        
+        // Update controls
+        controls.update();
+        
+        // FPS counter
+        frameCount++;
+        const now = performance.now();
+        if (now - lastTime >= 1000) {
+            document.getElementById('fps').innerHTML = `FPS: ${frameCount}`;
+            frameCount = 0;
+            lastTime = now;
+        }
+        
+        effectComposer.render();
+    }
+    
+    animate();
+    
+    // ============================================
+    // EMERGENCE ANIMATION
+    // ============================================
+    
+    const title = document.getElementById('title');
+    setTimeout(() => {
+        title.classList.add('visible');
+    }, 500);
+    
+    // Animate polaroids scaling in
+    polaroids.forEach((polaroid, idx) => {
+        polaroid.group.scale.set(0, 0, 0);
+        setTimeout(() => {
+            const duration = 800;
+            const startTime = performance.now();
+            function scaleIn(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(1, elapsed / duration);
+                const easeOut = 1 - Math.pow(1 - progress, 1.5);
+                const scale = easeOut;
+                polaroid.group.scale.set(scale, scale, scale);
+                if (progress < 1) {
+                    requestAnimationFrame(scaleIn);
+                }
+            }
+            requestAnimationFrame(scaleIn);
+        }, idx * 100);
+    });
+    
+    // ============================================
+    // BACK BUTTON TRANSITION
+    // ============================================
+    
+    const backBtn = document.getElementById('backBtn');
+    backBtn.addEventListener('click', () => {
+        // Create particles flying to center
+        for (let i = 0; i < 150; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * window.innerWidth}px;
+                top: ${Math.random() * window.innerHeight}px;
+                width: ${5 + Math.random() * 8}px;
+                height: ${5 + Math.random() * 8}px;
+                background: radial-gradient(circle, #FFD700, #FF3366);
+                border-radius: 50%;
+                z-index: 10001;
+                pointer-events: none;
+                transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            `;
+            document.body.appendChild(particle);
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const deltaX = centerX - parseFloat(particle.style.left);
+            const deltaY = centerY - parseFloat(particle.style.top);
+            setTimeout(() => {
+                particle.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0)`;
+                particle.style.opacity = '0';
+            }, 10);
+            setTimeout(() => particle.remove(), 800);
+        }
+        
+        // Flash and redirect
+        const flash = document.createElement('div');
+        flash.style.cssText = `
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, #000000, #0a0015, #1a0030);
-            transform: translate(-50%, -50%) scale(30);
+            background: radial-gradient(circle, #FFD700, #FF3366);
             z-index: 20000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
             pointer-events: none;
-            transition: all 1.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         `;
-        document.body.appendChild(blackholeOverlay);
-        setTimeout(() => { 
-            blackholeOverlay.style.transform = 'translate(-50%, -50%) scale(0)'; 
-            setTimeout(() => blackholeOverlay.remove(), 1500); 
-        }, 100);
-        setTimeout(() => { 
-            galleryHeader.style.opacity = '1'; 
-            galleryHeader.style.transform = 'translateY(0)'; 
-        }, 500);
-    }
-    
-    emergeFromBlackHole();
-
-    // ============================================
-    // CURSOR PHYSICS
-    // ============================================
-    const cursorDot = document.getElementById('cursorDot');
-    const cursorRing = document.getElementById('cursorRing');
-    let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, ringX = 0, ringY = 0, ringVX = 0, ringVY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        const isClickable = e.target.closest('.polaroid-card, .back-btn');
-        if (isClickable) {
-            cursorRing.style.borderColor = '#FFD700';
-            cursorRing.style.width = '70px';
-            cursorRing.style.height = '70px';
-            cursorDot.style.width = '12px';
-            cursorDot.style.height = '12px';
-        } else {
-            cursorRing.style.borderColor = 'rgba(255, 215, 0, 0.6)';
-            cursorRing.style.width = '40px';
-            cursorRing.style.height = '40px';
-            cursorDot.style.width = '6px';
-            cursorDot.style.height = '6px';
-        }
+        document.body.appendChild(flash);
+        setTimeout(() => { flash.style.opacity = '1'; }, 50);
+        setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 300); }, 250);
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 600);
     });
     
-    function animateCursor() {
-        dotX += (mouseX - dotX) * 0.15;
-        dotY += (mouseY - dotY) * 0.15;
-        cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
-        let forceX = (mouseX - ringX) * 0.06;
-        let forceY = (mouseY - ringY) * 0.06;
-        ringVX += forceX;
-        ringVY += forceY;
-        ringVX *= 0.94;
-        ringVY *= 0.94;
-        ringX += ringVX;
-        ringY += ringVY;
-        cursorRing.style.transform = `translate(${ringX}px, ${ringY}px)`;
-        requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
+    // ============================================
+    // RESIZE HANDLER
+    // ============================================
     
-    function createRipple(x, y) {
-        const ripple = document.createElement('div');
-        ripple.style.cssText = `
-            position: fixed; left: ${x}px; top: ${y}px; width: 10px; height: 10px;
-            border-radius: 50%; background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,20,147,0.4));
-            transform: translate(-50%, -50%) scale(0); pointer-events: none; z-index: 100000;
-            animation: rippleExpand 0.8s ease-out forwards;
-        `;
-        document.body.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 800);
-    }
-    
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = `@keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; } 100% { transform: translate(-50%, -50%) scale(20); opacity: 0; } }`;
-    document.head.appendChild(styleSheet);
-    
-    document.querySelectorAll('.polaroid-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            const rect = card.getBoundingClientRect();
-            createRipple(rect.left + rect.width/2, rect.top + rect.height/2);
-        });
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        effectComposer.setSize(window.innerWidth, window.innerHeight);
     });
+    
+    console.log('%c✨ UNSEEN WORLD | 3D ORBIT GALLERY ✨', 'color: #FFD700; font-size: 14px;');
+    console.log('%c🌀 12 Polaroids in 3D Orbit | Central Portal | Real-time Animation', 'color: #FF1493; font-size: 12px;');
+    console.log('%c⚡ Drag to rotate view | Auto-orbiting | Full GPU Acceleration', 'color: #00FFFF; font-size: 12px;');
 </script>
 </body>
 </html>
