@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>GATE HUB | Ancient • Mystical • Space</title>
+    <title>GATE HUB | Circular Gates</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -17,27 +17,23 @@
         .ui-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, transparent 0%, rgba(0,0,0,0.6) 100%); pointer-events: none; }
         
         .title { text-align: center; margin-bottom: 60px; opacity: 0; transform: translateY(-30px); transition: all 1s ease; }
-        .title h1 { font-size: 3rem; font-weight: 800; letter-spacing: 12px; background: linear-gradient(135deg, #FFD700, #FF1493, #00FFFF); background-clip: text; -webkit-background-clip: text; color: transparent; text-shadow: 0 0 30px rgba(255,215,0,0.3); }
+        .title h1 { font-size: 3rem; font-weight: 800; letter-spacing: 12px; background: linear-gradient(135deg, #FFD700, #FF1493, #00FFFF); background-clip: text; -webkit-background-clip: text; color: transparent; }
         .title p { font-size: 0.8rem; letter-spacing: 6px; color: rgba(255,255,255,0.6); margin-top: 1rem; }
         .title.visible { opacity: 1; transform: translateY(0); }
         
-        .gate-container { display: flex; gap: 50px; justify-content: center; align-items: center; flex-wrap: wrap; pointer-events: auto; }
+        .gate-container { display: flex; gap: 60px; justify-content: center; align-items: center; flex-wrap: wrap; pointer-events: auto; }
         
-        .gate-card { width: 280px; height: 380px; cursor: pointer; position: relative; opacity: 0; transform: scale(0.8); transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .gate-card { width: 280px; height: 280px; cursor: pointer; position: relative; opacity: 0; transform: scale(0.8); transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); border-radius: 50%; }
         .gate-card.visible { opacity: 1; transform: scale(1); }
-        .gate-card:hover { transform: scale(1.05) translateY(-10px); filter: drop-shadow(0 0 30px rgba(255,215,0,0.4)); }
+        .gate-card:hover { transform: scale(1.05) translateY(-10px); filter: drop-shadow(0 0 30px rgba(255,215,0,0.5)); }
         
-        .gate-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; border: 2px solid rgba(255,215,0,0.4); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+        /* Circular Gate Frames */
+        .gate-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 3px solid rgba(255,215,0,0.5); box-shadow: 0 0 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,215,0,0.2); background-size: cover; background-position: center; }
         
-        .gate-image { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
-        
-        /* Gate-specific gradients as fallback images */
-        .gate-ancient .gate-image { background: linear-gradient(135deg, #8B5A2B, #DAA520, #CD853F); }
-        .gate-mystical .gate-image { background: linear-gradient(135deg, #4B0082, #9B30FF, #DA70D6); }
-        .gate-space .gate-image { background: linear-gradient(135deg, #0a0a2a, #1a1a4a, #2a2a5a); position: relative; }
-        
-        /* Star pattern for space gate */
-        .gate-space .gate-image::before {
+        .gate-ancient .gate-frame { background: radial-gradient(circle at 30% 40%, #DAA520, #8B5A2B, #4A2A0A); }
+        .gate-mystical .gate-frame { background: radial-gradient(circle at 30% 40%, #DA70D6, #8B008B, #4B0082); }
+        .gate-space .gate-frame { background: radial-gradient(circle at 30% 40%, #00BFFF, #00008B, #00001A); position: relative; }
+        .gate-space .gate-frame::before {
             content: '';
             position: absolute;
             top: 0;
@@ -45,20 +41,25 @@
             width: 100%;
             height: 100%;
             background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 80px 150px, #fff, rgba(0,0,0,0));
-            background-size: 200px 200px;
-            opacity: 0.6;
+            background-size: 150px 150px;
+            opacity: 0.5;
+            border-radius: 50%;
         }
         
-        .gate-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 20px; text-align: center; border-top: 1px solid rgba(255,215,0,0.3); }
-        .gate-overlay h2 { font-size: 1.3rem; letter-spacing: 4px; margin-bottom: 5px; }
-        .gate-overlay p { font-size: 0.6rem; letter-spacing: 2px; color: rgba(255,255,255,0.6); }
-        .gate-overlay .icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+        /* Circular Ring Effect */
+        .gate-ring { position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; border: 2px solid rgba(255,215,0,0.3); animation: pulseRing 2s infinite; pointer-events: none; }
+        @keyframes pulseRing { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.05); opacity: 1; } }
+        
+        .gate-overlay { position: absolute; bottom: -50px; left: 0; right: 0; text-align: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 15px; border-radius: 30px; margin: 0 20px; border-top: 1px solid rgba(255,215,0,0.3); }
+        .gate-overlay h2 { font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 5px; }
+        .gate-overlay p { font-size: 0.55rem; letter-spacing: 2px; color: rgba(255,255,255,0.6); }
+        .gate-overlay .icon { font-size: 1.8rem; margin-bottom: 5px; display: block; }
         
         .gate-ancient .gate-overlay h2 { color: #DAA520; }
         .gate-mystical .gate-overlay h2 { color: #DA70D6; }
         .gate-space .gate-overlay h2 { color: #00FFFF; }
         
-        .back-btn { position: fixed; bottom: 30px; left: 30px; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,215,0,0.5); padding: 12px 24px; color: #FFD700; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer; z-index: 100; clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); transition: all 0.3s ease; font-family: 'Space Grotesk', sans-serif; }
+        .back-btn { position: fixed; bottom: 30px; left: 30px; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,215,0,0.5); padding: 12px 24px; color: #FFD700; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer; z-index: 100; clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); transition: all 0.3s ease; }
         .back-btn:hover { letter-spacing: 5px; background: rgba(255,215,0,0.2); transform: translateX(5px); }
         
         .fps-counter { position: fixed; top: 20px; right: 20px; color: #00ff88; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; z-index: 100; }
@@ -66,16 +67,15 @@
         .transition-overlay.active { opacity: 1; pointer-events: all; }
         
         @media (max-width: 900px) {
-            .gate-container { gap: 25px; }
-            .gate-card { width: 220px; height: 300px; }
-            .gate-overlay { padding: 12px; }
+            .gate-container { gap: 40px; }
+            .gate-card { width: 220px; height: 220px; }
+            .gate-overlay { bottom: -40px; padding: 10px; }
             .gate-overlay h2 { font-size: 1rem; letter-spacing: 2px; }
             .title h1 { font-size: 1.8rem; letter-spacing: 6px; }
         }
-        
         @media (max-width: 700px) {
-            .gate-container { flex-direction: column; gap: 20px; }
-            .gate-card { width: 260px; height: 340px; }
+            .gate-container { flex-direction: column; gap: 70px; }
+            .gate-card { width: 240px; height: 240px; }
         }
     </style>
 </head>
@@ -85,56 +85,47 @@
 
 <div class="ui-overlay">
     <div class="title" id="title">
-        <h1>✦ GATE HUB ✦</h1>
-        <p>CHOOSE YOUR PATH</p>
+        <h1>✦ CIRCULAR GATES ✦</h1>
+        <p>CHOOSE YOUR PATH • ZOOM INTO THE PORTAL</p>
     </div>
     
     <div class="gate-container">
-        <!-- ANCIENT GATE -->
+        <!-- ANCIENT GATE - Circular -->
         <div class="gate-card gate-ancient" id="ancientGate">
-            <div class="gate-frame">
-                <div class="gate-image">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);"></div>
-                </div>
-                <div class="gate-overlay">
-                    <span class="icon">🏛️</span>
-                    <h2>ANCIENT GATE</h2>
-                    <p>Realm of Forgotten Ages • Eternal Wisdom</p>
-                </div>
+            <div class="gate-frame"></div>
+            <div class="gate-ring"></div>
+            <div class="gate-overlay">
+                <span class="icon">🏛️</span>
+                <h2>ANCIENT GATE</h2>
+                <p>Realm of Wisdom • Solve the Riddle</p>
             </div>
         </div>
         
-        <!-- MYSTICAL GATE -->
+        <!-- MYSTICAL GATE - Circular -->
         <div class="gate-card gate-mystical" id="mysticalGate">
-            <div class="gate-frame">
-                <div class="gate-image">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);"></div>
-                </div>
-                <div class="gate-overlay">
-                    <span class="icon">🔮</span>
-                    <h2>MYSTICAL GATE</h2>
-                    <p>Realm of Magic • Arcane Powers</p>
-                </div>
+            <div class="gate-frame"></div>
+            <div class="gate-ring"></div>
+            <div class="gate-overlay">
+                <span class="icon">🔮</span>
+                <h2>MYSTICAL GATE</h2>
+                <p>Realm of Magic • Memory Challenge</p>
             </div>
         </div>
         
-        <!-- SPACE GATE -->
+        <!-- SPACE GATE - Circular -->
         <div class="gate-card gate-space" id="spaceGate">
-            <div class="gate-frame">
-                <div class="gate-image">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);"></div>
-                </div>
-                <div class="gate-overlay">
-                    <span class="icon">🌌</span>
-                    <h2>SPACE GATE</h2>
-                    <p>Realm of Cosmos • Infinite Stars</p>
-                </div>
+            <div class="gate-frame"></div>
+            <div class="gate-ring"></div>
+            <div class="gate-overlay">
+                <span class="icon">🌌</span>
+                <h2>SPACE GATE</h2>
+                <p>Realm of Cosmos • Symbol Puzzle</p>
             </div>
         </div>
     </div>
 </div>
 
-<button class="back-btn" id="backBtn">← BACK TO PORTAL</button>
+<button class="back-btn" id="backBtn">← BACK TO TESTING</button>
 <div class="transition-overlay" id="transitionOverlay"></div>
 <div class="fps-counter" id="fps">FPS: --</div>
 
@@ -153,10 +144,6 @@
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-    
-    // ============================================
-    // 3D BACKGROUND - CENTRAL HUB
-    // ============================================
     
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
@@ -193,7 +180,6 @@
     const core = new THREE.Mesh(coreGeo, coreMat);
     scene.add(core);
     
-    // Orbiting rings
     const ring1Geo = new THREE.TorusGeometry(1.1, 0.05, 128, 256);
     const ring1Mat = new THREE.MeshStandardMaterial({ color: 0xFF88AA, emissive: 0xFF4466 });
     const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
@@ -209,7 +195,6 @@
     const ring3 = new THREE.Mesh(ring3Geo, ring3Mat);
     scene.add(ring3);
     
-    // Floating particles
     const particleCount = 4000;
     const particleGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -225,7 +210,6 @@
     const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0xFF8866, size: 0.02, blending: THREE.AdditiveBlending }));
     scene.add(particles);
     
-    // Starfield
     const starCount = 4000;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
@@ -238,16 +222,11 @@
     const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.5 }));
     scene.add(stars);
     
-    // Lights
     const ambientLight = new THREE.AmbientLight(0x111122);
     scene.add(ambientLight);
     const coreLight = new THREE.PointLight(0xFF3366, 1.5, 20);
     coreLight.position.set(0, 0, 0);
     scene.add(coreLight);
-    
-    // ============================================
-    // ANIMATION LOOP
-    // ============================================
     
     let time = 0;
     let frameCount = 0;
@@ -262,11 +241,9 @@
         ring3.rotation.z += 0.005;
         particles.rotation.y += 0.002;
         stars.rotation.y += 0.0003;
-        
         coreLight.intensity = 1.3 + Math.sin(time * 4) * 0.3;
         const pulse = 0.95 + Math.sin(time * 5) * 0.05;
         core.scale.set(pulse, pulse, pulse);
-        
         controls.update();
         
         frameCount++;
@@ -276,36 +253,23 @@
             frameCount = 0;
             lastTime = now;
         }
-        
         effectComposer.render();
     }
     animate();
     
-    // ============================================
-    // GATE TRANSITIONS WITH ZOOM
-    // ============================================
-    
     const transitionOverlay = document.getElementById('transitionOverlay');
     let isTransitioning = false;
     
-    function zoomToGate(gateType, destinationUrl) {
+    function zoomToGate(gateType, destinationUrl, flashColor) {
         if (isTransitioning) return;
         isTransitioning = true;
         
-        // Get gate color
-        let flashColor = '#FFD700';
-        if (gateType === 'ancient') flashColor = '#DAA520';
-        if (gateType === 'mystical') flashColor = '#DA70D6';
-        if (gateType === 'space') flashColor = '#00FFFF';
-        
-        // Flash effect
         const flash = document.createElement('div');
         flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:${flashColor};z-index:10001;opacity:0;transition:opacity 0.2s;pointer-events:none;`;
         document.body.appendChild(flash);
         setTimeout(() => flash.style.opacity = '1', 10);
         setTimeout(() => flash.remove(), 400);
         
-        // Camera zoom into gate
         const startTime = performance.now();
         const duration = 2000;
         
@@ -314,12 +278,9 @@
             const progress = Math.min(1, elapsed / duration);
             const easeOut = 1 - Math.pow(1 - progress, 1.5);
             
-            // Zoom camera
             camera.position.z = 12 - easeOut * 10;
             camera.fov = 45 + easeOut * 25;
             camera.updateProjectionMatrix();
-            
-            // Intensify light
             coreLight.intensity = 1.5 + progress * 3;
             bloomPass.strength = 1.0 + progress * 1.5;
             
@@ -327,18 +288,11 @@
                 requestAnimationFrame(zoomAnimation);
             } else {
                 transitionOverlay.classList.add('active');
-                setTimeout(() => {
-                    window.location.href = destinationUrl;
-                }, 500);
+                setTimeout(() => { window.location.href = destinationUrl; }, 500);
             }
         }
-        
         requestAnimationFrame(zoomAnimation);
     }
-    
-    // ============================================
-    // UI EVENT HANDLERS
-    // ============================================
     
     const title = document.getElementById('title');
     const ancientGate = document.getElementById('ancientGate');
@@ -352,13 +306,11 @@
         spaceGate.classList.add('visible');
     }, 500);
     
-    ancientGate.addEventListener('click', () => zoomToGate('ancient', 'ancient-realm.html'));
-    mysticalGate.addEventListener('click', () => zoomToGate('mystical', 'mystical-realm.html'));
-    spaceGate.addEventListener('click', () => zoomToGate('space', 'space-realm.html'));
+    ancientGate.addEventListener('click', () => zoomToGate('ancient', 'ancient-riddle.html', '#DAA520'));
+    mysticalGate.addEventListener('click', () => zoomToGate('mystical', 'mystical-challenge.html', '#DA70D6'));
+    spaceGate.addEventListener('click', () => zoomToGate('space', 'space-puzzle.html', '#00FFFF'));
     
-    document.getElementById('backBtn').addEventListener('click', () => {
-        window.location.href = "realgallery.html";
-    });
+    document.getElementById('backBtn').addEventListener('click', () => { window.location.href = "testing.html"; });
     
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -367,7 +319,7 @@
         effectComposer.setSize(window.innerWidth, window.innerHeight);
     });
     
-    console.log('%c✨ GATE HUB ACTIVATED | Ancient • Mystical • Space ✨', 'color: #FFD700; font-size: 14px');
+    console.log('%c✨ CIRCULAR GATES ACTIVATED | Click a gate to enter ✨', 'color: #FFD700; font-size: 14px');
 </script>
 </body>
 </html>
