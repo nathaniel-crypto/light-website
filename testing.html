@@ -83,6 +83,15 @@
         }
         .stats div { margin: 4px 0; }
         .title { position: fixed; top: 20px; left: 20px; z-index: 100; font-size: 0.8rem; letter-spacing: 4px; color: #FFD700; background: rgba(0,0,0,0.5); padding: 8px 16px; border-radius: 8px; }
+        .back-btn { 
+            position: fixed; bottom: 30px; right: 30px; 
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255,215,0,0.5); padding: 12px 24px; 
+            color: #FFD700; letter-spacing: 3px; font-size: 0.7rem; 
+            cursor: pointer; z-index: 100; font-family: 'Space Grotesk', sans-serif;
+            border-radius: 8px; transition: all 0.3s ease;
+        }
+        .back-btn:hover { letter-spacing: 5px; background: rgba(255,215,0,0.2); transform: translateX(5px); }
         @media (max-width: 768px) { .ui-panel { flex-direction: column; gap: 10px; } .control-group { min-width: auto; } }
     </style>
 </head>
@@ -131,8 +140,9 @@
         </select>
     </div>
     <button class="btn" id="resetBtn">⟳ RESET CAMERA</button>
-    <button class="btn" id="backBtn">← BACK TO GALLERY</button>
 </div>
+
+<button class="back-btn" id="backBtn">← BACK TO GATES</button>
 
 <script type="importmap">
     {
@@ -170,7 +180,6 @@
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.6;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
     
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -182,7 +191,6 @@
     controls.enablePan = true;
     controls.target.set(0, 0, 0);
     
-    // Post-processing
     const renderScene = new RenderPass(scene, camera);
     const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.3, 0.85);
     bloomPass.threshold = 0.05;
@@ -196,17 +204,13 @@
     effectComposer.addPass(afterimagePass);
     afterimagePass.renderToScreen = true;
     
-    // ============================================
-    // TEST OBJECTS - LIGHT CONSTANTS
-    // ============================================
-    
-    // Central glowing sphere
+    // Test objects
     const coreGeo = new THREE.SphereGeometry(0.8, 256, 256);
     const coreMat = new THREE.MeshStandardMaterial({ color: 0xFF6688, emissive: 0xFF3366, emissiveIntensity: 1.2, metalness: 0.9, roughness: 0.1 });
     const coreSphere = new THREE.Mesh(coreGeo, coreMat);
     scene.add(coreSphere);
     
-    // Floating cubes (light test subjects)
+    // Cubes
     const cubes = [];
     const cubeColors = [0xFF3366, 0x33FF66, 0x3366FF, 0xFFD700, 0xFF66CC, 0x66FFCC];
     for (let i = 0; i < 24; i++) {
@@ -220,12 +224,11 @@
         cube.position.y = y;
         cube.position.z = Math.sin(angle) * radius;
         cube.castShadow = true;
-        cube.receiveShadow = true;
         scene.add(cube);
         cubes.push({ mesh: cube, radius, angle, speed: 0.3 + Math.random() * 0.3, yOffset: y });
     }
     
-    // Particle system (millions of particles simulation)
+    // Particle system
     let particleSystem;
     let particleCount = 20000;
     
@@ -247,46 +250,36 @@
         }
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const material = new THREE.PointsMaterial({ size: 0.035, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true });
+        const material = new THREE.PointsMaterial({ size: 0.035, vertexColors: true, blending: THREE.AdditiveBlending });
         particleSystem = new THREE.Points(geometry, material);
         scene.add(particleSystem);
     }
     createParticleSystem(particleCount);
     
-    // Ground grid (reference)
     const gridHelper = new THREE.GridHelper(15, 30, 0x88AAFF, 0x335588);
     gridHelper.position.y = -1.8;
     gridHelper.material.transparent = true;
     gridHelper.material.opacity = 0.3;
     scene.add(gridHelper);
     
-    // Ambient light
+    // Lights
     const ambientLight = new THREE.AmbientLight(0x111122);
     scene.add(ambientLight);
-    
-    // Main light (adjustable)
     const mainLight = new THREE.PointLight(0xFF3366, 1.5, 15);
     mainLight.position.set(0, 1, 0);
     mainLight.castShadow = true;
     scene.add(mainLight);
-    
-    // Fill lights
     const fillLight1 = new THREE.PointLight(0x33FF66, 0.5, 12);
     fillLight1.position.set(2, 1.5, 2);
     scene.add(fillLight1);
-    
     const fillLight2 = new THREE.PointLight(0x3366FF, 0.5, 12);
     fillLight2.position.set(-1.5, 1, 2.5);
     scene.add(fillLight2);
-    
     const backLight = new THREE.DirectionalLight(0xFFAA88, 0.6);
     backLight.position.set(0, 1, -3);
     scene.add(backLight);
     
-    // ============================================
-    // INTERACTIVE CONTROLS (Light Constants)
-    // ============================================
-    
+    // UI Controls
     const lightIntensitySlider = document.getElementById('lightIntensity');
     const intensityVal = document.getElementById('intensityVal');
     const lightColorSelect = document.getElementById('lightColor');
@@ -345,19 +338,19 @@
         controls.update();
     });
     
+    // ============================================
+    // BACK BUTTON - REDIRECTS TO GATE-HUB
+    // ============================================
     document.getElementById('backBtn').addEventListener('click', () => {
         const flash = document.createElement('div');
         flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,#FFD700,#FF3366);z-index:10000;opacity:0;transition:opacity 0.2s;pointer-events:none;`;
         document.body.appendChild(flash);
         setTimeout(() => flash.style.opacity = '1', 10);
         setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 200); }, 200);
-        setTimeout(() => { window.location.href = "realgallery.html"; }, 400);
+        setTimeout(() => { window.location.href = "gate-hub.html"; }, 400);
     });
     
-    // ============================================
-    // ANIMATION & FPS TRACKING
-    // ============================================
-    
+    // Animation
     let time = 0;
     let frameCount = 0;
     let lastTime = performance.now();
@@ -368,7 +361,6 @@
         requestAnimationFrame(animate);
         time += 0.016;
         
-        // Animate cubes orbiting
         cubes.forEach(cube => {
             cube.angle += 0.008 * cube.speed;
             cube.mesh.position.x = Math.cos(cube.angle) * cube.radius;
@@ -378,27 +370,18 @@
             cube.mesh.rotation.y += 0.03;
         });
         
-        // Pulsing core
         const pulse = 0.85 + Math.sin(time * 4) * 0.15;
         coreSphere.scale.set(pulse, pulse, pulse);
-        
-        // Animate particles
         if (particleSystem) particleSystem.rotation.y += 0.002;
         
-        // Random color cycle for rainbow mode
         if (lightColorSelect.value === '4') {
             const hue = (time * 0.5) % 1;
             mainLight.color.setHSL(hue, 1, 0.5);
         }
         
         controls.update();
-        
-        // Measure render time
         effectComposer.render();
-        const renderEnd = performance.now();
-        const renderDuration = (renderEnd - frameStart).toFixed(1);
         
-        // FPS counter
         frameCount++;
         const now = performance.now();
         if (now - lastTime >= 1000) {
@@ -408,13 +391,7 @@
             lastTime = now;
         }
     }
-    
     animate();
-    
-    // UI visibility
-    setTimeout(() => {
-        document.querySelector('.title').style.opacity = '1';
-    }, 100);
     
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -423,9 +400,7 @@
         effectComposer.setSize(window.innerWidth, window.innerHeight);
     });
     
-    console.log('%c⚡ TESTING AREA | RAY TRACING LAB | GPU ACCELERATED ⚡', 'color: #00ff88; font-size: 14px');
-    console.log('%c🎮 RTX Path Tracing | DLSS 5.0 | 60-120 FPS Target', 'color: #FFD700; font-size: 12px');
-    console.log('%c✨ Adjust light intensity, color, particle density, and reflection quality in real-time', 'color: #FF1493; font-size: 12px');
+    console.log('%c⚡ TESTING AREA | RAY TRACING LAB | BACK TO GATE-HUB ⚡', 'color: #00ff88; font-size: 14px');
 </script>
 </body>
 </html>
