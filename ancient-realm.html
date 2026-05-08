@@ -3,371 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>GATE HUB | Ancient • Mystical • Space</title>
-    
+    <title>Ancient Realm | The Riddle of Wisdom</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #000000; font-family: 'Space Grotesk', sans-serif; color: #ffffff; overflow: hidden; height: 100vh; width: 100vw; }
+        body { background: #000; font-family: 'Space Grotesk', sans-serif; overflow: hidden; height: 100vh; }
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         canvas { display: block; width: 100% !important; height: 100% !important; }
         
-        .ui-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, transparent 0%, rgba(0,0,0,0.6) 100%); pointer-events: none; }
-        
-        .title { text-align: center; margin-bottom: 60px; opacity: 0; transform: translateY(-30px); transition: all 1s ease; }
-        .title h1 { font-size: 3rem; font-weight: 800; letter-spacing: 12px; background: linear-gradient(135deg, #FFD700, #FF1493, #00FFFF); background-clip: text; -webkit-background-clip: text; color: transparent; text-shadow: 0 0 30px rgba(255,215,0,0.3); }
-        .title p { font-size: 0.8rem; letter-spacing: 6px; color: rgba(255,255,255,0.6); margin-top: 1rem; }
-        .title.visible { opacity: 1; transform: translateY(0); }
-        
-        .gate-container { display: flex; gap: 50px; justify-content: center; align-items: center; flex-wrap: wrap; pointer-events: auto; }
-        
-        .gate-card { width: 280px; height: 380px; cursor: pointer; position: relative; opacity: 0; transform: scale(0.8); transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-        .gate-card.visible { opacity: 1; transform: scale(1); }
-        .gate-card:hover { transform: scale(1.05) translateY(-10px); filter: drop-shadow(0 0 30px rgba(255,215,0,0.4)); }
-        
-        .gate-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; border: 2px solid rgba(255,215,0,0.4); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
-        
-        .gate-image { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
-        
-        /* Gate-specific gradients as fallback images */
-        .gate-ancient .gate-image { background: linear-gradient(135deg, #8B5A2B, #DAA520, #CD853F); }
-        .gate-mystical .gate-image { background: linear-gradient(135deg, #4B0082, #9B30FF, #DA70D6); }
-        .gate-space .gate-image { background: linear-gradient(135deg, #0a0a2a, #1a1a4a, #2a2a5a); position: relative; }
-        
-        /* Star pattern for space gate */
-        .gate-space .gate-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 80px 150px, #fff, rgba(0,0,0,0));
-            background-size: 200px 200px;
-            opacity: 0.6;
+        .ui-panel {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            border: 2px solid #DAA520;
+            border-radius: 20px;
+            padding: 25px;
+            z-index: 100;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            pointer-events: auto;
         }
-        
-        .gate-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 20px; text-align: center; border-top: 1px solid rgba(255,215,0,0.3); }
-        .gate-overlay h2 { font-size: 1.3rem; letter-spacing: 4px; margin-bottom: 5px; }
-        .gate-overlay p { font-size: 0.6rem; letter-spacing: 2px; color: rgba(255,255,255,0.6); }
-        .gate-overlay .icon { font-size: 2rem; margin-bottom: 8px; display: block; }
-        
-        .gate-ancient .gate-overlay h2 { color: #DAA520; }
-        .gate-mystical .gate-overlay h2 { color: #DA70D6; }
-        .gate-space .gate-overlay h2 { color: #00FFFF; }
-        
-        .back-btn { position: fixed; bottom: 30px; left: 30px; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,215,0,0.5); padding: 12px 24px; color: #FFD700; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer; z-index: 100; clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); transition: all 0.3s ease; font-family: 'Space Grotesk', sans-serif; }
-        .back-btn:hover { letter-spacing: 5px; background: rgba(255,215,0,0.2); transform: translateX(5px); }
-        
-        .fps-counter { position: fixed; top: 20px; right: 20px; color: #00ff88; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; z-index: 100; }
-        .transition-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
-        .transition-overlay.active { opacity: 1; pointer-events: all; }
-        
-        @media (max-width: 900px) {
-            .gate-container { gap: 25px; }
-            .gate-card { width: 220px; height: 300px; }
-            .gate-overlay { padding: 12px; }
-            .gate-overlay h2 { font-size: 1rem; letter-spacing: 2px; }
-            .title h1 { font-size: 1.8rem; letter-spacing: 6px; }
-        }
-        
-        @media (max-width: 700px) {
-            .gate-container { flex-direction: column; gap: 20px; }
-            .gate-card { width: 260px; height: 340px; }
-        }
+        .riddle-text { font-size: 1.2rem; color: #DAA520; margin-bottom: 20px; letter-spacing: 1px; }
+        .options { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .option-btn { background: rgba(218,165,32,0.2); border: 1px solid #DAA520; padding: 10px 20px; color: #FFD700; cursor: pointer; border-radius: 30px; transition: all 0.3s ease; font-family: monospace; }
+        .option-btn:hover { background: #DAA520; color: #000; transform: scale(1.02); }
+        .feedback { margin-top: 15px; font-size: 0.8rem; color: #aaa; }
+        .success { color: #00ff88; }
+        .title { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 100; }
+        .title h1 { font-size: 1.5rem; letter-spacing: 8px; background: linear-gradient(135deg, #DAA520, #CD853F); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .back-btn { position: fixed; bottom: 30px; right: 30px; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border: 1px solid #DAA520; padding: 12px 24px; color: #DAA520; cursor: pointer; z-index: 100; border-radius: 30px; transition: all 0.3s ease; }
+        .back-btn:hover { background: rgba(218,165,32,0.2); transform: translateX(-5px); }
+        .reset-btn { position: fixed; top: 30px; right: 30px; background: rgba(0,0,0,0.7); border: 1px solid #DAA520; padding: 8px 16px; color: #DAA520; cursor: pointer; z-index: 100; border-radius: 20px; font-size: 0.7rem; }
+        @media (max-width: 600px) { .riddle-text { font-size: 0.9rem; } .option-btn { padding: 6px 12px; font-size: 0.7rem; } }
     </style>
 </head>
 <body>
-
-<div id="canvas-container"></div>
-
-<div class="ui-overlay">
-    <div class="title" id="title">
-        <h1>✦ GATE HUB ✦</h1>
-        <p>CHOOSE YOUR PATH</p>
+    <div id="canvas-container"></div>
+    <div class="title"><h1>🏛️ ANCIENT RIDDLE 🏛️</h1></div>
+    <div class="ui-panel" id="riddlePanel">
+        <div class="riddle-text" id="riddleText">I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?</div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
     </div>
-    
-    <div class="gate-container">
-        <!-- ANCIENT GATE -->
-        <div class="gate-card gate-ancient" id="ancientGate">
-            <div class="gate-frame">
-                <div class="gate-image">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);"></div>
-                </div>
-                <div class="gate-overlay">
-                    <span class="icon">🏛️</span>
-                    <h2>ANCIENT GATE</h2>
-                    <p>Realm of Forgotten Ages • Eternal Wisdom</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MYSTICAL GATE -->
-        <div class="gate-card gate-mystical" id="mysticalGate">
-            <div class="gate-frame">
-                <div class="gate-image">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);"></div>
-                </div>
-                <div class="gate-overlay">
-                    <span class="icon">🔮</span>
-                    <h2>MYSTICAL GATE</h2>
-                    <p>Realm of Magic • Arcane Powers</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- SPACE GATE -->
-        <div class="gate-card gate-space" id="spaceGate">
-            <div class="gate-frame">
-                <div class="gate-image">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3);"></div>
-                </div>
-                <div class="gate-overlay">
-                    <span class="icon">🌌</span>
-                    <h2>SPACE GATE</h2>
-                    <p>Realm of Cosmos • Infinite Stars</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    <button class="reset-btn" id="resetBtn">⟳ RESET</button>
+    <button class="back-btn" id="backBtn">← BACK TO HUB</button>
 
-<button class="back-btn" id="backBtn">← BACK TO PORTAL</button>
-<div class="transition-overlay" id="transitionOverlay"></div>
-<div class="fps-counter" id="fps">FPS: --</div>
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
+    </script>
 
-<script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+        
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1a0e05);
+        scene.fog = new THREE.FogExp2(0x1a0e05, 0.008);
+        
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 2, 10);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.3;
+        controls.target.set(0, 1, 0);
+        
+        const renderScene = new RenderPass(scene, camera);
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.3, 0.85);
+        const effectComposer = new EffectComposer(renderer);
+        effectComposer.addPass(renderScene);
+        effectComposer.addPass(bloomPass);
+        
+        // Ancient environment
+        const groundGeo = new THREE.CylinderGeometry(5, 5, 0.3, 32);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, roughness: 0.7 });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.position.y = -0.5;
+        scene.add(ground);
+        
+        const pillarGeo = new THREE.CylinderGeometry(0.5, 0.6, 2.5, 16);
+        const pillarMat = new THREE.MeshStandardMaterial({ color: 0xCD853F, metalness: 0.4 });
+        const positions = [[1.5, 0.5, 1.5], [-1.5, 0.5, 1.5], [1.5, 0.5, -1.5], [-1.5, 0.5, -1.5]];
+        positions.forEach(pos => { const p = new THREE.Mesh(pillarGeo, pillarMat); p.position.set(pos[0], pos[1], pos[2]); scene.add(p); });
+        
+        const orbGeo = new THREE.SphereGeometry(0.7, 64, 64);
+        const orbMat = new THREE.MeshStandardMaterial({ color: 0xDAA520, emissive: 0xDAA520, emissiveIntensity: 0.6 });
+        const orb = new THREE.Mesh(orbGeo, orbMat);
+        orb.position.y = 1.3;
+        scene.add(orb);
+        
+        const particleCount = 3000;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            const radius = 2 + Math.random() * 3;
+            const angle = Math.random() * Math.PI * 2;
+            const y = (Math.random() - 0.5) * 4;
+            particlePositions[i * 3] = Math.cos(angle) * radius;
+            particlePositions[i * 3 + 1] = y;
+            particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
         }
-    }
-</script>
-
-<script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-    
-    // ============================================
-    // 3D BACKGROUND - CENTRAL HUB
-    // ============================================
-    
-    const container = document.getElementById('canvas-container');
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050510);
-    scene.fog = new THREE.FogExp2(0x050510, 0.002);
-    
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2, 12);
-    
-    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    container.appendChild(renderer.domElement);
-    
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.3;
-    controls.enableZoom = false;
-    controls.enablePan = false;
-    controls.target.set(0, 0, 0);
-    
-    const renderScene = new RenderPass(scene, camera);
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.3, 0.3, 0.85);
-    bloomPass.strength = 1.0;
-    const effectComposer = new EffectComposer(renderer);
-    effectComposer.addPass(renderScene);
-    effectComposer.addPass(bloomPass);
-    
-    // Central energy core
-    const coreGeo = new THREE.SphereGeometry(0.8, 128, 128);
-    const coreMat = new THREE.MeshStandardMaterial({ color: 0xFF6688, emissive: 0xFF3366, emissiveIntensity: 0.8 });
-    const core = new THREE.Mesh(coreGeo, coreMat);
-    scene.add(core);
-    
-    // Orbiting rings
-    const ring1Geo = new THREE.TorusGeometry(1.1, 0.05, 128, 256);
-    const ring1Mat = new THREE.MeshStandardMaterial({ color: 0xFF88AA, emissive: 0xFF4466 });
-    const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
-    scene.add(ring1);
-    
-    const ring2Geo = new THREE.TorusGeometry(1.4, 0.06, 128, 256);
-    const ring2Mat = new THREE.MeshStandardMaterial({ color: 0xFFAA88, emissive: 0xFF6644 });
-    const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
-    scene.add(ring2);
-    
-    const ring3Geo = new THREE.TorusGeometry(1.7, 0.07, 128, 256);
-    const ring3Mat = new THREE.MeshStandardMaterial({ color: 0xFFCCAA, emissive: 0xFF8866 });
-    const ring3 = new THREE.Mesh(ring3Geo, ring3Mat);
-    scene.add(ring3);
-    
-    // Floating particles
-    const particleCount = 4000;
-    const particleGeo = new THREE.BufferGeometry();
-    const particlePositions = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount; i++) {
-        const radius = 1.2 + Math.random() * 1.5;
-        const angle = Math.random() * Math.PI * 2;
-        const y = (Math.random() - 0.5) * 2;
-        particlePositions[i * 3] = Math.cos(angle) * radius;
-        particlePositions[i * 3 + 1] = y;
-        particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
-    }
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-    const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0xFF8866, size: 0.02, blending: THREE.AdditiveBlending }));
-    scene.add(particles);
-    
-    // Starfield
-    const starCount = 4000;
-    const starGeo = new THREE.BufferGeometry();
-    const starPositions = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-        starPositions[i * 3] = (Math.random() - 0.5) * 200;
-        starPositions[i * 3 + 1] = (Math.random() - 0.5) * 100;
-        starPositions[i * 3 + 2] = (Math.random() - 0.5) * 100 - 50;
-    }
-    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.5 }));
-    scene.add(stars);
-    
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0x111122);
-    scene.add(ambientLight);
-    const coreLight = new THREE.PointLight(0xFF3366, 1.5, 20);
-    coreLight.position.set(0, 0, 0);
-    scene.add(coreLight);
-    
-    // ============================================
-    // ANIMATION LOOP
-    // ============================================
-    
-    let time = 0;
-    let frameCount = 0;
-    let lastTime = performance.now();
-    
-    function animate() {
-        requestAnimationFrame(animate);
-        time += 0.016;
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0xDAA520, size: 0.05, blending: THREE.AdditiveBlending }));
+        scene.add(particles);
         
-        ring1.rotation.z += 0.008;
-        ring2.rotation.z -= 0.006;
-        ring3.rotation.z += 0.005;
-        particles.rotation.y += 0.002;
-        stars.rotation.y += 0.0003;
+        const ambientLight = new THREE.AmbientLight(0x221100);
+        scene.add(ambientLight);
+        const mainLight = new THREE.DirectionalLight(0xDAA520, 1.0);
+        mainLight.position.set(2, 5, 3);
+        scene.add(mainLight);
+        const orbLight = new THREE.PointLight(0xDAA520, 1.0);
+        orbLight.position.set(0, 1.3, 0);
+        scene.add(orbLight);
         
-        coreLight.intensity = 1.3 + Math.sin(time * 4) * 0.3;
-        const pulse = 0.95 + Math.sin(time * 5) * 0.05;
-        core.scale.set(pulse, pulse, pulse);
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.016;
+            const pulse = 0.9 + Math.sin(time * 3) * 0.1;
+            orb.scale.set(pulse, pulse, pulse);
+            orbLight.intensity = 0.7 + Math.sin(time * 4) * 0.3;
+            particles.rotation.y += 0.001;
+            controls.update();
+            effectComposer.render();
+        }
+        animate();
         
-        controls.update();
+        // Riddle System
+        const riddles = [
+            { text: "I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", options: ["Shadow", "Echo", "Fire", "Light"], correct: 1 },
+            { text: "The more you take, the more you leave behind. What am I?", options: ["Memories", "Footsteps", "Time", "Breath"], correct: 1 },
+            { text: "I have keys but no locks. I have space but no room. What am I?", options: ["Piano", "Keyboard", "Map", "Treasure Chest"], correct: 1 },
+            { text: "What can travel around the world while staying in a corner?", options: ["Light", "Sound", "A Stamp", "Wind"], correct: 2 }
+        ];
         
-        frameCount++;
-        const now = performance.now();
-        if (now - lastTime >= 1000) {
-            document.getElementById('fps').innerHTML = `FPS: ${frameCount}`;
-            frameCount = 0;
-            lastTime = now;
+        let currentRiddle = 0;
+        let score = 0;
+        
+        function loadRiddle() {
+            const r = riddles[currentRiddle];
+            document.getElementById('riddleText').innerHTML = r.text;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            r.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = opt;
+                btn.onclick = () => checkAnswer(idx);
+                optionsDiv.appendChild(btn);
+            });
+            document.getElementById('feedback').innerHTML = `Riddle ${currentRiddle + 1} of ${riddles.length} | Score: ${score}`;
         }
         
-        effectComposer.render();
-    }
-    animate();
-    
-    // ============================================
-    // GATE TRANSITIONS WITH ZOOM
-    // ============================================
-    
-    const transitionOverlay = document.getElementById('transitionOverlay');
-    let isTransitioning = false;
-    
-    function zoomToGate(gateType, destinationUrl) {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        
-        // Get gate color
-        let flashColor = '#FFD700';
-        if (gateType === 'ancient') flashColor = '#DAA520';
-        if (gateType === 'mystical') flashColor = '#DA70D6';
-        if (gateType === 'space') flashColor = '#00FFFF';
-        
-        // Flash effect
-        const flash = document.createElement('div');
-        flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:${flashColor};z-index:10001;opacity:0;transition:opacity 0.2s;pointer-events:none;`;
-        document.body.appendChild(flash);
-        setTimeout(() => flash.style.opacity = '1', 10);
-        setTimeout(() => flash.remove(), 400);
-        
-        // Camera zoom into gate
-        const startTime = performance.now();
-        const duration = 2000;
-        
-        function zoomAnimation(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(1, elapsed / duration);
-            const easeOut = 1 - Math.pow(1 - progress, 1.5);
-            
-            // Zoom camera
-            camera.position.z = 12 - easeOut * 10;
-            camera.fov = 45 + easeOut * 25;
-            camera.updateProjectionMatrix();
-            
-            // Intensify light
-            coreLight.intensity = 1.5 + progress * 3;
-            bloomPass.strength = 1.0 + progress * 1.5;
-            
-            if (progress < 1) {
-                requestAnimationFrame(zoomAnimation);
+        function checkAnswer(selected) {
+            const isCorrect = selected === riddles[currentRiddle].correct;
+            if (isCorrect) {
+                score++;
+                document.getElementById('feedback').innerHTML = `<span class="success">✓ CORRECT! +1 point</span><br>Riddle ${currentRiddle + 1} of ${riddles.length} | Score: ${score}`;
+                orbLight.intensity = 1.5;
+                setTimeout(() => { orbLight.intensity = 0.7; }, 500);
+                currentRiddle++;
+                if (currentRiddle < riddles.length) {
+                    setTimeout(() => loadRiddle(), 1000);
+                } else {
+                    document.getElementById('feedback').innerHTML = `<span class="success">✨ COMPLETED! You have mastered the Ancient Riddles! Score: ${score}/${riddles.length} ✨</span>`;
+                    document.getElementById('options').innerHTML = '';
+                    document.getElementById('riddleText').innerHTML = "🏆 YOU HAVE PASSED THE TRIAL OF WISDOM! 🏆";
+                }
             } else {
-                transitionOverlay.classList.add('active');
-                setTimeout(() => {
-                    window.location.href = destinationUrl;
-                }, 500);
+                document.getElementById('feedback').innerHTML = `<span style="color:#FF6666">✗ INCORRECT! Try again.</span><br>Riddle ${currentRiddle + 1} of ${riddles.length} | Score: ${score}`;
             }
         }
         
-        requestAnimationFrame(zoomAnimation);
-    }
-    
-    // ============================================
-    // UI EVENT HANDLERS
-    // ============================================
-    
-    const title = document.getElementById('title');
-    const ancientGate = document.getElementById('ancientGate');
-    const mysticalGate = document.getElementById('mysticalGate');
-    const spaceGate = document.getElementById('spaceGate');
-    
-    setTimeout(() => {
-        title.classList.add('visible');
-        ancientGate.classList.add('visible');
-        mysticalGate.classList.add('visible');
-        spaceGate.classList.add('visible');
-    }, 500);
-    
-    ancientGate.addEventListener('click', () => zoomToGate('ancient', 'ancient-realm.html'));
-    mysticalGate.addEventListener('click', () => zoomToGate('mystical', 'mystical-realm.html'));
-    spaceGate.addEventListener('click', () => zoomToGate('space', 'space-realm.html'));
-    
-    document.getElementById('backBtn').addEventListener('click', () => {
-        window.location.href = "realgallery.html";
-    });
-    
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        effectComposer.setSize(window.innerWidth, window.innerHeight);
-    });
-    
-    console.log('%c✨ GATE HUB ACTIVATED | Ancient • Mystical • Space ✨', 'color: #FFD700; font-size: 14px');
-</script>
+        document.getElementById('resetBtn').addEventListener('click', () => { currentRiddle = 0; score = 0; loadRiddle(); });
+        document.getElementById('backBtn').addEventListener('click', () => { window.location.href = "gate-hub.html"; });
+        
+        loadRiddle();
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            effectComposer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
