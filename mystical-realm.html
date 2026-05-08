@@ -3,26 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Mystical Realm | Arcane Powers</title>
+    <title>Mystical Realm | The Challenge of Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; font-family: 'Space Grotesk', sans-serif; overflow: hidden; height: 100vh; }
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         canvas { display: block; width: 100% !important; height: 100% !important; }
-        .info { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 100; pointer-events: none; }
-        .info h1 { font-size: 2rem; font-weight: 700; letter-spacing: 8px; background: linear-gradient(135deg, #DA70D6, #9B30FF); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .info p { font-size: 0.7rem; letter-spacing: 4px; color: rgba(218,112,214,0.5); }
-        .btn { position: fixed; bottom: 30px; left: 30px; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border: 1px solid #DA70D6; padding: 12px 24px; color: #DA70D6; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer; z-index: 100; clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); transition: all 0.3s ease; }
-        .btn:hover { letter-spacing: 5px; background: rgba(218,112,214,0.2); transform: translateX(5px); }
-        .fps-counter { position: fixed; top: 20px; right: 20px; color: #00ff88; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; z-index: 100; }
+        
+        .ui-panel {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            border: 2px solid #DA70D6;
+            border-radius: 20px;
+            padding: 25px;
+            z-index: 100;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            pointer-events: auto;
+        }
+        .challenge-text { font-size: 1.2rem; color: #DA70D6; margin-bottom: 20px; }
+        .options { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .option-btn { background: rgba(218,112,214,0.2); border: 1px solid #DA70D6; padding: 10px 20px; color: #DA70D6; cursor: pointer; border-radius: 30px; transition: all 0.3s ease; }
+        .option-btn:hover { background: #DA70D6; color: #000; }
+        .feedback { margin-top: 15px; font-size: 0.8rem; color: #aaa; }
+        .success { color: #00ff88; }
+        .title { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 100; }
+        .title h1 { font-size: 1.5rem; letter-spacing: 8px; background: linear-gradient(135deg, #DA70D6, #9B30FF); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .back-btn { position: fixed; bottom: 30px; right: 30px; background: rgba(0,0,0,0.7); border: 1px solid #DA70D6; padding: 12px 24px; color: #DA70D6; cursor: pointer; z-index: 100; border-radius: 30px; }
+        .back-btn:hover { background: rgba(218,112,214,0.2); }
+        .reset-btn { position: fixed; top: 30px; right: 30px; background: rgba(0,0,0,0.7); border: 1px solid #DA70D6; padding: 8px 16px; color: #DA70D6; cursor: pointer; z-index: 100; border-radius: 20px; font-size: 0.7rem; }
+        .power-bar { width: 100%; height: 10px; background: #333; border-radius: 5px; margin-top: 15px; overflow: hidden; }
+        .power-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #DA70D6, #9B30FF); transition: width 0.3s ease; border-radius: 5px; }
+        @media (max-width: 600px) { .challenge-text { font-size: 0.9rem; } .option-btn { padding: 6px 12px; font-size: 0.7rem; } }
     </style>
 </head>
 <body>
     <div id="canvas-container"></div>
-    <div class="info"><h1>🔮 MYSTICAL REALM 🔮</h1><p>Arcane Powers • Magic Energy</p></div>
-    <button class="btn" id="backBtn">← BACK TO HUB</button>
-    <div class="fps-counter" id="fps">FPS: --</div>
+    <div class="title"><h1>🔮 MYSTICAL CHALLENGE 🔮</h1></div>
+    <div class="ui-panel" id="challengePanel">
+        <div class="challenge-text" id="challengeText">Choose the correct magical symbol to charge your power!</div>
+        <div class="options" id="options"></div>
+        <div class="power-bar"><div class="power-fill" id="powerFill"></div></div>
+        <div class="feedback" id="feedback">Power: 0%</div>
+    </div>
+    <button class="reset-btn" id="resetBtn">⟳ RESET</button>
+    <button class="back-btn" id="backBtn">← BACK TO HUB</button>
 
     <script type="importmap">
         { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
@@ -51,7 +82,7 @@
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.5;
+        controls.autoRotateSpeed = 0.3;
         controls.target.set(0, 1, 0);
         
         const renderScene = new RenderPass(scene, camera);
@@ -60,21 +91,19 @@
         effectComposer.addPass(renderScene);
         effectComposer.addPass(bloomPass);
         
-        // Mystical platform
-        const platformGeo = new THREE.CylinderGeometry(3.5, 3.5, 0.2, 32);
-        const platformMat = new THREE.MeshStandardMaterial({ color: 0x4B0082, metalness: 0.3, roughness: 0.5 });
+        // Mystical environment
+        const platformGeo = new THREE.CylinderGeometry(4, 4, 0.2, 32);
+        const platformMat = new THREE.MeshStandardMaterial({ color: 0x4B0082, metalness: 0.3 });
         const platform = new THREE.Mesh(platformGeo, platformMat);
         platform.position.y = -0.6;
         scene.add(platform);
         
-        // Magic crystal
-        const crystalGeo = new THREE.ConeGeometry(0.6, 1.5, 8);
-        const crystalMat = new THREE.MeshStandardMaterial({ color: 0xDA70D6, emissive: 0xDA70D6, emissiveIntensity: 0.6, metalness: 0.8 });
+        const crystalGeo = new THREE.ConeGeometry(0.7, 1.8, 8);
+        const crystalMat = new THREE.MeshStandardMaterial({ color: 0xDA70D6, emissive: 0xDA70D6, emissiveIntensity: 0.6 });
         const crystal = new THREE.Mesh(crystalGeo, crystalMat);
-        crystal.position.y = 0.3;
+        crystal.position.y = 0.4;
         scene.add(crystal);
         
-        // Floating energy orbs
         const orbCount = 8;
         const orbs = [];
         for (let i = 0; i < orbCount; i++) {
@@ -85,12 +114,11 @@
             orbs.push(orb);
         }
         
-        // Particles
         const particleCount = 5000;
         const particleGeo = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
         for (let i = 0; i < particleCount; i++) {
-            const radius = 1.5 + Math.random() * 3;
+            const radius = 1.5 + Math.random() * 3.5;
             const angle = Math.random() * Math.PI * 2;
             const y = (Math.random() - 0.5) * 4;
             particlePositions[i * 3] = Math.cos(angle) * radius;
@@ -101,59 +129,124 @@
         const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0xDA70D6, size: 0.04, blending: THREE.AdditiveBlending }));
         scene.add(particles);
         
-        // Lights
         const ambientLight = new THREE.AmbientLight(0x1a0a2a);
         scene.add(ambientLight);
         const mainLight = new THREE.DirectionalLight(0xDA70D6, 1.0);
         mainLight.position.set(2, 5, 3);
         scene.add(mainLight);
         const crystalLight = new THREE.PointLight(0xDA70D6, 1.0);
-        crystalLight.position.set(0, 0.6, 0);
+        crystalLight.position.set(0, 0.7, 0);
         scene.add(crystalLight);
         
         let time = 0;
-        let frameCount = 0;
-        let lastTime = performance.now();
-        
         function animate() {
             requestAnimationFrame(animate);
             time += 0.016;
-            
             const pulse = 0.9 + Math.sin(time * 4) * 0.1;
             crystal.scale.set(pulse, pulse, pulse);
             crystalLight.intensity = 0.7 + Math.sin(time * 5) * 0.4;
-            
             orbs.forEach((orb, i) => {
                 const angle = time * 0.8 + (i / orbs.length) * Math.PI * 2;
                 const radius = 2.2;
                 orb.position.x = Math.cos(angle) * radius;
                 orb.position.z = Math.sin(angle) * radius;
-                orb.position.y = 0.5 + Math.sin(angle * 2) * 0.3;
+                orb.position.y = 0.6 + Math.sin(angle * 2) * 0.3;
             });
-            
             particles.rotation.y += 0.002;
             controls.update();
-            
-            frameCount++;
-            const now = performance.now();
-            if (now - lastTime >= 1000) {
-                document.getElementById('fps').innerHTML = `FPS: ${frameCount}`;
-                frameCount = 0;
-                lastTime = now;
-            }
-            
             effectComposer.render();
         }
         animate();
         
-        document.getElementById('backBtn').addEventListener('click', () => {
-            const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:#DA70D6;z-index:10001;opacity:0;transition:opacity 0.2s;pointer-events:none;`;
-            document.body.appendChild(flash);
-            setTimeout(() => flash.style.opacity = '1', 10);
-            setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 200); }, 200);
-            setTimeout(() => { window.location.href = "gate-hub.html"; }, 400);
-        });
+        // Challenge System
+        const symbols = ["✨", "🔮", "⚡", "🌀", "🔥", "💎"];
+        let power = 0;
+        let currentSequence = [];
+        let userSequence = [];
+        let awaitingInput = false;
+        
+        function generateSequence() {
+            currentSequence = [];
+            for (let i = 0; i < 3; i++) {
+                currentSequence.push(Math.floor(Math.random() * symbols.length));
+            }
+            userSequence = [];
+            awaitingInput = false;
+            displaySequence();
+        }
+        
+        function displaySequence() {
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i >= currentSequence.length) {
+                    clearInterval(interval);
+                    awaitingInput = true;
+                    document.getElementById('feedback').innerHTML = `🎭 Your turn! Click the symbols in the same order. Power: ${power}%`;
+                    return;
+                }
+                const idx = currentSequence[i];
+                const btn = document.querySelectorAll('.option-btn')[idx];
+                if (btn) {
+                    btn.style.transform = 'scale(1.1)';
+                    btn.style.boxShadow = '0 0 20px #DA70D6';
+                    setTimeout(() => {
+                        btn.style.transform = 'scale(1)';
+                        btn.style.boxShadow = 'none';
+                    }, 300);
+                }
+                i++;
+            }, 800);
+        }
+        
+        function checkSequence() {
+            let correct = true;
+            for (let i = 0; i < userSequence.length; i++) {
+                if (userSequence[i] !== currentSequence[i]) correct = false;
+            }
+            if (correct && userSequence.length === currentSequence.length) {
+                power = Math.min(100, power + 20);
+                document.getElementById('powerFill').style.width = power + '%';
+                document.getElementById('feedback').innerHTML = `✓ Correct! +20% Power! Power: ${power}%`;
+                crystalLight.intensity = 1.5;
+                setTimeout(() => { crystalLight.intensity = 0.7; }, 500);
+                if (power >= 100) {
+                    document.getElementById('feedback').innerHTML = `<span class="success">✨ MAGICAL MASTERY ACHIEVED! You have mastered the Mystical Challenge! ✨</span>`;
+                    document.getElementById('options').innerHTML = '';
+                    document.getElementById('challengeText').innerHTML = "🏆 YOU HAVE PASSED THE TRIAL OF MAGIC! 🏆";
+                } else {
+                    setTimeout(() => generateSequence(), 1000);
+                }
+            } else {
+                document.getElementById('feedback').innerHTML = `✗ Incorrect sequence! Try again. Power: ${power}%`;
+                userSequence = [];
+                setTimeout(() => displaySequence(), 1000);
+            }
+        }
+        
+        function buildOptions() {
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            symbols.forEach((sym, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = sym;
+                btn.onclick = () => {
+                    if (!awaitingInput) return;
+                    userSequence.push(idx);
+                    if (userSequence.length === currentSequence.length) {
+                        awaitingInput = false;
+                        checkSequence();
+                    }
+                };
+                optionsDiv.appendChild(btn);
+            });
+        }
+        
+        document.getElementById('resetBtn').addEventListener('click', () => { power = 0; document.getElementById('powerFill').style.width = '0%'; generateSequence(); });
+        document.getElementById('backBtn').addEventListener('click', () => { window.location.href = "gate-hub.html"; });
+        
+        buildOptions();
+        generateSequence();
         
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
