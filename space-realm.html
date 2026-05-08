@@ -3,26 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Space Realm | Cosmic Wonders</title>
+    <title>Space Realm | The Puzzle of Cosmos</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; font-family: 'Space Grotesk', sans-serif; overflow: hidden; height: 100vh; }
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         canvas { display: block; width: 100% !important; height: 100% !important; }
-        .info { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 100; pointer-events: none; }
-        .info h1 { font-size: 2rem; font-weight: 700; letter-spacing: 8px; background: linear-gradient(135deg, #00FFFF, #0066FF); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .info p { font-size: 0.7rem; letter-spacing: 4px; color: rgba(0,255,255,0.5); }
-        .btn { position: fixed; bottom: 30px; left: 30px; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border: 1px solid #00FFFF; padding: 12px 24px; color: #00FFFF; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer; z-index: 100; clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); transition: all 0.3s ease; }
-        .btn:hover { letter-spacing: 5px; background: rgba(0,255,255,0.2); transform: translateX(5px); }
-        .fps-counter { position: fixed; top: 20px; right: 20px; color: #00ff88; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; z-index: 100; }
+        
+        .ui-panel {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            border: 2px solid #00FFFF;
+            border-radius: 20px;
+            padding: 25px;
+            z-index: 100;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            pointer-events: auto;
+        }
+        .puzzle-text { font-size: 1.2rem; color: #00FFFF; margin-bottom: 20px; }
+        .sequence-display { font-size: 2rem; letter-spacing: 10px; margin: 15px 0; color: #00FFFF; font-family: monospace; }
+        .options { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .option-btn { background: rgba(0,255,255,0.2); border: 1px solid #00FFFF; padding: 12px 20px; color: #00FFFF; cursor: pointer; border-radius: 30px; transition: all 0.3s ease; font-size: 1.2rem; }
+        .option-btn:hover { background: #00FFFF; color: #000; transform: scale(1.05); }
+        .feedback { margin-top: 15px; font-size: 0.8rem; color: #aaa; }
+        .success { color: #00ff88; }
+        .title { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 100; }
+        .title h1 { font-size: 1.5rem; letter-spacing: 8px; background: linear-gradient(135deg, #00FFFF, #0066FF); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .back-btn { position: fixed; bottom: 30px; right: 30px; background: rgba(0,0,0,0.7); border: 1px solid #00FFFF; padding: 12px 24px; color: #00FFFF; cursor: pointer; z-index: 100; border-radius: 30px; }
+        .back-btn:hover { background: rgba(0,255,255,0.2); }
+        .reset-btn { position: fixed; top: 30px; right: 30px; background: rgba(0,0,0,0.7); border: 1px solid #00FFFF; padding: 8px 16px; color: #00FFFF; cursor: pointer; z-index: 100; border-radius: 20px; font-size: 0.7rem; }
+        @media (max-width: 600px) { .puzzle-text { font-size: 0.9rem; } .option-btn { padding: 8px 12px; font-size: 1rem; } .sequence-display { font-size: 1.2rem; letter-spacing: 5px; } }
     </style>
 </head>
 <body>
     <div id="canvas-container"></div>
-    <div class="info"><h1>🌌 SPACE REALM 🌌</h1><p>Cosmic Wonders • Infinite Stars</p></div>
-    <button class="btn" id="backBtn">← BACK TO HUB</button>
-    <div class="fps-counter" id="fps">FPS: --</div>
+    <div class="title"><h1>🌌 SPACE PUZZLE 🌌</h1></div>
+    <div class="ui-panel" id="puzzlePanel">
+        <div class="puzzle-text" id="puzzleText">Match the cosmic sequence!</div>
+        <div class="sequence-display" id="sequenceDisplay">---</div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback">Score: 0/5</div>
+    </div>
+    <button class="reset-btn" id="resetBtn">⟳ RESET</button>
+    <button class="back-btn" id="backBtn">← BACK TO HUB</button>
 
     <script type="importmap">
         { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
@@ -60,13 +90,12 @@
         effectComposer.addPass(renderScene);
         effectComposer.addPass(bloomPass);
         
-        // Central star
+        // Space environment
         const starCoreGeo = new THREE.SphereGeometry(0.8, 128, 128);
         const starCoreMat = new THREE.MeshStandardMaterial({ color: 0x00FFFF, emissive: 0x00FFFF, emissiveIntensity: 0.8 });
         const starCore = new THREE.Mesh(starCoreGeo, starCoreMat);
         scene.add(starCore);
         
-        // Orbiting planets (rings)
         const ring1Geo = new THREE.TorusGeometry(1.4, 0.05, 128, 256);
         const ring1Mat = new THREE.MeshStandardMaterial({ color: 0x00FFFF, emissive: 0x00FFFF });
         const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
@@ -82,7 +111,6 @@
         const ring3 = new THREE.Mesh(ring3Geo, ring3Mat);
         scene.add(ring3);
         
-        // Small orbiting spheres (planets)
         const planetCount = 12;
         const planets = [];
         for (let i = 0; i < planetCount; i++) {
@@ -93,7 +121,6 @@
             planets.push(planet);
         }
         
-        // Particles (stars)
         const particleCount = 8000;
         const particleGeo = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
@@ -109,7 +136,6 @@
         const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0x88AACC, size: 0.04, blending: THREE.AdditiveBlending }));
         scene.add(particles);
         
-        // Distant starfield
         const starCount = 5000;
         const starGeo = new THREE.BufferGeometry();
         const starPositions = new Float32Array(starCount * 3);
@@ -122,7 +148,6 @@
         const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.06, transparent: true, opacity: 0.4 }));
         scene.add(stars);
         
-        // Lights
         const ambientLight = new THREE.AmbientLight(0x111122);
         scene.add(ambientLight);
         const coreLight = new THREE.PointLight(0x00FFFF, 1.5, 25);
@@ -130,53 +155,85 @@
         scene.add(coreLight);
         
         let time = 0;
-        let frameCount = 0;
-        let lastTime = performance.now();
-        
         function animate() {
             requestAnimationFrame(animate);
             time += 0.016;
-            
             const pulse = 0.9 + Math.sin(time * 4) * 0.1;
             starCore.scale.set(pulse, pulse, pulse);
             coreLight.intensity = 1.0 + Math.sin(time * 5) * 0.4;
-            
             ring1.rotation.z += 0.008;
             ring2.rotation.z -= 0.006;
             ring3.rotation.z += 0.005;
-            
             planets.forEach((planet, i) => {
                 const angle = time * 0.5 + (i / planets.length) * Math.PI * 2;
-                const radius = 2.0;
-                planet.position.x = Math.cos(angle) * radius;
-                planet.position.z = Math.sin(angle) * radius;
+                planet.position.x = Math.cos(angle) * 2.0;
+                planet.position.z = Math.sin(angle) * 2.0;
                 planet.position.y = Math.sin(angle * 2) * 0.5;
             });
-            
             particles.rotation.y += 0.001;
             stars.rotation.y += 0.0002;
             controls.update();
-            
-            frameCount++;
-            const now = performance.now();
-            if (now - lastTime >= 1000) {
-                document.getElementById('fps').innerHTML = `FPS: ${frameCount}`;
-                frameCount = 0;
-                lastTime = now;
-            }
-            
             effectComposer.render();
         }
         animate();
         
-        document.getElementById('backBtn').addEventListener('click', () => {
-            const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;background:#00FFFF;z-index:10001;opacity:0;transition:opacity 0.2s;pointer-events:none;`;
-            document.body.appendChild(flash);
-            setTimeout(() => flash.style.opacity = '1', 10);
-            setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 200); }, 200);
-            setTimeout(() => { window.location.href = "gate-hub.html"; }, 400);
-        });
+        // Puzzle System
+        const symbols = ["🌕", "🌍", "⭐", "🌙", "☄️", "🪐"];
+        let score = 0;
+        let currentTarget = "";
+        let currentOptions = [];
+        
+        function generatePuzzle() {
+            const randomIndex = Math.floor(Math.random() * symbols.length);
+            currentTarget = symbols[randomIndex];
+            currentOptions = [currentTarget];
+            while (currentOptions.length < 4) {
+                const rand = symbols[Math.floor(Math.random() * symbols.length)];
+                if (!currentOptions.includes(rand)) currentOptions.push(rand);
+            }
+            for (let i = currentOptions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentOptions[i], currentOptions[j]] = [currentOptions[j], currentOptions[i]];
+            }
+            document.getElementById('sequenceDisplay').innerHTML = currentTarget;
+            buildOptions();
+        }
+        
+        function buildOptions() {
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            currentOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = opt;
+                btn.onclick = () => checkAnswer(opt);
+                optionsDiv.appendChild(btn);
+            });
+        }
+        
+        function checkAnswer(selected) {
+            if (selected === currentTarget) {
+                score++;
+                document.getElementById('feedback').innerHTML = `<span class="success">✓ CORRECT! Score: ${score}/5</span>`;
+                coreLight.intensity = 2.5;
+                setTimeout(() => { coreLight.intensity = 1.5; }, 300);
+                if (score >= 5) {
+                    document.getElementById('feedback').innerHTML = `<span class="success">✨ COSMIC MASTERY ACHIEVED! You have solved the Space Puzzle! ✨</span>`;
+                    document.getElementById('options').innerHTML = '';
+                    document.getElementById('puzzleText').innerHTML = "🏆 YOU HAVE PASSED THE TRIAL OF COSMOS! 🏆";
+                } else {
+                    generatePuzzle();
+                }
+            } else {
+                document.getElementById('feedback').innerHTML = `✗ INCORRECT! The correct symbol was ${currentTarget}. Score: ${score}/5`;
+                generatePuzzle();
+            }
+        }
+        
+        document.getElementById('resetBtn').addEventListener('click', () => { score = 0; document.getElementById('feedback').innerHTML = "Score: 0/5"; generatePuzzle(); });
+        document.getElementById('backBtn').addEventListener('click', () => { window.location.href = "gate-hub.html"; });
+        
+        generatePuzzle();
         
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
