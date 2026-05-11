@@ -16,7 +16,7 @@
             bottom: 30px;
             left: 30px;
             right: 30px;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.92);
             backdrop-filter: blur(20px);
             border: 2px solid #00FFFF;
             border-radius: 20px;
@@ -30,17 +30,18 @@
         }
         .puzzle-text { font-size: 1rem; color: #00FFFF; margin-bottom: 15px; letter-spacing: 2px; }
         .sequence-display { 
-            font-size: 2.5rem; 
-            letter-spacing: 15px; 
+            font-size: 3rem; 
+            letter-spacing: 20px; 
             margin: 20px 0; 
             color: #00FFFF; 
             font-family: monospace;
             text-shadow: 0 0 10px #00FFFF;
             background: rgba(0,0,0,0.5);
-            padding: 15px;
+            padding: 20px;
             border-radius: 15px;
+            transition: transform 0.1s ease;
         }
-        .star-rating { margin: 10px 0; font-size: 1.2rem; letter-spacing: 5px; }
+        .star-rating { margin: 10px 0; font-size: 1.3rem; letter-spacing: 5px; }
         .star { color: #FFD700; text-shadow: 0 0 5px #FFD700; }
         .star-empty { color: #444; }
         .options { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
@@ -52,11 +53,12 @@
             cursor: pointer; 
             border-radius: 50px; 
             transition: all 0.2s ease; 
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             min-width: 70px;
         }
         .option-btn:hover { background: #00FFFF; color: #000; transform: scale(1.05); box-shadow: 0 0 20px #00FFFF; }
+        .option-btn.disabled { opacity: 0.5; pointer-events: none; }
         .feedback { margin-top: 15px; font-size: 0.85rem; color: #aaa; }
         .success { color: #00ff88; text-shadow: 0 0 5px #00ff88; }
         .fail { color: #FF3366; }
@@ -65,27 +67,25 @@
         .back-btn { position: fixed; bottom: 30px; right: 30px; background: rgba(0,0,0,0.7); border: 1px solid #00FFFF; padding: 12px 24px; color: #00FFFF; cursor: pointer; z-index: 100; border-radius: 30px; transition: all 0.3s ease; }
         .back-btn:hover { background: rgba(0,255,255,0.2); transform: translateX(-5px); }
         .reset-btn { position: fixed; top: 30px; right: 30px; background: rgba(0,0,0,0.7); border: 1px solid #00FFFF; padding: 8px 16px; color: #00FFFF; cursor: pointer; z-index: 100; border-radius: 20px; font-size: 0.7rem; }
-        .difficulty { position: fixed; top: 100px; right: 30px; background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; color: #FFD700; z-index: 100; }
         .progress-bar { width: 100%; height: 6px; background: #333; border-radius: 3px; margin-top: 15px; overflow: hidden; }
         .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00FFFF, #0066FF); transition: width 0.3s ease; border-radius: 3px; }
         @media (max-width: 600px) { 
             .puzzle-text { font-size: 0.8rem; } 
-            .option-btn { padding: 8px 12px; font-size: 0.9rem; min-width: 55px; }
-            .sequence-display { font-size: 1.5rem; letter-spacing: 8px; }
+            .option-btn { padding: 8px 12px; font-size: 1rem; min-width: 55px; }
+            .sequence-display { font-size: 1.8rem; letter-spacing: 10px; }
         }
     </style>
 </head>
 <body>
     <div id="canvas-container"></div>
     <div class="title"><h1>🌌 TRIAL OF THE COSMOS 🌌</h1></div>
-    <div class="difficulty" id="difficulty">DIFFICULTY: ★★★☆☆</div>
     <div class="ui-panel" id="puzzlePanel">
         <div class="puzzle-text" id="puzzleText">⚡ MEMORIZE THE COSMIC SEQUENCE ⚡</div>
         <div class="star-rating" id="starRating"></div>
         <div class="sequence-display" id="sequenceDisplay">???</div>
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         <div class="options" id="options"></div>
-        <div class="feedback" id="feedback">Round 1 of 8 • Watch the sequence...</div>
+        <div class="feedback" id="feedback">Round 1 of 5 • Watch the sequence...</div>
     </div>
     <button class="reset-btn" id="resetBtn">⟳ RESTART TRIAL</button>
     <button class="back-btn" id="backBtn">← BACK TO HUB</button>
@@ -101,7 +101,7 @@
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         
-        // 3D Environment Setup
+        // 3D Environment
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x010118);
@@ -127,7 +127,7 @@
         effectComposer.addPass(renderScene);
         effectComposer.addPass(bloomPass);
         
-        // Space environment
+        // Space environment objects
         const starCoreGeo = new THREE.SphereGeometry(0.8, 128, 128);
         const starCoreMat = new THREE.MeshStandardMaterial({ color: 0x00FFFF, emissive: 0x00FFFF, emissiveIntensity: 0.8 });
         const starCore = new THREE.Mesh(starCoreGeo, starCoreMat);
@@ -191,18 +191,18 @@
         coreLight.position.set(0, 0, 0);
         scene.add(coreLight);
         
-        let time = 0;
+        let animTime = 0;
         function animate() {
             requestAnimationFrame(animate);
-            time += 0.016;
-            const pulse = 0.9 + Math.sin(time * 4) * 0.1;
+            animTime += 0.016;
+            const pulse = 0.9 + Math.sin(animTime * 4) * 0.1;
             starCore.scale.set(pulse, pulse, pulse);
-            coreLight.intensity = 1.0 + Math.sin(time * 5) * 0.4;
+            coreLight.intensity = 1.0 + Math.sin(animTime * 5) * 0.4;
             ring1.rotation.z += 0.008;
             ring2.rotation.z -= 0.006;
             ring3.rotation.z += 0.005;
             planets.forEach((planet, i) => {
-                const angle = time * 0.5 + (i / planets.length) * Math.PI * 2;
+                const angle = animTime * 0.5 + (i / planets.length) * Math.PI * 2;
                 planet.position.x = Math.cos(angle) * 2.0;
                 planet.position.z = Math.sin(angle) * 2.0;
                 planet.position.y = Math.sin(angle * 2) * 0.5;
@@ -215,36 +215,39 @@
         animate();
         
         // ============================================
-        // GENUINELY HARD COSMOS PUZZLE
+        // COSMOS PUZZLE - WORKING
         // ============================================
         
-        // Cosmic symbols (harder to distinguish)
-        const symbols = ["🌕", "🌑", "⭐", "🌙", "☄️", "🪐", "🔭", "🛸", "🌍", "🌌"];
+        const symbols = ["🌕", "🌑", "⭐", "🌙", "☄️", "🪐", "🔭", "🌍"];
         
         let currentRound = 1;
-        const totalRounds = 8;
+        const totalRounds = 5;
         let currentSequence = [];
         let userSequence = [];
         let awaitingInput = false;
         let roundScore = 0;
         let starsEarned = 0;
+        let isAnimating = false;
         
-        // Generate sequence with increasing length and complexity
+        function getSequenceLength() {
+            return Math.min(3 + Math.floor(currentRound / 2), 6);
+        }
+        
         function generateSequence() {
-            const sequenceLength = Math.min(3 + Math.floor(currentRound / 2), 7);
+            const length = getSequenceLength();
             currentSequence = [];
-            for (let i = 0; i < sequenceLength; i++) {
-                const randomIndex = Math.floor(Math.random() * symbols.length);
-                currentSequence.push(randomIndex);
+            for (let i = 0; i < length; i++) {
+                currentSequence.push(Math.floor(Math.random() * symbols.length));
             }
             userSequence = [];
-            updateStarRating();
+            updateUI();
             document.getElementById('feedback').innerHTML = `Round ${currentRound} of ${totalRounds} • Watch the sequence...`;
-            document.getElementById('puzzleText').innerHTML = `🌀 MEMORIZE ${sequenceLength} SYMBOLS 🌀`;
+            document.getElementById('puzzleText').innerHTML = `🌀 MEMORIZE ${length} SYMBOLS 🌀`;
             displaySequence();
         }
         
-        function updateStarRating() {
+        function updateUI() {
+            // Update star rating
             const starContainer = document.getElementById('starRating');
             starContainer.innerHTML = '';
             for (let i = 0; i < starsEarned; i++) {
@@ -253,23 +256,28 @@
             for (let i = starsEarned; i < 5; i++) {
                 starContainer.innerHTML += '<span class="star-empty">★</span>';
             }
-            const difficulty = starsEarned <= 1 ? "★☆☆☆☆" : starsEarned <= 2 ? "★★☆☆☆" : starsEarned <= 3 ? "★★★☆☆" : starsEarned <= 4 ? "★★★★☆" : "★★★★★";
-            document.getElementById('difficulty').innerHTML = `STARS: ${starsEarned}/5 • DIFFICULTY: ${difficulty}`;
+            
+            // Update progress
             const progress = (currentRound - 1) / totalRounds * 100;
             document.getElementById('progressFill').style.width = progress + '%';
         }
         
         function displaySequence() {
-            let i = 0;
+            isAnimating = true;
             awaitingInput = false;
-            document.getElementById('options').style.pointerEvents = 'none';
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.style.pointerEvents = 'none';
+            optionsDiv.classList.add('disabled');
             
+            let i = 0;
             const interval = setInterval(() => {
                 if (i >= currentSequence.length) {
                     clearInterval(interval);
                     document.getElementById('sequenceDisplay').innerHTML = "? ? ?";
-                    document.getElementById('options').style.pointerEvents = 'auto';
+                    optionsDiv.style.pointerEvents = 'auto';
+                    optionsDiv.classList.remove('disabled');
                     awaitingInput = true;
+                    isAnimating = false;
                     document.getElementById('feedback').innerHTML = `Round ${currentRound} • Enter the sequence (${currentSequence.length} symbols)`;
                     return;
                 }
@@ -280,7 +288,6 @@
                     document.getElementById('sequenceDisplay').style.transform = 'scale(1)';
                 }, 200);
                 
-                // Flash effect
                 coreLight.intensity = 2.5;
                 setTimeout(() => { coreLight.intensity = 1.5; }, 200);
                 i++;
@@ -290,31 +297,23 @@
         function buildOptions() {
             const optionsDiv = document.getElementById('options');
             optionsDiv.innerHTML = '';
-            // Show 6 random symbols plus the correct ones (harder)
-            const shuffledSymbols = [...symbols];
-            for (let i = shuffledSymbols.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffledSymbols[i], shuffledSymbols[j]] = [shuffledSymbols[j], shuffledSymbols[i]];
-            }
-            const displaySymbols = shuffledSymbols.slice(0, 6);
-            
-            displaySymbols.forEach((sym, idx) => {
+            // Show all symbols as options
+            symbols.forEach((sym, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerHTML = sym;
-                const symbolIndex = symbols.indexOf(sym);
-                btn.onclick = () => handleUserInput(symbolIndex);
+                btn.onclick = () => handleUserInput(idx);
                 optionsDiv.appendChild(btn);
             });
         }
         
         function handleUserInput(selectedIndex) {
-            if (!awaitingInput) return;
+            if (!awaitingInput || isAnimating) return;
             
             userSequence.push(selectedIndex);
             const currentPosition = userSequence.length - 1;
             
-            // Visual feedback for selection
+            // Visual feedback
             coreLight.intensity = 2.0;
             setTimeout(() => { coreLight.intensity = 1.5; }, 150);
             
@@ -328,29 +327,35 @@
                 return;
             }
             
-            // Show current progress
             document.getElementById('feedback').innerHTML = `✅ ${userSequence.length}/${currentSequence.length} correct • Keep going!`;
             
             if (userSequence.length === currentSequence.length) {
                 // ROUND COMPLETE
                 roundScore++;
-                starsEarned = Math.floor(roundScore / 2);
-                if (starsEarned > 5) starsEarned = 5;
-                updateStarRating();
+                starsEarned = Math.min(5, Math.floor(roundScore / 1.5));
+                updateUI();
                 
                 if (currentRound >= totalRounds) {
                     // VICTORY!
-                    document.getElementById('feedback').innerHTML = `<span class="success">✨✨✨ COSMIC MASTERY ACHIEVED! You have passed the Trial of the Cosmos! ✨✨✨</span>`;
+                    document.getElementById('feedback').innerHTML = `<span class="success">✨✨✨ COSMIC MASTERY ACHIEVED! Gate Complete! ✨✨✨</span>`;
                     document.getElementById('options').innerHTML = '';
-                    document.getElementById('puzzleText').innerHTML = "🏆 YOU HAVE PROVEN YOUR WORTH! THE COSMOS RECOGNIZES YOU! 🏆";
+                    document.getElementById('puzzleText').innerHTML = "🏆 YOU HAVE PASSED THE TRIAL OF THE COSMOS! 🏆";
                     document.getElementById('sequenceDisplay').innerHTML = "🌟 VICTORY 🌟";
                     coreLight.intensity = 3.0;
                     bloomPass.strength = 2.0;
                     awaitingInput = false;
+                    
+                    // Mark gate as completed
+                    let completedGates = JSON.parse(localStorage.getItem('completedGates') || '{"ancient":false,"mystical":false,"space":false}');
+                    completedGates.space = true;
+                    localStorage.setItem('completedGates', JSON.stringify(completedGates));
+                    // Trigger storage event for other tabs
+                    window.dispatchEvent(new StorageEvent('storage', { key: 'completedGates', newValue: JSON.stringify(completedGates) }));
+                    return;
                 } else {
                     currentRound++;
                     generateSequence();
-                    setTimeout(() => buildOptions(), 500);
+                    setTimeout(() => buildOptions(), 1000);
                 }
             }
         }
@@ -363,6 +368,11 @@
             buildOptions();
             coreLight.intensity = 1.5;
             bloomPass.strength = 1.4;
+            // Reset completion status for this gate
+            let completedGates = JSON.parse(localStorage.getItem('completedGates') || '{"ancient":false,"mystical":false,"space":false}');
+            completedGates.space = false;
+            localStorage.setItem('completedGates', JSON.stringify(completedGates));
+            window.dispatchEvent(new StorageEvent('storage', { key: 'completedGates', newValue: JSON.stringify(completedGates) }));
         });
         
         document.getElementById('backBtn').addEventListener('click', () => {
@@ -370,8 +380,8 @@
         });
         
         // Initialize
-        generateSequence();
         buildOptions();
+        generateSequence();
         
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
