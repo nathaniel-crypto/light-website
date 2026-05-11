@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MASTER REALM | The Convergence of Light</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; font-family: 'Space Grotesk', sans-serif; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        canvas { display: block; width: 100% !important; height: 100% !important; }
+        .message { position: relative; z-index: 100; text-align: center; color: white; background: rgba(0,0,0,0.7); padding: 30px; border-radius: 20px; max-width: 600px; margin: 20px; backdrop-filter: blur(10px); border: 1px solid #FFD700; }
+        h1 { font-size: 2rem; margin-bottom: 20px; background: linear-gradient(135deg, #FFD700, #FF1493, #00FFFF); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        p { margin-bottom: 20px; line-height: 1.6; }
+        .btn { background: rgba(255,215,0,0.2); border: 1px solid #FFD700; padding: 12px 30px; color: #FFD700; cursor: pointer; border-radius: 40px; transition: all 0.3s ease; font-family: 'Space Grotesk', sans-serif; }
+        .btn:hover { background: #FFD700; color: #000; transform: scale(1.05); }
+        @media (max-width: 600px) { h1 { font-size: 1.2rem; } }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <div class="message">
+        <h1>🌟 THE MASTER REALM 🌟</h1>
+        <p>You have conquered all three gates!</p>
+        <p>✨ Wisdom • Magic • Cosmos ✨</p>
+        <p>You are now a true master of light.</p>
+        <button class="btn" id="backBtn">← RETURN TO HUB</button>
+    </div>
+
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+        
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050520);
+        
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 2, 12);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        
+        const renderScene = new RenderPass(scene, camera);
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.9);
+        const composer = new EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+        
+        // Light particles
+        const particleCount = 10000;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            positions[i*3] = (Math.random() - 0.5) * 30;
+            positions[i*3+1] = (Math.random() - 0.5) * 20;
+            positions[i*3+2] = (Math.random() - 0.5) * 20 - 10;
+            colors[i*3] = Math.random();
+            colors[i*3+1] = Math.random() * 0.5 + 0.5;
+            colors[i*3+2] = Math.random() * 0.8 + 0.2;
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 0.05, vertexColors: true, blending: THREE.AdditiveBlending }));
+        scene.add(particles);
+        
+        const ambientLight = new THREE.AmbientLight(0x222233);
+        scene.add(ambientLight);
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.y += 0.002;
+            particles.rotation.x += 0.001;
+            controls.update();
+            composer.render();
+        }
+        animate();
+        
+        document.getElementById('backBtn').addEventListener('click', () => { window.location.href = "gate-hub.html"; });
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
